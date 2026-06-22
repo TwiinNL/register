@@ -1,13 +1,13 @@
 # =============================================================================
 # Bouw de Hugo-site + Pagefind-index en publiceer naar Codeberg Pages.
 #
-# Resultaat wordt naar de branch `pages` van DEZE repo geduwd en is dan
+# Het resultaat wordt naar de branch `pages` van DEZE repo geduwd en is dan
 # bereikbaar op:  https://<eigenaar>.codeberg.page/<repo>/
 # (bij LAS/playground dus: https://las.codeberg.page/playground/ )
 #
-# Wil je in plaats daarvan op de root  https://las.codeberg.page/  publiceren?
-# Maak dan een aparte repo `LAS/pages`, zet daar een access-token als
-# secret (bv. DEPLOY_TOKEN) en pas de deploy-stap aan (zie README.md).
+# Wil je op de root  https://las.codeberg.page/  publiceren? Maak dan een aparte
+# repo `LAS/pages`, push de build daarheen met een access-token-secret en zet
+# baseURL in hugo.toml om (zie README.md).
 # =============================================================================
 name: Deploy site
 
@@ -16,15 +16,18 @@ on:
     branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: write   # nodig om naar de branch `pages` te kunnen pushen
+
 env:
   HUGO_VERSION: "0.163.3"
   PAGEFIND_VERSION: "1.5.2"
 
 jobs:
   build-and-deploy:
-    runs-on: docker
+    runs-on: codeberg-small
     container:
-      image: node:20-bookworm
+      image: node:20-bookworm   # bevat git, curl, tar en node/npx
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -46,9 +49,14 @@ jobs:
         run: npx -y "pagefind@${PAGEFIND_VERSION}" --site public
 
       - name: Publiceer naar Codeberg Pages (branch `pages`)
-        if: ${{ forge.event_name == 'push' && forge.ref == 'refs/heads/main' }}
-        uses: actions/git-pages@v2
-        with:
-          site: "https://${{ forge.event.repository.owner.username }}.codeberg.page/${{ forge.event.repository.name }}/"
-          token: ${{ forge.token }}
-          source: public/
+        run: |
+          set -e
+          cd public
+          git init -q
+          git config user.name "Forgejo Actions"
+          git config user.email "actions@noreply.codeberg.org"
+          git checkout -q -b pages
+          git add -A
+          git commit -q -m "Deploy ${GITHUB_SHA:-handmatig} [skip ci]"
+          git push -f "https://x-access-token:${{ forge.token }}@codeberg.org/${{ forge.repository }}.git" pages
+          echo "Gepubliceerd naar branch 'pages'. Live op https://las.codeberg.page/playground/"
