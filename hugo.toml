@@ -11,7 +11,7 @@
 baseURL = "https://las.codeberg.page/playground/"
 
 defaultContentLanguage = "nl"
-title = "Twiin LAS — Register"
+title = "Twiin Landelijk afsprakenstelsel | Index"
 
 [languages.nl]
   locale = "nl-NL"
@@ -63,6 +63,9 @@ enableRobotsTXT = true
 [params]
   organisatie = "Twiin"
   beschrijving = "Centrale vindplaats (single source of truth) voor metadata van afspraken, specificaties, richtlijnen en standaarden binnen het Twiin Landelijk Afsprakenstelsel (LAS)."
+  # Licentie (footer)
+  licentie = "CC BY-SA 4.0"
+  licentieURL = "https://creativecommons.org/licenses/by-sa/4.0/deed.nl"
   # RDF/JSON-LD: basis-namespace voor de eigen LAS-vocabulaire.
   # Eindigt op #; termen worden hieraan gehangen (bv. las:Afspraak).
   rdfNamespace = "https://las.codeberg.page/playground/ns#"

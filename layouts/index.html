@@ -4,16 +4,17 @@
 {{- $recent := first $n (sort $register "Params.ingangsdatum" "desc") -}}
 {{- $belangrijk := first $n (sort (where $register "Params.uitgelicht" true) "Params.prioriteit" "asc") -}}
 
-<section class="hero">
-  <div class="wrap">
-    <h1>Twiin LAS — Register</h1>
-    <p class="hero__lead">{{ site.Params.beschrijving }}</p>
-    <form class="hero__search" role="search" action="{{ "register/" | relURL }}" method="get">
+<header class="banner" data-component="banner">
+  <div class="wrap banner__inner">
+    <p class="banner__kicker">Index</p>
+    <h1 class="banner__title">Twiin Landelijk afsprakenstelsel</h1>
+    <p class="banner__lead">{{ site.Params.beschrijving }}</p>
+    <form class="banner__search" role="search" action="{{ "register/" | relURL }}" method="get">
       <input type="search" name="q" placeholder="Zoek een afspraak, specificatie of standaard…" aria-label="Zoeken in het register">
-      <button type="submit" class="btn">Zoeken</button>
+      <button type="submit" class="btn btn--cta">Zoeken</button>
     </form>
   </div>
-</section>
+</header>
 
 <section class="wrap section">
   <div class="section__head">
