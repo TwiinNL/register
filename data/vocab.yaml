@@ -57,7 +57,7 @@ functie:
     Adressering:       { label: "Adressering",       kleur: "grijs" }
     Localisatie:       { label: "Localisatie",       kleur: "grijs" }
     Transparantie:     { label: "Transparantie",     kleur: "grijs" }
-    Netwerkbeveiliging:{ label: "Netwerkbeveiliging",kleur: "grijs" }
+    Netwerkbeveiliging: { label: "Netwerkbeveiliging", kleur: "grijs" }
     Routering:         { label: "Routering",         kleur: "grijs" }
 
 status:

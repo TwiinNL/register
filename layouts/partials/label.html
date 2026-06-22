@@ -6,7 +6,7 @@
 {{- $vocab := .vocab -}}
 {{- $code := .code -}}
 {{- $out := $code -}}
-{{- with index site.Data.vocab $vocab -}}
+{{- with index hugo.Data.vocab $vocab -}}
   {{- with index .terms $code -}}
     {{- $out = .label -}}
   {{- end -}}

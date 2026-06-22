@@ -7,7 +7,7 @@
 {{- $label := $code -}}
 {{- $kleur := "grijs" -}}
 {{- $titel := "" -}}
-{{- with index site.Data.vocab $vocab -}}
+{{- with index hugo.Data.vocab $vocab -}}
   {{- with index .terms $code -}}
     {{- $label = .label -}}
     {{- with .kleur }}{{ $kleur = . }}{{ end -}}

@@ -10,9 +10,13 @@
 # en RDF-identifiers volgen automatisch.
 baseURL = "https://las.codeberg.page/playground/"
 
-languageCode = "nl"
 defaultContentLanguage = "nl"
 title = "Twiin LAS — Register"
+
+[languages.nl]
+  locale = "nl-NL"
+  label = "Nederlands"
+  weight = 1
 
 # Schone, korte UID-gebaseerde URLs en geen "ugly" .html
 enableGitInfo = true

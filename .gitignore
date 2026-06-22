@@ -9,7 +9,8 @@
 # macOS
 .DS_Store
 
-# Editor
+# Editor / lokale tooling
 .idea/
 .vscode/
+.claude/
 *.swp

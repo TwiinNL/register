@@ -1,0 +1,4 @@
+/* Reserveerd voor eventuele Pagefind-UI overrides.
+   De register-pagina gebruikt een eigen UI via de Pagefind JS-API,
+   dus hier staan alleen kleine aanvullingen indien nodig. */
+mark { background: var(--accent-soft); color: inherit; padding: 0 .1em; border-radius: 3px; }

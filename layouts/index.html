@@ -36,7 +36,7 @@
   <div class="section__head"><h2>Categorieën</h2><a class="link-more" href="{{ "register/" | relURL }}">Volledig register →</a></div>
 
   {{- /* Per Soort een rij met de eerste kaarten */ -}}
-  {{ range $code, $term := site.Data.vocab.soort.terms }}
+  {{ range $code, $term := hugo.Data.vocab.soort.terms }}
     {{ $cards := where $register "Params.soort" $code }}
     {{ if $cards }}
     <div class="category">
