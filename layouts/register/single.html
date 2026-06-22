@@ -1,0 +1,151 @@
+{{ define "main" }}
+{{- $ns := site.Params.rdfNamespace -}}
+{{- $permalink := .Permalink -}}{{ with .Params.permalink }}{{ $permalink = . }}{{ end -}}
+
+<article class="kaart" data-pagefind-body>
+
+  <nav class="breadcrumb" aria-label="Kruimelpad">
+    <a href="{{ "/" | relURL }}">Home</a> ›
+    <a href="{{ "register/" | relURL }}">Register</a> ›
+    <span>{{ .Params.uid }}</span>
+  </nav>
+
+  <header class="kaart__header">
+    <div class="kaart__badges">
+      {{ partial "badge.html" (dict "vocab" "soort" "code" .Params.soort) }}
+      {{ partial "badge.html" (dict "vocab" "status" "code" .Params.status) }}
+    </div>
+    <p class="kaart__uid" data-pagefind-meta="uid">{{ .Params.uid }}</p>
+    <h1 class="kaart__title">{{ .Title }}</h1>
+    {{ with .Params.samenvatting }}<p class="kaart__lead">{{ . }}</p>{{ end }}
+  </header>
+
+  {{- /* Verborgen Pagefind-facetten (meervoudige waarden = meerdere elementen) */ -}}
+  <div hidden>
+    <span data-pagefind-filter="soort">{{ partial "label.html" (dict "vocab" "soort" "code" .Params.soort) }}</span>
+    <span data-pagefind-filter="status">{{ partial "label.html" (dict "vocab" "status" "code" .Params.status) }}</span>
+    {{ range .Params.domein }}<span data-pagefind-filter="domein">{{ . }}</span>{{ end }}
+    {{ range .Params.uitwisseling }}<span data-pagefind-filter="uitwisseling">{{ . }}</span>{{ end }}
+    {{ range .Params.patroon }}<span data-pagefind-filter="patroon">{{ . }}</span>{{ end }}
+    {{ range .Params.functie }}<span data-pagefind-filter="functie">{{ . }}</span>{{ end }}
+    {{ range .Params.toepassingen }}<span data-pagefind-filter="toepassing">{{ . }}</span>{{ end }}
+    {{ range .Params.auteur }}<span data-pagefind-filter="auteur">{{ . }}</span>{{ end }}
+    <span data-pagefind-meta="soort">{{ partial "label.html" (dict "vocab" "soort" "code" .Params.soort) }}</span>
+    <span data-pagefind-meta="status">{{ partial "label.html" (dict "vocab" "status" "code" .Params.status) }}</span>
+    {{ with .Params.ingangsdatum }}<span data-pagefind-sort="ingang">{{ . }}</span><span data-pagefind-meta="ingang">{{ . }}</span>{{ end }}
+  </div>
+
+  {{- /* Permalink-blok: dit register is de "place of truth" */ -}}
+  <section class="permalink-box">
+    <h2>Permalink</h2>
+    <p class="permalink-box__hint">Verwijs naar deze metadata via onderstaande permalink. Deze blijft stabiel zodra een eigen domein is gekoppeld.</p>
+    <div class="permalink-box__row">
+      <code id="permalink" class="permalink-box__url">{{ $permalink }}</code>
+      <button type="button" class="btn btn--small" data-copy="#permalink">Kopieer</button>
+    </div>
+    <p class="permalink-box__formats">
+      Machineleesbaar:
+      {{ with .OutputFormats.Get "jsonld" }}<a href="{{ .RelPermalink }}">JSON-LD (RDF)</a>{{ end }}
+    </p>
+  </section>
+
+  <section class="kaart__attrs">
+    <h2>Kerngegevens</h2>
+    <dl class="attr-grid">
+      <dt>UID</dt><dd><code>{{ .Params.uid }}</code></dd>
+      <dt>Soort</dt><dd>{{ partial "badge.html" (dict "vocab" "soort" "code" .Params.soort) }} <span class="muted">{{ partial "label.html" (dict "vocab" "soort" "code" .Params.soort) }}</span></dd>
+      <dt>Status</dt><dd>{{ partial "badge.html" (dict "vocab" "status" "code" .Params.status) }}</dd>
+      <dt>Ingangsdatum</dt><dd>{{ with .Params.ingangsdatum }}<time datetime="{{ . }}">{{ . }}</time>{{ end }}{{ with .Params.ingang_stelselversie }} <span class="muted">(vanaf Stelselversie {{ . }})</span>{{ end }}</dd>
+      <dt>Vervaldatum</dt><dd>{{ with .Params.vervaldatum }}<time datetime="{{ . }}">{{ . }}</time>{{ with $.Params.vervaldatum_stelselversie }} <span class="muted">(t/m Stelselversie {{ . }})</span>{{ end }}{{ else }}<span class="muted">—</span>{{ end }}</dd>
+      <dt>Auteur / Opsteller</dt><dd>{{ delimit .Params.auteur ", " | default "—" }}</dd>
+      <dt>Autorisator</dt><dd>{{ with .Params.autorisator }}{{ range . }}{{ .naam }}{{ with .datum }} <span class="muted">({{ . }})</span>{{ end }}{{ end }}{{ else }}<span class="muted">—</span>{{ end }}</dd>
+      <dt>Beheerder</dt><dd>{{ delimit .Params.beheerder ", " | default "—" }}</dd>
+    </dl>
+  </section>
+
+  <section class="kaart__context">
+    <h2>Context</h2>
+    <dl class="attr-grid">
+      <dt>Domein</dt><dd class="badges">{{ range .Params.domein }}{{ partial "badge.html" (dict "vocab" "domein" "code" .) }}{{ else }}<span class="muted">—</span>{{ end }}</dd>
+      <dt>Uitwisseling</dt><dd class="badges">{{ range .Params.uitwisseling }}{{ partial "badge.html" (dict "vocab" "uitwisseling" "code" .) }}{{ else }}<span class="muted">—</span>{{ end }}</dd>
+      <dt>Communicatiepatroon <span class="tag-prefix">[P]</span></dt><dd class="badges">{{ range .Params.patroon }}{{ partial "badge.html" (dict "vocab" "patroon" "code" .) }}{{ else }}<span class="muted">—</span>{{ end }}</dd>
+      <dt>Generieke functies <span class="tag-prefix">[F]</span></dt><dd class="badges">{{ range .Params.functie }}{{ partial "badge.html" (dict "vocab" "functie" "code" .) }}{{ else }}<span class="muted">—</span>{{ end }}</dd>
+    </dl>
+  </section>
+
+  {{ with .Params.voorwaarden }}
+  <section class="kaart__block">
+    <h2>Voorwaarden / Uitzonderingen</h2>
+    <p>{{ . }}</p>
+  </section>
+  {{ end }}
+
+  {{ with .Params.conformiteitscriteria }}
+  <section class="kaart__block">
+    <h2>Conformiteitscriteria</h2>
+    <p>{{ . }}</p>
+  </section>
+  {{ end }}
+
+  {{ if .Content }}
+  <section class="kaart__block kaart__body">
+    <h2>Omschrijving</h2>
+    {{ .Content }}
+  </section>
+  {{ end }}
+
+  {{ with .Params.betreft_twiin }}
+  <section class="kaart__block">
+    <h2>Bijbehorende specificaties in Twiin</h2>
+    <ul class="ref-list">
+      {{ range . }}<li><a href="{{ .link }}"{{ if not (hasPrefix .link "/") }} rel="external"{{ end }}>{{ .titel }}</a> <span class="muted">— beheerder: {{ .beheerder | default "Twiin" }}</span></li>{{ end }}
+    </ul>
+  </section>
+  {{ end }}
+
+  {{ with .Params.betreft_extern }}
+  <section class="kaart__block">
+    <h2>Bijbehorende standaarden &amp; normen buiten Twiin</h2>
+    <ul class="ref-list">
+      {{ range . }}<li><a href="{{ .link }}" rel="external">{{ .titel }}</a>{{ with .beheerder }} <span class="muted">— {{ . }}</span>{{ end }}</li>{{ end }}
+    </ul>
+  </section>
+  {{ end }}
+
+  {{ with .Params.relaties }}
+  <section class="kaart__block">
+    <h2>Relaties en afhankelijkheden</h2>
+    <ul class="ref-list">
+      {{ range . }}
+        {{ $code := . }}
+        {{ $target := index (where site.RegularPages "Params.uid" $code) 0 }}
+        <li>
+          {{ if $target }}<a href="{{ $target.RelPermalink }}">{{ $code }} — {{ $target.Title }}</a>
+          {{ else }}<code>{{ $code }}</code> <span class="muted">(nog niet in register)</span>{{ end }}
+        </li>
+      {{ end }}
+    </ul>
+  </section>
+  {{ end }}
+
+  {{ with .Params.toepassingen }}
+  <section class="kaart__block">
+    <h2>Toepassingen in</h2>
+    <p class="badges">{{ range . }}{{ partial "badge.html" (dict "vocab" "stelsel" "code" .) }}{{ end }}</p>
+  </section>
+  {{ end }}
+
+  {{ with .Params.wijzigingslog }}
+  <section class="kaart__block">
+    <h2>Wijzigingslog</h2>
+    <table class="log-table">
+      <thead><tr><th>Datum</th><th>Versie</th><th>Wijziging</th></tr></thead>
+      <tbody>
+        {{ range . }}<tr><td><time datetime="{{ .datum }}">{{ .datum }}</time></td><td>{{ .versie }}</td><td>{{ .wijziging }}</td></tr>{{ end }}
+      </tbody>
+    </table>
+  </section>
+  {{ end }}
+
+</article>
+{{ end }}

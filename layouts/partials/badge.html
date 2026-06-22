@@ -1,0 +1,17 @@
+{{- /*
+  Rendert een gekleurde badge voor een vocabulaire-term.
+  Aanroep: {{ partial "badge.html" (dict "vocab" "status" "code" .Params.status) }}
+*/ -}}
+{{- $vocab := .vocab -}}
+{{- $code := .code -}}
+{{- $label := $code -}}
+{{- $kleur := "grijs" -}}
+{{- $titel := "" -}}
+{{- with index site.Data.vocab $vocab -}}
+  {{- with index .terms $code -}}
+    {{- $label = .label -}}
+    {{- with .kleur }}{{ $kleur = . }}{{ end -}}
+    {{- with .omschrijving }}{{ $titel = . }}{{ end -}}
+  {{- end -}}
+{{- end -}}
+<span class="badge badge--{{ $kleur }}"{{ with $titel }} title="{{ . }}"{{ end }}>{{ $label }}</span>

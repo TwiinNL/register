@@ -1,0 +1,91 @@
+# =============================================================================
+# Gecontroleerde vocabulaires (controlled vocabularies)
+# =============================================================================
+# Eén bron voor: code, label (NL), korte omschrijving en een kleur/categorie
+# voor de UI. Templates en RDF-generatie lezen uitsluitend hieruit, zodat
+# nieuwe waarden op één plek toegevoegd worden.
+#
+# Elk item wordt in RDF behandeld als skos:Concept binnen het bijbehorende
+# skos:ConceptScheme (zie key 'scheme').
+
+soort:
+  scheme: "soort"
+  label: "Soort"
+  terms:
+    VA: { label: "Vertrouwensafspraak", kleur: "groen",  omschrijving: "Afspraak over onderling vertrouwen tussen deelnemers." }
+    PA: { label: "Procesafspraak",      kleur: "blauw",  omschrijving: "Afspraak over het proces/de werkwijze." }
+    TA: { label: "Technische afspraak", kleur: "paars",  omschrijving: "Technisch normatieve afspraak (TA)." }
+    SP: { label: "Specificatie",        kleur: "cyaan",  omschrijving: "Gedetailleerde technische specificatie." }
+    RI: { label: "Richtlijn",           kleur: "oranje", omschrijving: "Richtinggevende, doorgaans informatieve afspraak." }
+
+domein:
+  scheme: "domein"
+  label: "Domein"
+  terms:
+    MSZ: { label: "MSZ", kleur: "blauw",  omschrijving: "Medisch-specialistische zorg." }
+    VVT: { label: "VVT", kleur: "groen",  omschrijving: "Verpleging, Verzorging en Thuiszorg." }
+    HA:  { label: "HA",  kleur: "oranje", omschrijving: "Huisartsenzorg." }
+
+uitwisseling:
+  scheme: "uitwisseling"
+  label: "Uitwisseling"
+  terms:
+    Verwijzing: { label: "Verwijzing", kleur: "paars", omschrijving: "Uitwisseling in het kader van een verwijzing." }
+    Overdracht: { label: "Overdracht", kleur: "cyaan", omschrijving: "Uitwisseling in het kader van een overdracht." }
+
+patroon:
+  scheme: "patroon"
+  label: "Communicatiepatroon"
+  prefix: "P"
+  terms:
+    "Notified Pull": { label: "Notified Pull", kleur: "blauw",  omschrijving: "Versturen van een notificatie gevolgd door gerichte bevraging." }
+    "Pull":          { label: "Pull",          kleur: "groen",  omschrijving: "Gerichte bevraging." }
+    "Indexed Pull":  { label: "Indexed Pull",  kleur: "oranje", omschrijving: "Geïndexeerde bevraging." }
+    "Push":          { label: "Push",          kleur: "paars",  omschrijving: "Versturen." }
+
+functie:
+  scheme: "functie"
+  label: "Generieke functie"
+  prefix: "F"
+  terms:
+    Identificatie:     { label: "Identificatie",     kleur: "grijs" }
+    Authenticatie:     { label: "Authenticatie",     kleur: "grijs" }
+    Autorisatie:       { label: "Autorisatie",       kleur: "grijs" }
+    Behandelrelatie:   { label: "Behandelrelatie",   kleur: "grijs" }
+    Toestemming:       { label: "Toestemming",       kleur: "grijs" }
+    Logging:           { label: "Logging",           kleur: "grijs" }
+    Adressering:       { label: "Adressering",       kleur: "grijs" }
+    Localisatie:       { label: "Localisatie",       kleur: "grijs" }
+    Transparantie:     { label: "Transparantie",     kleur: "grijs" }
+    Netwerkbeveiliging:{ label: "Netwerkbeveiliging",kleur: "grijs" }
+    Routering:         { label: "Routering",         kleur: "grijs" }
+
+status:
+  scheme: "status"
+  label: "Status"
+  # Volgorde = levenscyclus; 'rang' bepaalt sortering/lifecycle-positie.
+  terms:
+    Draft:        { label: "Draft",        kleur: "grijs",  rang: 1, omschrijving: "Concept, in bewerking." }
+    Candidate:    { label: "Candidate",    kleur: "geel",   rang: 2, omschrijving: "Kandidaat voor vaststelling." }
+    Trial:        { label: "Trial",        kleur: "geel",   rang: 3, omschrijving: "Beproeving / trial-use." }
+    Normatief:    { label: "Normatief",    kleur: "groen",  rang: 4, omschrijving: "Vastgesteld en verplichtend." }
+    Informative:  { label: "Informative",  kleur: "blauw",  rang: 4, omschrijving: "Informatief, niet verplichtend." }
+    Uitgefaseerd: { label: "Uitgefaseerd", kleur: "oranje", rang: 5, omschrijving: "Wordt uitgefaseerd." }
+    Vervallen:    { label: "Vervallen",    kleur: "rood",   rang: 6, omschrijving: "Niet langer geldig." }
+
+stelsel:
+  scheme: "stelsel"
+  label: "Toepassing in stelsel"
+  terms:
+    MedMij: { label: "MedMij", omschrijving: "MedMij-afsprakenstelsel." }
+    AORTA:  { label: "AORTA",  omschrijving: "AORTA-infrastructuur." }
+    NUTS:   { label: "NUTS",   omschrijving: "Nuts-netwerk." }
+
+rol:
+  # Organisaties/rollen voor auteur, autorisator, beheerder
+  label: "Organisatie / rol"
+  terms:
+    "Working Group TA":    { label: "Working Group TA" }
+    "Working Group TA NP": { label: "Working Group TA NP" }
+    "Twiin":               { label: "Twiin" }
+    "VWS programma LDN":   { label: "VWS programma LDN" }

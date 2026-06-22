@@ -1,0 +1,111 @@
+{{- /*
+  Bouwt het JSON-LD (RDF) object voor een kaart en geeft het als string terug.
+  Gebruikt door head.html (inline <script>) en door single.jsonld (los bestand),
+  zodat er één bron is voor de RDF-representatie.
+
+  Vocabulaires: Dublin Core Terms (dct), ADMS (assets/standaarden),
+  SKOS (gecontroleerde waarden) en schema.org. Eigen termen onder 'las:'.
+*/ -}}
+{{- $p := . -}}
+{{- $ns := site.Params.rdfNamespace -}}
+{{- $id := $p.Permalink -}}
+{{- with $p.Params.permalink }}{{ $id = . }}{{ end -}}
+
+{{- $ctx := dict
+  "dct" "http://purl.org/dc/terms/"
+  "adms" "http://www.w3.org/ns/adms#"
+  "skos" "http://www.w3.org/2004/02/skos/core#"
+  "schema" "https://schema.org/"
+  "owl" "http://www.w3.org/2002/07/owl#"
+  "rdfs" "http://www.w3.org/2000/01/rdf-schema#"
+  "las" $ns -}}
+
+{{- $node := dict
+  "@id" $id
+  "@type" (slice "adms:Asset" "las:Afspraak")
+  "dct:identifier" $p.Params.uid
+  "dct:title" $p.Title
+  "schema:name" $p.Title
+  "schema:url" $id -}}
+
+{{- /* Soort als skos:Concept */ -}}
+{{- with $p.Params.soort -}}
+  {{- $lab := partial "label.html" (dict "vocab" "soort" "code" .) -}}
+  {{- $node = merge $node (dict "dct:type" (dict "@id" (printf "%ssoort-%s" $ns .) "skos:prefLabel" $lab)) -}}
+{{- end -}}
+
+{{- /* Status via adms:status */ -}}
+{{- with $p.Params.status -}}
+  {{- $lab := partial "label.html" (dict "vocab" "status" "code" .) -}}
+  {{- $node = merge $node (dict "adms:status" (dict "@id" (printf "%sstatus-%s" $ns .) "skos:prefLabel" $lab)) -}}
+{{- end -}}
+
+{{- with $p.Params.samenvatting }}{{ $node = merge $node (dict "dct:description" .) }}{{ end -}}
+
+{{- /* Context-lijsten als skos:Concept-arrays onder las:* */ -}}
+{{- $contextMap := slice
+  (dict "field" "domein" "vocab" "domein" "prop" "las:domein")
+  (dict "field" "uitwisseling" "vocab" "uitwisseling" "prop" "las:uitwisseling")
+  (dict "field" "patroon" "vocab" "patroon" "prop" "las:communicatiepatroon")
+  (dict "field" "functie" "vocab" "functie" "prop" "las:generiekeFunctie")
+  (dict "field" "toepassingen" "vocab" "stelsel" "prop" "las:toepassing") -}}
+{{- range $contextMap -}}
+  {{- $vals := index $p.Params .field -}}
+  {{- if $vals -}}
+    {{- $arr := slice -}}
+    {{- $v := . -}}
+    {{- range $vals -}}
+      {{- $lab := partial "label.html" (dict "vocab" $v.vocab "code" .) -}}
+      {{- $arr = $arr | append (dict "@id" (printf "%s%s-%s" $ns $v.vocab .) "skos:prefLabel" $lab) -}}
+    {{- end -}}
+    {{- $node = merge $node (dict $v.prop $arr) -}}
+  {{- end -}}
+{{- end -}}
+
+{{- with $p.Params.auteur }}{{ $node = merge $node (dict "dct:creator" .) }}{{ end -}}
+{{- with $p.Params.beheerder }}{{ $node = merge $node (dict "las:beheerder" .) }}{{ end -}}
+
+{{- /* Autorisator(en) + datum */ -}}
+{{- with $p.Params.autorisator -}}
+  {{- $arr := slice -}}
+  {{- range . -}}
+    {{- $arr = $arr | append (dict "las:organisatie" .naam "dct:date" (string .datum)) -}}
+  {{- end -}}
+  {{- $node = merge $node (dict "las:autorisator" $arr) -}}
+{{- end -}}
+
+{{- with $p.Params.ingangsdatum }}{{ $node = merge $node (dict "dct:issued" (string .) "schema:datePublished" (string .)) }}{{ end -}}
+{{- with $p.Params.vervaldatum }}{{ $node = merge $node (dict "las:vervaldatum" (string .)) }}{{ end -}}
+{{- with $p.Params.ingang_stelselversie }}{{ $node = merge $node (dict "las:ingangStelselversie" (string .)) }}{{ end -}}
+
+{{- /* Relaties naar andere UIDs → interne permalinks */ -}}
+{{- with $p.Params.relaties -}}
+  {{- $arr := slice -}}
+  {{- range . -}}
+    {{- $code := . -}}
+    {{- $target := "" -}}
+    {{- range (where site.RegularPages "Type" "register") -}}
+      {{- if eq .Params.uid $code }}{{ $target = .Permalink }}{{ end -}}
+    {{- end -}}
+    {{- $arr = $arr | append (dict "@id" (cond (ne $target "") $target (printf "%safspraak-%s" $ns $code)) "dct:identifier" $code) -}}
+  {{- end -}}
+  {{- $node = merge $node (dict "dct:relation" $arr) -}}
+{{- end -}}
+
+{{- /* Verwijzingen binnen + buiten Twiin → dct:references */ -}}
+{{- $refs := slice -}}
+{{- range $p.Params.betreft_twiin }}{{ $refs = $refs | append (dict "@id" .link "dct:title" .titel "las:beheerder" (.beheerder | default "Twiin") "las:scope" "twiin") }}{{ end -}}
+{{- range $p.Params.betreft_extern }}{{ $refs = $refs | append (dict "@id" .link "dct:title" .titel "las:beheerder" (.beheerder | default "") "las:scope" "extern") }}{{ end -}}
+{{- with $refs }}{{ $node = merge $node (dict "dct:references" .) }}{{ end -}}
+
+{{- /* Wijzigingslog → adms:versionNotes-achtige lijst */ -}}
+{{- with $p.Params.wijzigingslog -}}
+  {{- $arr := slice -}}
+  {{- range . -}}
+    {{- $arr = $arr | append (dict "dct:date" (string .datum) "owl:versionInfo" (string .versie) "rdfs:comment" .wijziging) -}}
+  {{- end -}}
+  {{- $node = merge $node (dict "las:wijzigingslog" $arr) -}}
+{{- end -}}
+
+{{- $graph := merge (dict "@context" $ctx) $node -}}
+{{- return (jsonify (dict "indent" "  ") $graph) -}}

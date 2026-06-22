@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="{{ site.LanguageCode | default "nl" }}" data-basepath="{{ "/" | relURL }}">
+<head>
+  {{ partial "head.html" . }}
+</head>
+<body>
+  {{ partial "header.html" . }}
+  <main class="site-main" id="content">
+    {{ block "main" . }}{{ end }}
+  </main>
+  {{ partial "footer.html" . }}
+  <script src="{{ "js/main.js" | relURL }}"></script>
+  {{ block "scripts" . }}{{ end }}
+</body>
+</html>

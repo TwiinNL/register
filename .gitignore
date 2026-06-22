@@ -1,0 +1,15 @@
+# Hugo build output
+/public/
+/resources/_gen/
+.hugo_build.lock
+
+# Pagefind index (gegenereerd tijdens build)
+/public/pagefind/
+
+# macOS
+.DS_Store
+
+# Editor
+.idea/
+.vscode/
+*.swp

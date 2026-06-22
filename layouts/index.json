@@ -1,0 +1,23 @@
+{{- $register := where site.RegularPages "Type" "register" -}}
+{{- $items := slice -}}
+{{- range (sort $register "Params.uid") -}}
+  {{- $permalink := .Permalink -}}{{ with .Params.permalink }}{{ $permalink = . }}{{ end -}}
+  {{- $jsonld := "" -}}{{ with .OutputFormats.Get "jsonld" }}{{ $jsonld = .Permalink }}{{ end -}}
+  {{- $items = $items | append (dict
+      "uid" .Params.uid
+      "naam" .Title
+      "soort" .Params.soort
+      "status" .Params.status
+      "domein" (.Params.domein | default slice)
+      "uitwisseling" (.Params.uitwisseling | default slice)
+      "patroon" (.Params.patroon | default slice)
+      "functie" (.Params.functie | default slice)
+      "toepassingen" (.Params.toepassingen | default slice)
+      "ingangsdatum" (string (.Params.ingangsdatum | default ""))
+      "samenvatting" (.Params.samenvatting | default "")
+      "url" .RelPermalink
+      "permalink" $permalink
+      "jsonld" $jsonld
+    ) -}}
+{{- end -}}
+{{- dict "register" (site.Title) "aantal" (len $items) "items" $items | jsonify (dict "indent" "  ") -}}

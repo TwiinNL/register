@@ -1,0 +1,74 @@
+# =============================================================================
+# Twiin LAS — Landelijk Afsprakenstelsel — Register van specificaties
+# Hugo configuration
+# =============================================================================
+#
+# baseURL: bepaalt waar de permalinks naar verwijzen.
+#   - Codeberg Pages (per-repo):  https://las.codeberg.page/playground/
+#   - Eigen domein (later):       https://afsprakenstelsel.twiin.nl/
+# Pas deze één regel aan zodra een eigen domein gekoppeld is; alle permalinks
+# en RDF-identifiers volgen automatisch.
+baseURL = "https://las.codeberg.page/playground/"
+
+languageCode = "nl"
+defaultContentLanguage = "nl"
+title = "Twiin LAS — Register"
+
+# Schone, korte UID-gebaseerde URLs en geen "ugly" .html
+enableGitInfo = true
+enableRobotsTXT = true
+
+# -----------------------------------------------------------------------------
+# Permalinks: kaarten leven onder /register/<uid-lowercase>/
+# -----------------------------------------------------------------------------
+[permalinks]
+  register = "/register/:slug/"
+
+# -----------------------------------------------------------------------------
+# Media type + output format voor JSON-LD (RDF) per kaart
+# -----------------------------------------------------------------------------
+[mediaTypes."application/ld+json"]
+  suffixes = ["jsonld"]
+
+[outputFormats.jsonld]
+  mediaType = "application/ld+json"
+  baseName = "index"
+  isPlainText = true
+  notAlternative = true
+
+[outputs]
+  home = ["HTML", "RSS", "JSON"]   # JSON = register-index voor client-side fallback
+  section = ["HTML", "RSS"]
+  page = ["HTML", "jsonld"]        # elke kaart krijgt ook index.jsonld (RDF)
+
+# -----------------------------------------------------------------------------
+# Markdown / rendering
+# -----------------------------------------------------------------------------
+[markup]
+  [markup.goldmark.renderer]
+    unsafe = true   # toestaan van inline HTML in kaart-bodies waar nodig
+  [markup.highlight]
+    noClasses = false
+  [markup.tableOfContents]
+    startLevel = 2
+    endLevel = 3
+
+# -----------------------------------------------------------------------------
+# Parameters (bewerkbaar zonder code aan te raken)
+# -----------------------------------------------------------------------------
+[params]
+  organisatie = "Twiin"
+  beschrijving = "Centrale vindplaats (single source of truth) voor metadata van afspraken, specificaties, richtlijnen en standaarden binnen het Twiin Landelijk Afsprakenstelsel (LAS)."
+  # RDF/JSON-LD: basis-namespace voor de eigen LAS-vocabulaire.
+  # Eindigt op #; termen worden hieraan gehangen (bv. las:Afspraak).
+  rdfNamespace = "https://las.codeberg.page/playground/ns#"
+  # Hoeveel uitgelichte kaarten op de landingspagina
+  uitgelichtAantal = 4
+
+[params.author]
+  name = "Twiin"
+
+# Geen Hugo-taxonomieën: browsen gebeurt via de categorieën op de homepage
+# en facet-filtering via Pagefind. Lege tabel schakelt de standaard
+# tags/categories uit.
+[taxonomies]

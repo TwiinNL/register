@@ -1,0 +1,1 @@
+{{- partial "jsonld-data.html" . -}}

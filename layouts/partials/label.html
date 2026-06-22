@@ -1,0 +1,14 @@
+{{- /*
+  Geeft het NL-label voor een code uit data/vocab.yaml.
+  Aanroep: {{ partial "label.html" (dict "vocab" "soort" "code" .Params.soort) }}
+  Valt terug op de code zelf als er geen label is.
+*/ -}}
+{{- $vocab := .vocab -}}
+{{- $code := .code -}}
+{{- $out := $code -}}
+{{- with index site.Data.vocab $vocab -}}
+  {{- with index .terms $code -}}
+    {{- $out = .label -}}
+  {{- end -}}
+{{- end -}}
+{{- return $out -}}

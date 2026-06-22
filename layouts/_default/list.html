@@ -1,0 +1,11 @@
+{{ define "main" }}
+<div class="wrap">
+  <header class="page-head"><h1>{{ .Title }}</h1>{{ .Content }}</header>
+  <div class="card-grid">
+    {{ range .Pages }}
+      {{ if eq .Type "register" }}{{ partial "card.html" . }}
+      {{ else }}<article class="card"><a class="card__link" href="{{ .RelPermalink }}"><h3 class="card__title">{{ .Title }}</h3></a></article>{{ end }}
+    {{ end }}
+  </div>
+</div>
+{{ end }}

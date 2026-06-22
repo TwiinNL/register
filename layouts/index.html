@@ -1,0 +1,58 @@
+{{ define "main" }}
+{{- $register := where site.RegularPages "Type" "register" -}}
+{{- $n := site.Params.uitgelichtAantal | default 4 -}}
+{{- $recent := first $n (sort $register "Params.ingangsdatum" "desc") -}}
+{{- $belangrijk := first $n (sort (where $register "Params.uitgelicht" true) "Params.prioriteit" "asc") -}}
+
+<section class="hero">
+  <div class="wrap">
+    <h1>Twiin LAS — Register</h1>
+    <p class="hero__lead">{{ site.Params.beschrijving }}</p>
+    <form class="hero__search" role="search" action="{{ "register/" | relURL }}" method="get">
+      <input type="search" name="q" placeholder="Zoek een afspraak, specificatie of standaard…" aria-label="Zoeken in het register">
+      <button type="submit" class="btn">Zoeken</button>
+    </form>
+  </div>
+</section>
+
+<section class="wrap section">
+  <div class="section__head">
+    <h2>Uitgelicht</h2>
+    <div class="switch" role="group" aria-label="Selecteer weergave uitgelichte kaarten">
+      <button type="button" class="switch__btn is-active" data-featured="belangrijk">Belangrijk</button>
+      <button type="button" class="switch__btn" data-featured="recent">Recent</button>
+    </div>
+  </div>
+
+  <div class="card-grid" data-featured-panel="belangrijk">
+    {{ range $belangrijk }}{{ partial "card.html" . }}{{ else }}<p class="muted">Nog geen uitgelichte kaarten.</p>{{ end }}
+  </div>
+  <div class="card-grid" data-featured-panel="recent" hidden>
+    {{ range $recent }}{{ partial "card.html" . }}{{ end }}
+  </div>
+</section>
+
+<section class="wrap section">
+  <div class="section__head"><h2>Categorieën</h2><a class="link-more" href="{{ "register/" | relURL }}">Volledig register →</a></div>
+
+  {{- /* Per Soort een rij met de eerste kaarten */ -}}
+  {{ range $code, $term := site.Data.vocab.soort.terms }}
+    {{ $cards := where $register "Params.soort" $code }}
+    {{ if $cards }}
+    <div class="category">
+      <div class="category__head">
+        <h3>{{ partial "badge.html" (dict "vocab" "soort" "code" $code) }} {{ $term.label }} <span class="muted">({{ len $cards }})</span></h3>
+        <a class="link-more" href="{{ "register/" | relURL }}?filter=soort:{{ $term.label }}">Alle {{ $term.label | lower }} →</a>
+      </div>
+      <div class="card-grid">
+        {{ range first 3 (sort $cards "Params.ingangsdatum" "desc") }}{{ partial "card.html" . }}{{ end }}
+      </div>
+    </div>
+    {{ end }}
+  {{ end }}
+</section>
+{{ end }}
+
+{{ define "scripts" }}
+<script src="{{ "js/landing.js" | relURL }}"></script>
+{{ end }}

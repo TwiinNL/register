@@ -1,0 +1,16 @@
+{{- /* Compacte metadata-kaart voor overzichten. Verwacht een register-pagina als context. */ -}}
+{{- $p := . -}}
+<article class="card" data-soort="{{ $p.Params.soort }}" data-status="{{ $p.Params.status }}">
+  <a class="card__link" href="{{ $p.RelPermalink }}">
+    <header class="card__head">
+      {{ partial "badge.html" (dict "vocab" "soort" "code" $p.Params.soort) }}
+      <span class="card__uid">{{ $p.Params.uid }}</span>
+    </header>
+    <h3 class="card__title">{{ $p.Title }}</h3>
+    {{ with $p.Params.samenvatting }}<p class="card__summary">{{ . }}</p>{{ end }}
+  </a>
+  <footer class="card__foot">
+    {{ partial "badge.html" (dict "vocab" "status" "code" $p.Params.status) }}
+    {{ range $p.Params.domein }}{{ partial "badge.html" (dict "vocab" "domein" "code" .) }}{{ end }}
+  </footer>
+</article>
