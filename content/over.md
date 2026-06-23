@@ -1,11 +1,11 @@
 ---
-title: "Over dit register"
+title: "Over deze index"
 ---
 
-Dit register is de **centrale vindplaats (single source of truth)** voor de metadata van
+Dit register is de **centrale vindplaats** voor de metadata van
 afspraken, specificaties, richtlijnen en standaarden binnen het **Twiin Landelijk
-Afsprakenstelsel (LAS)**. Iedere kaart beschrijft één afspraak — of een combinatie van
-afspraken — en vormt het permalink-anker waar andere partijen naar verwijzen.
+Afsprakenstelsel voor gezondheidsgegevens**. Iedere kaart beschrijft één afspraak, of een combinatie van
+afsprakenen en vormt het permalink-anker voor verwijzing.
 
 ## Metadatakaarten
 
@@ -24,18 +24,17 @@ waarbij `SOORT` een van de volgende waarden is:
 
 De permalink is de stabiele verwijzing naar een kaart. Zolang de site via Codeberg Pages
 gepubliceerd wordt, is de permalink de URL binnen deze publicatie. Zodra een eigen domein
-gekoppeld is, verwijst de permalink daarnaartoe — de inhoud en het pad blijven gelijk.
+gekoppeld is, verwijst de permalink daarnaartoe.
 
 ## RDF / JSON-LD
 
-Iedere kaart publiceert een machineleesbare beschrijving als **JSON-LD** (een
-RDF-serialisatie). Deze is opgenomen in de pagina en los op te halen via `index.jsonld` bij
-elke kaart. De beschrijving gebruikt gangbare vocabulaires — Dublin Core Terms (`dct`),
-ADMS (`adms`), SKOS (`skos`) en schema.org — aangevuld met een eigen LAS-vocabulaire (`las:`)
+Iedere kaart publiceert een machineleesbare beschrijving als RDF. Deze is opgenomen in de pagina en los op te halen via `index.jsonld` bij
+elke kaart. De beschrijving gebruikt Dublin Core Terms (`dct`),
+ADMS (`adms`), SKOS (`skos`) en schema.org, aangevuld met een eigen LAS-vocabulaire (`las:`)
 voor domeinspecifieke eigenschappen.
 
 ## Zoeken en filteren
 
-Het [register](../register/) is full-text doorzoekbaar (via Pagefind) en te filteren op
+Het [register](../register/) is full-text doorzoekbaar en te filteren op
 attributen: soort, status, domein, uitwisseling, communicatiepatroon, generieke functie,
 toepassing en auteur.

@@ -84,9 +84,7 @@ a:hover { text-decoration:underline; }
 /* ---- Banner (Twiin-stijl, met merkbeeld) ---- */
 .banner {
   background:
-    linear-gradient(90deg, rgba(25,8,20,.50) 0%, rgba(25,8,20,.14) 55%, rgba(25,8,20,0) 82%),
     url("../images/twiin-banner.jpeg") center/cover no-repeat;
-  border-bottom:3px solid var(--accent);
   padding-block:4rem 3.4rem;
 }
 .banner__kicker { text-transform:uppercase; letter-spacing:.14em; font-size:.82rem; font-weight:700; color:rgba(255,255,255,.92); margin:0 0 .5rem; }
