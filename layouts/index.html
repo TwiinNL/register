@@ -1,15 +1,15 @@
 {{ define "main" }}
-{{- $register := where site.RegularPages "Type" "register" -}}
+{{- $index := where site.RegularPages "Type" "index" -}}
 {{- $n := site.Params.uitgelichtAantal | default 4 -}}
-{{- $recent := first $n (sort $register "Params.ingangsdatum" "desc") -}}
-{{- $belangrijk := first $n (sort (where $register "Params.uitgelicht" true) "Params.prioriteit" "asc") -}}
+{{- $recent := first $n (sort $index "Params.ingangsdatum" "desc") -}}
+{{- $belangrijk := first $n (sort (where $index "Params.uitgelicht" true) "Params.prioriteit" "asc") -}}
 
 <header class="banner" data-component="banner">
   <div class="wrap banner__inner">
     <p class="banner__kicker">Index</p>
     <h1 class="banner__title">Twiin Landelijk afsprakenstelsel</h1>
-    <form class="banner__search" role="search" action="{{ "register/" | relURL }}" method="get">
-      <input type="search" name="q" placeholder="Zoek een afspraak, specificatie of standaard…" aria-label="Zoeken in het register">
+    <form class="banner__search" role="search" action="{{ "index/" | relURL }}" method="get">
+      <input type="search" name="q" placeholder="Zoek een afspraak, specificatie of standaard…" aria-label="Zoeken in de index">
       <button type="submit" class="btn btn--cta">Zoeken</button>
     </form>
   </div>
@@ -33,16 +33,16 @@
 </section>
 
 <section class="wrap section">
-  <div class="section__head"><h2>Categorieën</h2><a class="link-more" href="{{ "register/" | relURL }}">Volledig register →</a></div>
+  <div class="section__head"><h2>Categorieën</h2><a class="link-more" href="{{ "index/" | relURL }}">Volledige index→</a></div>
 
   {{- /* Per Soort een rij met de eerste kaarten */ -}}
   {{ range $code, $term := hugo.Data.vocab.soort.terms }}
-    {{ $cards := where $register "Params.soort" $code }}
+    {{ $cards := where $index "Params.soort" $code }}
     {{ if $cards }}
     <div class="category">
       <div class="category__head">
         <h3>{{ partial "badge.html" (dict "vocab" "soort" "code" $code) }} {{ $term.label }} <span class="muted">({{ len $cards }})</span></h3>
-        <a class="link-more" href="{{ "register/" | relURL }}?filter=soort:{{ $term.label }}">Alle {{ $term.label | lower }} →</a>
+        <a class="link-more" href="{{ "index/" | relURL }}?filter=soort:{{ $term.label }}">Alle {{ $term.label | lower }} →</a>
       </div>
       <div class="card-grid">
         {{ range first 3 (sort $cards "Params.ingangsdatum" "desc") }}{{ partial "card.html" . }}{{ end }}

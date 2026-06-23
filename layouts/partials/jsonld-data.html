@@ -84,7 +84,7 @@
   {{- range . -}}
     {{- $code := . -}}
     {{- $target := "" -}}
-    {{- range (where site.RegularPages "Type" "register") -}}
+    {{- range (where site.RegularPages "Type" "index") -}}
       {{- if eq .Params.uid $code }}{{ $target = .Permalink }}{{ end -}}
     {{- end -}}
     {{- $arr = $arr | append (dict "@id" (cond (ne $target "") $target (printf "%safspraak-%s" $ns $code)) "dct:identifier" $code) -}}

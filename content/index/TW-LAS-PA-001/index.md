@@ -23,7 +23,7 @@ autorisator:
 beheerder: ["Twiin"]
 betreft_twiin:
   - titel: "Vertrouwensafspraak: Onderling vertrouwen tussen deelnemers"
-    link: "/register/tw-las-va-001/"
+    link: "/index/tw-las-va-001/"
     beheerder: "Twiin"
 betreft_extern: []
 relaties: ["TW-LAS-VA-001"]
@@ -40,4 +40,4 @@ draft: false
 De procesafspraak beschrijft de stappen van aanmelding tot en met operationele aansluiting:
 intake, kwalificatie (technische en organisatorische toets), ondertekening van de
 deelnemersovereenkomst en publicatie van de conformiteitsverklaring. Het proces zorgt ervoor
-dat de [vertrouwensafspraak](/register/tw-las-va-001/) in de praktijk geborgd is.
+dat de [vertrouwensafspraak](/index/tw-las-va-001/) in de praktijk geborgd is.

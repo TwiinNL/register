@@ -6,7 +6,7 @@
 
   <nav class="breadcrumb" aria-label="Kruimelpad">
     <a href="{{ site.Home.RelPermalink }}">Home</a> ›
-    <a href="{{ "register/" | relURL }}">Register</a> ›
+    <a href="{{ "index/" | relURL }}">Index</a> ›
     <span>{{ .Params.uid }}</span>
   </nav>
 
@@ -35,7 +35,7 @@
     {{ with .Params.ingangsdatum }}<span data-pagefind-sort="ingang">{{ . }}</span><span data-pagefind-meta="ingang">{{ . }}</span>{{ end }}
   </div>
 
-  {{- /* Permalink-blok: dit register is de "place of truth" */ -}}
+  {{- /* Permalink-blok: deze index is de "place of truth" */ -}}
   <section class="permalink-box">
     <h2>Permalink</h2>
     <p class="permalink-box__hint">Verwijs naar deze metadata via onderstaande permalink. Deze blijft stabiel zodra een eigen domein is gekoppeld.</p>
@@ -121,7 +121,7 @@
         {{ $target := index (where site.RegularPages "Params.uid" $code) 0 }}
         <li>
           {{ if $target }}<a href="{{ $target.RelPermalink }}">{{ $code }} — {{ $target.Title }}</a>
-          {{ else }}<code>{{ $code }}</code> <span class="muted">(nog niet in register)</span>{{ end }}
+          {{ else }}<code>{{ $code }}</code> <span class="muted">(nog niet in de index)</span>{{ end }}
         </li>
       {{ end }}
     </ul>

@@ -1,8 +1,8 @@
 # Twiin LAS — Register van afspraken & specificaties
 
-De centrale vindplaats (*single source of truth*) voor de metadata van afspraken,
+De centrale vindplaats voor de metadata van afspraken,
 specificaties, richtlijnen en standaarden binnen het **Twiin Landelijk Afsprakenstelsel
-(LAS)**. Elke **metadatakaart** beschrijft één afspraak (of combinatie van afspraken),
+voor gezondheidsgegevens**. Elke **metadatakaart** beschrijft één afspraak (of combinatie van afspraken),
 biedt een **stabiele permalink** waar andere partijen naar verwijzen, en publiceert een
 machineleesbare **RDF/JSON-LD**-representatie.
 
@@ -82,8 +82,8 @@ archetypes/kaart.md       # sjabloon voor nieuwe kaarten
 content/
   _index.md               # landingspagina
   over.md                 # uitleg register/permalinks/RDF
-  register/
-    _index.md             # register-overzicht (zoeken + filteren)
+  index/
+    _index.md             # index (zoeken + filteren)
     TW-LAS-*/index.md      # de metadatakaarten
 layouts/
   index.html              # landingspagina (uitgelicht + categorieën)

@@ -1,6 +1,6 @@
-{{- $register := where site.RegularPages "Type" "register" -}}
+{{- $index:= where site.RegularPages "Type" "index" -}}
 {{- $items := slice -}}
-{{- range (sort $register "Params.uid") -}}
+{{- range (sort $index "Params.uid") -}}
   {{- $permalink := .Permalink -}}{{ with .Params.permalink }}{{ $permalink = . }}{{ end -}}
   {{- $jsonld := "" -}}{{ with .OutputFormats.Get "jsonld" }}{{ $jsonld = .Permalink }}{{ end -}}
   {{- $items = $items | append (dict
@@ -20,4 +20,4 @@
       "jsonld" $jsonld
     ) -}}
 {{- end -}}
-{{- dict "register" (site.Title) "aantal" (len $items) "items" $items | jsonify (dict "indent" "  ") -}}
+{{- dict "index" (site.Title) "aantal" (len $items) "items" $items | jsonify (dict "indent" "  ") -}}

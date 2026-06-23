@@ -2,7 +2,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 {{- $title := .Title -}}
 {{- $isHome := .IsHome -}}
-<title>{{ if $isHome }}{{ site.Title }}{{ else }}{{ $title }} · {{ site.Title }}{{ end }}</title>
+<title>{{ if $isHome }}{{ site.Title }}{{ else }}{{ $title }} ยท {{ site.Title }}{{ end }}</title>
 <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ site.Params.beschrijving }}{{ end }}">
 
 <meta property="og:type" content="website">
@@ -18,7 +18,7 @@
 <link rel="stylesheet" href="{{ "css/main.css" | relURL }}">
 
 {{- /* RDF / JSON-LD: voor kaarten een volledige beschrijving in de <head> */ -}}
-{{ if eq .Type "register" }}{{ if not .IsNode }}
+{{ if eq .Type "index" }}{{ if not .IsNode }}
 {{ partialCached "jsonld.html" . .RelPermalink }}
 {{ end }}{{ end }}
 {{- /* RSS autodiscovery */ -}}

@@ -23,10 +23,10 @@ enableGitInfo = true
 enableRobotsTXT = true
 
 # -----------------------------------------------------------------------------
-# Permalinks: kaarten leven onder /register/<uid-lowercase>/
+# Permalinks: kaarten leven onder /index/<uid-lowercase>/
 # -----------------------------------------------------------------------------
 [permalinks]
-  register = "/register/:slug/"
+  index = "/index/:slug/"
 
 # -----------------------------------------------------------------------------
 # Media type + output format voor JSON-LD (RDF) per kaart

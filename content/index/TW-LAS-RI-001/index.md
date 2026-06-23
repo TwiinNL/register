@@ -21,7 +21,7 @@ autorisator: []
 beheerder: ["Twiin"]
 betreft_twiin:
   - titel: "Technische afspraak: Notified Pull via FHIR"
-    link: "/register/tw-las-ta-001/"
+    link: "/index/tw-las-ta-001/"
     beheerder: "Twiin"
 betreft_extern:
   - titel: "Wabvpz / Wet aanvullende bepalingen verwerking persoonsgegevens in de zorg"

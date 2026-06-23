@@ -2,13 +2,13 @@
 <div class="wrap">
   <header class="page-head">
     <h1>{{ .Title }}</h1>
-    {{ with .Content }}{{ . }}{{ else }}<p class="page-head__lead">Doorzoek en filter alle afspraken, specificaties, richtlijnen en standaarden in het register.</p>{{ end }}
+    {{ with .Content }}{{ . }}{{ else }}<p class="page-head__lead">Doorzoek en filter alle afspraken, specificaties, richtlijnen en standaarden in de index.</p>{{ end }}
   </header>
 
   <div class="register">
     <aside class="register__filters" id="pf-filters" aria-label="Filters">
       {{- /* SSR-fallback facetten uit de vocabulaire; JS vervangt dit door live facetten met tellingen. */ -}}
-      <noscript><p class="muted">Filteren vereist JavaScript. Hieronder staat het volledige register.</p></noscript>
+      <noscript><p class="muted">Filteren vereist JavaScript. Hieronder staat de volledige index.</p></noscript>
     </aside>
 
     <div class="register__main">
