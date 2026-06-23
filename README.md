@@ -1,4 +1,4 @@
-# Twiin LAS — Register van afspraken & specificaties
+# Twiin LAS — Index van afspraken & specificaties
 
 De centrale vindplaats voor de metadata van afspraken,
 specificaties, richtlijnen en standaarden binnen het **Twiin Landelijk Afsprakenstelsel
@@ -35,12 +35,12 @@ de server-gerenderde kaartenlijst blijft als fallback zichtbaar).
 ## Een nieuwe kaart toevoegen
 
 ```bash
-hugo new --kind kaart content/register/TW-LAS-SP-003/index.md
+hugo new --kind kaart content/index/TW-LAS-SP-003/index.md
 ```
 
 Dit maakt een kaart op basis van [`archetypes/kaart.md`](archetypes/kaart.md). Vul de
 front-matter in (zie veldenoverzicht hieronder) en zet `draft: false`. De URL volgt uit
-`slug` (= UID in kleine letters), bijvoorbeeld `/register/tw-las-sp-003/`.
+`slug` (= UID in kleine letters), bijvoorbeeld `/index/tw-las-sp-003/`.
 
 ### Velden (front-matter)
 
@@ -81,15 +81,15 @@ data/vocab.yaml           # gecontroleerde vocabulaires (codes, labels, kleuren)
 archetypes/kaart.md       # sjabloon voor nieuwe kaarten
 content/
   _index.md               # landingspagina
-  over.md                 # uitleg register/permalinks/RDF
+  over.md                 # uitleg index/permalinks/RDF
   index/
     _index.md             # index (zoeken + filteren)
     TW-LAS-*/index.md      # de metadatakaarten
 layouts/
   index.html              # landingspagina (uitgelicht + categorieën)
   index.json              # machineleesbare index van alle kaarten
-  register/list.html      # zoek-/filterpagina (Pagefind)
-  register/single.html    # kaart-detailpagina (alle velden)
+  index/list.html         # zoek-/filterpagina (Pagefind)
+  index/single.html       # kaart-detailpagina (alle velden)
   _default/single.jsonld  # RDF/JSON-LD per kaart (index.jsonld)
   partials/jsonld-data.html  # opbouw van de RDF-graf
 static/css, static/js     # styling en gedrag (thema, filter-UI)
