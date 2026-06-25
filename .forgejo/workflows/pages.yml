@@ -1,13 +1,10 @@
 # =============================================================================
 # Bouw de Hugo-site + Pagefind-index en publiceer naar Codeberg Pages.
 #
-# Het resultaat wordt naar de branch `pages` van DEZE repo geduwd en is dan
-# bereikbaar op:  https://<eigenaar>.codeberg.page/<repo>/
-# (bij LAS/playground dus: https://las.codeberg.page/playground/ )
-#
-# Wil je op de root  https://las.codeberg.page/  publiceren? Maak dan een aparte
-# repo `LAS/pages`, push de build daarheen met een access-token-secret en zet
-# baseURL in hugo.toml om (zie README.md).
+# Draait op de Codeberg gedeelde runner (label `codeberg-medium`). Hugo en
+# Pagefind worden als statische binaries opgehaald (geen container/Node nodig).
+# Het resultaat wordt naar branch `pages` van deze repo geduwd en is dan
+# bereikbaar op https://las.codeberg.page/playground/ .
 # =============================================================================
 name: Deploy site
 
@@ -17,7 +14,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write   # nodig om naar de branch `pages` te kunnen pushen
+  contents: write   # nodig om naar branch `pages` te kunnen pushen
 
 env:
   HUGO_VERSION: "0.163.3"
@@ -25,33 +22,35 @@ env:
 
 jobs:
   build-and-deploy:
-    runs-on: docker             # label van de (self-hosted) repo-runner
-    container:
-      image: node:20-bookworm   # bevat git, curl, tar en node/npx
+    runs-on: codeberg-medium
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0   # nodig voor enableGitInfo (Lastmod)
 
-      - name: Installeer Hugo (extended)
+      - name: Installeer Hugo + Pagefind (statische binaries)
         run: |
-          set -e
+          set -eux
+          mkdir -p "$HOME/bin"
           curl -sSL "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.tar.gz" -o /tmp/hugo.tar.gz
-          tar -xzf /tmp/hugo.tar.gz -C /tmp hugo
-          install /tmp/hugo /usr/local/bin/hugo
-          hugo version
+          tar -xzf /tmp/hugo.tar.gz -C "$HOME/bin" hugo
+          curl -sSL "https://github.com/Pagefind/pagefind/releases/download/v${PAGEFIND_VERSION}/pagefind-v${PAGEFIND_VERSION}-x86_64-unknown-linux-musl.tar.gz" -o /tmp/pagefind.tar.gz
+          tar -xzf /tmp/pagefind.tar.gz -C "$HOME/bin" pagefind
+          "$HOME/bin/hugo" version
+          "$HOME/bin/pagefind" --version
 
-      - name: Bouw site
-        run: hugo --minify --gc
-
-      - name: Bouw zoekindex (Pagefind)
-        run: npx -y "pagefind@${PAGEFIND_VERSION}" --site public
+      - name: Bouw site + zoekindex
+        run: |
+          set -eux
+          "$HOME/bin/hugo" --minify --gc
+          "$HOME/bin/pagefind" --site public
 
       - name: Publiceer naar Codeberg Pages (branch `pages`)
         run: |
-          set -e
+          set -eu
           cd public
+          touch .nojekyll
           git init -q
           git config user.name "Forgejo Actions"
           git config user.email "actions@noreply.codeberg.org"
@@ -59,4 +58,4 @@ jobs:
           git add -A
           git commit -q -m "Deploy ${GITHUB_SHA:-handmatig} [skip ci]"
           git push -f "https://x-access-token:${{ forge.token }}@codeberg.org/${{ forge.repository }}.git" pages
-          echo "Gepubliceerd naar branch 'pages'. Live op https://las.codeberg.page/playground/"
+          echo "Gepubliceerd → https://las.codeberg.page/playground/"
