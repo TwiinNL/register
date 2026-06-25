@@ -47,6 +47,8 @@
 }
 
 * { box-sizing: border-box; }
+/* Zorg dat het hidden-attribuut altijd verbergt, ook op .card-grid (display:grid) */
+[hidden] { display: none !important; }
 html { scroll-behavior: smooth; }
 body {
   margin:0; font-family:var(--font); color:var(--text); background:var(--bg);
