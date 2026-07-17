@@ -81,6 +81,8 @@ CSS = r"""
 @media (max-width:860px){.twiin-las-split{flex-direction:column;}.twiin-las-col-side{width:100%;position:static;max-height:none;overflow:visible;}}
 .twiin-las .register__filters{background:transparent;border:0;padding:0;}
 .twiin-las-col-side .register__filters h3:first-child{margin-top:.4rem;}
+.twiin-las-toc{overflow:auto;}
+.twiin-las-toc .register__filters{padding:12px 16px;}
 .twiin-las .register__filters h3{margin:.2rem 0 .6rem;font-size:.78rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);}
 .twiin-las .facet{margin-bottom:1.1rem;}
 .twiin-las .facet__option{display:flex;align-items:center;gap:.45rem;font-size:.85rem;padding:.12rem 0;cursor:pointer;}
@@ -130,7 +132,7 @@ JS = r"""
   var byUid={}; DATA.forEach(function(c){byUid[c.uid]=c;});
   var slugToUid={}; DATA.forEach(function(c){slugToUid[c.uid.toLowerCase()]=c.uid;});
   var state={q:'',filters:{},sort:'relevance'};
-  var wrap=null, mainArea=null, sideArea=null;
+  var mainArea=null, sideArea=null;
 
   function qs(s){return document.querySelector(s);}
   function css(){if(document.getElementById('twiin-las-css'))return;var s=document.createElement('style');s.id='twiin-las-css';s.textContent=__CSS__;document.head.appendChild(s);}
@@ -245,12 +247,27 @@ JS = r"""
     window.addEventListener('hashchange',render);
   }
 
+  function makeTocHost(){
+    var mc=qs('.main-content'); if(!mc)return null;
+    // Verberg een bestaande Scroll-TOC (inline > class), zodat alleen onze filters tonen.
+    var ex=mc.querySelector('.toc.sticky:not([data-twiin])'); if(ex)ex.style.display='none';
+    var nav=document.createElement('nav');
+    nav.className='toc sticky twiin-las twiin-las-toc';
+    nav.setAttribute('data-twiin','1');
+    nav.style.display='flex'; nav.style.flexDirection='column';
+    mc.appendChild(nav);
+    return nav;
+  }
   function boot(host){
     css();
-    wrap=document.createElement('div'); wrap.className='twiin-las';
-    wrap.innerHTML='<div class="twiin-las-split"><div class="twiin-las-col-main" data-main></div><aside class="twiin-las-col-side" data-side></aside></div>';
-    host.replaceChildren(wrap);
-    mainArea=wrap.querySelector('[data-main]'); sideArea=wrap.querySelector('[data-side]');
+    var mw=document.createElement('div'); mw.className='twiin-las twiin-las-content';
+    host.replaceChildren(mw);
+    var toc=makeTocHost();
+    if(toc){ mainArea=mw; sideArea=toc; }
+    else {
+      mw.innerHTML='<div class="twiin-las-split"><div class="twiin-las-col-main" data-main></div><aside class="twiin-las-col-side" data-side></aside></div>';
+      mainArea=mw.querySelector('[data-main]'); sideArea=mw.querySelector('[data-side]');
+    }
     wire(); render(); return true;
   }
   function findHost(){for(var i=0;i<MAIN_SELECTORS.length;i++){var el=qs(MAIN_SELECTORS[i]);if(el)return el;}return null;}
