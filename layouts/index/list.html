@@ -5,35 +5,7 @@
     {{ with .Content }}{{ . }}{{ else }}<p class="page-head__lead">Doorzoek en filter alle afspraken, specificaties, richtlijnen en standaarden in de index.</p>{{ end }}
   </header>
 
-  <div class="register">
-    <aside class="register__filters" id="pf-filters" aria-label="Filters">
-      {{- /* SSR-fallback facetten uit de vocabulaire; JS vervangt dit door live facetten met tellingen. */ -}}
-      <noscript><p class="muted">Filteren vereist JavaScript. Hieronder staat de volledige index.</p></noscript>
-    </aside>
-
-    <div class="register__main">
-      <form class="search" role="search" id="pf-form">
-        <input type="search" id="pf-search" name="q" placeholder="Zoek op vrije tekst, UID, naam…" autocomplete="off" aria-label="Zoeken">
-        <label class="search__sort">
-          Sorteer:
-          <select id="pf-sort">
-            <option value="relevance">Relevantie</option>
-            <option value="ingang_desc">Ingangsdatum (nieuw→oud)</option>
-            <option value="ingang_asc">Ingangsdatum (oud→nieuw)</option>
-          </select>
-        </label>
-      </form>
-
-      <p class="register__stats" id="pf-stats" aria-live="polite"></p>
-
-      {{- /* SSR-fallback: alle kaarten. JS vervangt #pf-results bij actieve zoek/filter. */ -}}
-      <div class="card-grid" id="pf-results">
-        {{ range (sort .Pages "Params.ingangsdatum" "desc") }}
-          {{ partial "card.html" . }}
-        {{ end }}
-      </div>
-    </div>
-  </div>
+  {{ partial "register.html" . }}
 </div>
 {{ end }}
 

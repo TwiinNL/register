@@ -1,0 +1,32 @@
+{{- /*
+  Het register-blok: facet-filters + zoeken + resultaten (Pagefind).
+  Contextonafhankelijk: SSR-kaarten komen uit alle index-pagina's, zodat dit
+  zowel op de index-pagina als op de standalone /embed/-pagina werkt.
+  Vereist dat register.js en css/pagefind-overrides.css geladen worden.
+*/ -}}
+{{- $kaarten := sort (where site.RegularPages "Type" "index") "Params.ingangsdatum" "desc" -}}
+<div class="register">
+  <aside class="register__filters" id="pf-filters" aria-label="Filters">
+    <noscript><p class="muted">Filteren vereist JavaScript. Hieronder staat de volledige index.</p></noscript>
+  </aside>
+
+  <div class="register__main">
+    <form class="search" role="search" id="pf-form">
+      <input type="search" id="pf-search" name="q" placeholder="Zoek op vrije tekst, UID, naam…" autocomplete="off" aria-label="Zoeken">
+      <label class="search__sort">
+        Sorteer:
+        <select id="pf-sort">
+          <option value="relevance">Relevantie</option>
+          <option value="ingang_desc">Ingangsdatum (nieuw→oud)</option>
+          <option value="ingang_asc">Ingangsdatum (oud→nieuw)</option>
+        </select>
+      </label>
+    </form>
+
+    <p class="register__stats" id="pf-stats" aria-live="polite"></p>
+
+    <div class="card-grid" id="pf-results">
+      {{ range $kaarten }}{{ partial "card.html" . }}{{ end }}
+    </div>
+  </div>
+</div>
