@@ -2,7 +2,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 {{- $title := .Title -}}
 {{- $isHome := .IsHome -}}
-<title>{{ if $isHome }}{{ site.Title }}{{ else }}{{ $title }} ยท {{ site.Title }}{{ end }}</title>
+{{- /* Home en de sectie-indexpagina tonen alleen de sitetitel; overige pagina's
+       (kaarten, Over) tonen "[paginatitel] | [sitetitel]". */ -}}
+{{- $siteOnly := or $isHome (eq .Kind "section") -}}
+<title>{{ if $siteOnly }}{{ site.Title }}{{ else }}{{ $title }} | {{ site.Title }}{{ end }}</title>
 <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ site.Params.beschrijving }}{{ end }}">
 
 <meta property="og:type" content="website">
