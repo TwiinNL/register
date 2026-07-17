@@ -125,6 +125,7 @@ CSS = r"""
 
 JS = r"""
 (function(){
+  if(window.__twiinLasInit){return;} window.__twiinLasInit=true;   // voorkom dubbele injectie
   var DATA=__DATA__, VOCAB=__VOCAB__;
   var MAIN_SELECTORS=['.article-body.fb-layout-body','.fb-layout-container'];
   var HASHKEY='las';
@@ -250,7 +251,9 @@ JS = r"""
 
   function makeTocHost(){
     var mc=qs('.main-content'); if(!mc)return null;
-    // Verberg een bestaande Scroll-TOC (inline > class), zodat alleen onze filters tonen.
+    // Ruim eventuele eerdere injectie op (voorkomt dubbele filterkolommen).
+    var olds=mc.querySelectorAll('nav[data-twiin]'); for(var k=0;k<olds.length;k++)olds[k].remove();
+    // Verwijder een bestaande Scroll-TOC, zodat alleen onze filters tonen.
     var ex=mc.querySelector('.toc.sticky:not([data-twiin])'); if(ex)ex.remove();
     var nav=document.createElement('nav');
     nav.className='toc sticky twiin-las twiin-las-toc';
