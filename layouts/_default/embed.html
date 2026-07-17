@@ -23,5 +23,16 @@
     {{ partial "register.html" . }}
   </main>
   <script type="module" src="{{ "js/register.js" | relURL }}"></script>
+  <script>
+    /* Meld de hoogte aan de parent (voor auto-resize van de iframe). */
+    (function () {
+      function post() {
+        try { parent.postMessage({ type: "twiin-embed-height", height: document.documentElement.scrollHeight }, "*"); } catch (e) {}
+      }
+      if ("ResizeObserver" in window) { new ResizeObserver(post).observe(document.body); }
+      window.addEventListener("load", post);
+      window.addEventListener("resize", post);
+    })();
+  </script>
 </body>
 </html>
