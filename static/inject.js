@@ -6,6 +6,7 @@
   var HASHKEY='las';
   var PAGEKEY='index-landelijke-afspraken';  // herkent de index-pagina in boom/URL
   var SITE='https://las.codeberg.page/playground/';  // permalink-basis (codeberg)
+  var INDEXNAME='';  // naam van de indexpagina (uit h1), voor de breadcrumb
   var FACETS=[['soort','Soort'],['status','Status'],['domein','Domein'],['uitwisseling','Uitwisseling'],['patroon','Communicatiepatroon'],['functie','Generieke functie'],['toepassingen','Toepassing']];
   var byUid={}; DATA.forEach(function(c){byUid[c.uid]=c;});
   var slugToUid={}; DATA.forEach(function(c){slugToUid[c.uid.toLowerCase()]=c.uid;});
@@ -117,7 +118,13 @@
   function setCrumb(uid){
     var ol=document.querySelector('.breadcrumbs ol, theme-breadcrumbs ol'); if(!ol)return;
     var prev=ol.querySelector('[data-twiin-crumb]'); if(prev)prev.remove();
-    if(uid){ var li=document.createElement('li'); li.setAttribute('data-twiin-crumb','1'); li.textContent=uid; ol.appendChild(li); }
+    if(uid){
+      // Bij een geopende kaart wijst de laatste crumb naar de INDEXpagina (niet de kaart).
+      var li=document.createElement('li'); li.setAttribute('data-twiin-crumb','1');
+      var a=document.createElement('a'); a.href=location.pathname; a.setAttribute('data-twiin-index','1');
+      a.textContent=INDEXNAME || 'Index Landelijke afspraken';
+      li.appendChild(a); ol.appendChild(li);
+    }
   }
   // Er bestaan twee #articleTree (een verborgen kopie + de zichtbare boom in
   // #navigator-nav). Kies de zichtbare.
@@ -172,6 +179,9 @@
 
   function wire(){
     document.addEventListener('click',function(e){
+      // Breadcrumb-crumb 'Index...' -> terug naar de lijst (in-page, geen reload).
+      var ix=e.target.closest&&e.target.closest('[data-twiin-index]');
+      if(ix){ e.preventDefault(); toList(); render(); return; }
       // Boom-links staan buiten .twiin-las (in #navigator-nav): apart afhandelen.
       var tl=e.target.closest&&e.target.closest('.twiin-tree-link');
       if(tl){ e.preventDefault(); location.hash=HASHKEY+'='+tl.getAttribute('data-uid'); return; }
@@ -208,6 +218,7 @@
   }
   function boot(host){
     css();
+    var h1=host.querySelector('h1'); if(h1&&h1.textContent.trim())INDEXNAME=h1.textContent.trim();
     var mw=document.createElement('div'); mw.className='twiin-las twiin-las-content';
     host.replaceChildren(mw);
     var toc=makeTocHost();
