@@ -131,8 +131,6 @@ CSS = r"""
 .twiin-las .permalink-box__formats{font-size:.82rem;margin:.7rem 0 0;color:var(--muted);}
 ul[data-twiin-tree]{list-style:none;margin:.2rem 0;padding-left:1.1rem;max-height:none;overflow:visible;}
 ul[data-twiin-tree] li.tree-item{list-style:none;max-height:none;overflow:visible;}
-ul[data-twiin-tree] .twiin-tree-link{display:block;padding:.25rem .4rem;font-size:.86rem;color:inherit;text-decoration:none;border-radius:6px;}
-ul[data-twiin-tree] .twiin-tree-link:hover{background:rgba(0,0,0,.05);}
 ul[data-twiin-tree] .twiin-tree-link[aria-current=true]{font-weight:700;color:#e6396a;}
 """
 
