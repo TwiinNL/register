@@ -122,6 +122,16 @@ CSS = r"""
 .twiin-las table.log th,.twiin-las table.log td{text-align:left;padding:.5rem .6rem;border-bottom:1px solid var(--border);vertical-align:top;}
 .twiin-las table.log th{background:var(--bg-alt);}
 .twiin-las .tag-prefix{font-family:var(--mono);font-size:.7rem;color:var(--muted);}
+.twiin-las .permalink-box{background:var(--bg-alt);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.1rem;margin-bottom:1.6rem;}
+.twiin-las .permalink-box h2{border:0;margin:0 0 .3rem;font-size:1rem;}
+.twiin-las .permalink-box__hint{font-size:.82rem;color:var(--muted);margin:0 0 .7rem;}
+.twiin-las .permalink-box__row{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;}
+.twiin-las .permalink-box__url{font-family:var(--mono);font-size:.82rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.5rem .7rem;flex:1;word-break:break-all;}
+.twiin-las .permalink-box__formats{font-size:.82rem;margin:.7rem 0 0;color:var(--muted);}
+#articleTree ul[data-twiin-tree]{list-style:none;margin:.2rem 0;padding-left:1.1rem;}
+#articleTree .twiin-tree-link{display:block;padding:.25rem .4rem;font-size:.86rem;color:inherit;text-decoration:none;border-radius:6px;}
+#articleTree .twiin-tree-link:hover{background:rgba(0,0,0,.05);}
+#articleTree .twiin-tree-link[aria-current=true]{font-weight:700;color:#e6396a;}
 """
 
 JS = r"""
@@ -131,6 +141,7 @@ JS = r"""
   var MAIN_SELECTORS=['.article-body.fb-layout-body','.fb-layout-container'];
   var HASHKEY='las';
   var PAGEKEY='index-landelijke-afspraken';  // herkent de index-pagina in boom/URL
+  var SITE='https://las.codeberg.page/playground/';  // permalink-basis (codeberg)
   var FACETS=[['soort','Soort'],['status','Status'],['domein','Domein'],['uitwisseling','Uitwisseling'],['patroon','Communicatiepatroon'],['functie','Generieke functie'],['toepassingen','Toepassing']];
   var byUid={}; DATA.forEach(function(c){byUid[c.uid]=c;});
   var slugToUid={}; DATA.forEach(function(c){slugToUid[c.uid.toLowerCase()]=c.uid;});
@@ -195,6 +206,12 @@ JS = r"""
     h.push('<div class="kaart__badges">'+badge('soort',c.soort)+badge('status',c.status)+'</div>');
     h.push('<p class="kaart__uid">'+esc(c.uid)+'</p><h1 class="kaart__title">'+esc(c.naam)+'</h1>');
     if(c.samenvatting)h.push('<p class="kaart__lead">'+esc(c.samenvatting)+'</p>');
+    var pl=SITE+'index/'+c.uid.toLowerCase()+'/', jl=pl+'index.jsonld';
+    h.push('<section class="permalink-box"><h2>Permalink</h2>'
+      +'<p class="permalink-box__hint">Verwijs naar deze metadata via onderstaande permalink. Deze blijft stabiel zodra een eigen domein is gekoppeld.</p>'
+      +'<div class="permalink-box__row"><code class="permalink-box__url" id="twlas-permalink">'+esc(pl)+'</code>'
+      +'<button type="button" class="btn" data-copy="#twlas-permalink">Kopieer</button></div>'
+      +'<p class="permalink-box__formats">Machineleesbaar: <a href="'+esc(jl)+'" target="_top" rel="noopener">JSON-LD (RDF)</a></p></section>');
     h.push('<section><h2>Kerngegevens</h2><dl class="attr-grid">');
     h.push('<dt>UID</dt><dd>'+esc(c.uid)+'</dd>');
     h.push('<dt>Soort</dt><dd>'+badge('soort',c.soort)+' <span class="muted">'+esc(lbl('soort',c.soort))+'</span></dd>');
@@ -235,21 +252,8 @@ JS = r"""
   // --- Scroll-thema-integraties: breadcrumb (kaart-UID) + paginaboom (kaarten) ---
   function setCrumb(uid){
     var ol=document.querySelector('.breadcrumbs ol, theme-breadcrumbs ol'); if(!ol)return;
-    var mine=ol.querySelector('[data-twiin-crumb]');
-    var hidden=ol.querySelector('[data-twiin-hidden]');
-    if(uid){
-      if(!mine){
-        // Verberg de huidige paginacrumb (laatste origineel) en toon de kaart-UID.
-        var origs=[].slice.call(ol.children).filter(function(li){return !li.hasAttribute('data-twiin-crumb');});
-        var last=origs[origs.length-1];
-        if(last){ last.setAttribute('data-twiin-hidden','1'); last.style.display='none'; }
-        mine=document.createElement('li'); mine.setAttribute('data-twiin-crumb','1'); ol.appendChild(mine);
-      }
-      mine.textContent=uid;
-    } else {
-      if(mine)mine.remove();
-      if(hidden){ hidden.style.display=''; hidden.removeAttribute('data-twiin-hidden'); }
-    }
+    var prev=ol.querySelector('[data-twiin-crumb]'); if(prev)prev.remove();
+    if(uid){ var li=document.createElement('li'); li.setAttribute('data-twiin-crumb','1'); li.textContent=uid; ol.appendChild(li); }
   }
   function treeIndexLink(){
     var t=document.querySelector('#articleTree'); if(!t)return null;
@@ -269,7 +273,7 @@ JS = r"""
     var ul=document.createElement('ul'); ul.setAttribute('data-twiin-tree','1');
     DATA.slice().sort(function(x,y){return x.uid.localeCompare(y.uid);}).forEach(function(c){
       var cli=document.createElement('li'); cli.className='tree-item';
-      cli.innerHTML='<div class="tree-item-header"><a class="twiin-tree-link" data-uid="'+esc(c.uid)+'" href="#'+HASHKEY+'='+esc(c.uid)+'">'+esc(c.naam)+'</a></div>';
+      cli.innerHTML='<div class="tree-item-header"><a class="tree-link twiin-tree-link" data-uid="'+esc(c.uid)+'" href="#'+HASHKEY+'='+esc(c.uid)+'">'+esc(c.naam)+'</a></div>';
       ul.appendChild(cli);
     });
     li.appendChild(ul);
@@ -283,8 +287,13 @@ JS = r"""
 
   function wire(){
     document.addEventListener('click',function(e){
+      // Boom-links staan buiten .twiin-las (in #articleTree): apart afhandelen.
+      var tl=e.target.closest&&e.target.closest('.twiin-tree-link');
+      if(tl){ e.preventDefault(); location.hash=HASHKEY+'='+tl.getAttribute('data-uid'); return; }
       if(!e.target.closest||!e.target.closest('.twiin-las'))return;
       if(e.target.closest('[data-back]')){toList();render();return;}
+      var cp=e.target.closest('[data-copy]');
+      if(cp){ var t=document.querySelector(cp.getAttribute('data-copy')); if(t&&navigator.clipboard){ navigator.clipboard.writeText(t.textContent.trim()); var o=cp.textContent; cp.textContent='Gekopieerd'; setTimeout(function(){cp.textContent=o;},1500); } return; }
       if(e.target.closest('[data-reset]')){state.filters={};toList();render();return;}
       var card=e.target.closest('.card[data-uid]'); if(card){location.hash=HASHKEY+'='+card.getAttribute('data-uid');}
     });
@@ -332,7 +341,11 @@ JS = r"""
     else if(n>66){ clearInterval(iv); }
   },150);
   // Paginaboom wordt async door het thema opgebouwd: pollen tot we kaarten kunnen toevoegen.
-  var tn=0, tiv=setInterval(function(){ tn++; if(buildTree()||tn>75) clearInterval(tiv); },200);
+  function watchTree(){ var t=document.querySelector('#articleTree'); if(!t||t.__twlasWatch)return; t.__twlasWatch=true;
+    new MutationObserver(function(){ if(!t.querySelector('[data-twiin-tree]')) buildTree(); }).observe(t,{childList:true,subtree:true}); }
+  var tn=0, tiv=setInterval(function(){ tn++; buildTree();
+    if(document.querySelector('#articleTree [data-twiin-tree]')){ clearInterval(tiv); watchTree(); }
+    else if(tn>75){ clearInterval(tiv); } },200);
 })();
 """
 
