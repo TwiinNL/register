@@ -129,10 +129,11 @@ CSS = r"""
 .twiin-las .permalink-box__row{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;}
 .twiin-las .permalink-box__url{font-family:var(--mono);font-size:.82rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.5rem .7rem;flex:1;word-break:break-all;}
 .twiin-las .permalink-box__formats{font-size:.82rem;margin:.7rem 0 0;color:var(--muted);}
-#articleTree ul[data-twiin-tree]{list-style:none;margin:.2rem 0;padding-left:1.1rem;}
-#articleTree .twiin-tree-link{display:block;padding:.25rem .4rem;font-size:.86rem;color:inherit;text-decoration:none;border-radius:6px;}
-#articleTree .twiin-tree-link:hover{background:rgba(0,0,0,.05);}
-#articleTree .twiin-tree-link[aria-current=true]{font-weight:700;color:#e6396a;}
+ul[data-twiin-tree]{display:block!important;max-height:none!important;height:auto!important;overflow:visible!important;list-style:none;margin:.2rem 0;padding-left:1.1rem;}
+ul[data-twiin-tree] li.tree-item{display:list-item!important;max-height:none!important;height:auto!important;overflow:visible!important;}
+ul[data-twiin-tree] .twiin-tree-link{display:block;padding:.25rem .4rem;font-size:.86rem;color:inherit;text-decoration:none;border-radius:6px;}
+ul[data-twiin-tree] .twiin-tree-link:hover{background:rgba(0,0,0,.05);}
+ul[data-twiin-tree] .twiin-tree-link[aria-current=true]{font-weight:700;color:#e6396a;}
 """
 
 JS = r"""
@@ -256,14 +257,23 @@ JS = r"""
     var prev=ol.querySelector('[data-twiin-crumb]'); if(prev)prev.remove();
     if(uid){ var li=document.createElement('li'); li.setAttribute('data-twiin-crumb','1'); li.textContent=uid; ol.appendChild(li); }
   }
+  // Er bestaan twee #articleTree (een verborgen kopie + de zichtbare boom in
+  // #navigator-nav). Kies de zichtbare.
+  function treeRoot(){
+    var nav=document.querySelector('#navigator-nav'); if(nav)return nav;
+    var all=document.querySelectorAll('#articleTree');
+    for(var i=0;i<all.length;i++){ if(all[i].getClientRects().length)return all[i]; }
+    return document.querySelector('#articleTree');
+  }
   function treeIndexLink(){
-    var t=document.querySelector('#articleTree'); if(!t)return null;
-    var links=t.querySelectorAll('a[href]'), path=location.pathname.replace(/\/+$/,'');
-    for(var i=0;i<links.length;i++){ var h=(links[i].getAttribute('href')||'').split('#')[0].split('?')[0].replace(/\/+$/,''); if(h&&(h===path||h.indexOf(PAGEKEY)>-1)) return links[i]; }
-    return null;
+    var t=treeRoot(); if(!t)return null;
+    var links=t.querySelectorAll('a[href]'), path=location.pathname.replace(/\/+$/,''), cand=null;
+    for(var i=0;i<links.length;i++){ var a=links[i], h=(a.getAttribute('href')||'').split('#')[0].split('?')[0].replace(/\/+$/,'');
+      if(h&&(h===path||h.indexOf(PAGEKEY)>-1)){ if(a.offsetHeight>0)return a; cand=cand||a; } }
+    return cand;
   }
   function highlightTree(uid){
-    var t=document.querySelector('#articleTree'); if(!t)return;
+    var t=treeRoot(); if(!t)return;
     var links=t.querySelectorAll('.twiin-tree-link');
     for(var i=0;i<links.length;i++){ if(uid&&links[i].getAttribute('data-uid')===uid)links[i].setAttribute('aria-current','true'); else links[i].removeAttribute('aria-current'); }
   }
@@ -342,10 +352,11 @@ JS = r"""
     else if(n>66){ clearInterval(iv); }
   },150);
   // Paginaboom wordt async door het thema opgebouwd: pollen tot we kaarten kunnen toevoegen.
-  function watchTree(){ var t=document.querySelector('#articleTree'); if(!t||t.__twlasWatch)return; t.__twlasWatch=true;
+  function watchTree(){ var t=treeRoot(); if(!t||t.__twlasWatch)return; t.__twlasWatch=true;
     new MutationObserver(function(){ if(!t.querySelector('[data-twiin-tree]')) buildTree(); }).observe(t,{childList:true,subtree:true}); }
   var tn=0, tiv=setInterval(function(){ tn++; buildTree();
-    if(document.querySelector('#articleTree [data-twiin-tree]')){ clearInterval(tiv); watchTree(); }
+    var r=treeRoot();
+    if(r&&r.querySelector('[data-twiin-tree]')){ clearInterval(tiv); watchTree(); }
     else if(tn>75){ clearInterval(tiv); } },200);
 })();
 """
