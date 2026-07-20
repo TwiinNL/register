@@ -130,6 +130,7 @@ JS = r"""
   var DATA=__DATA__, VOCAB=__VOCAB__;
   var MAIN_SELECTORS=['.article-body.fb-layout-body','.fb-layout-container'];
   var HASHKEY='las';
+  var PAGEKEY='index-landelijke-afspraken';  // herkent de index-pagina in boom/URL
   var FACETS=[['soort','Soort'],['status','Status'],['domein','Domein'],['uitwisseling','Uitwisseling'],['patroon','Communicatiepatroon'],['functie','Generieke functie'],['toepassingen','Toepassing']];
   var byUid={}; DATA.forEach(function(c){byUid[c.uid]=c;});
   var slugToUid={}; DATA.forEach(function(c){slugToUid[c.uid.toLowerCase()]=c.uid;});
@@ -228,8 +229,54 @@ JS = r"""
     var si=mainArea.querySelector('[data-search]'); if(si){si.value=state.q; if(state.q){si.focus();si.setSelectionRange(si.value.length,si.value.length);}}
     var so=mainArea.querySelector('[data-sort]'); if(so)so.value=state.sort;
   }
-  function renderList(){ mainArea.innerHTML=resultsHtml(); setFiltersVisible(true); paintFilters(); restoreInputs(); }
-  function renderDetail(uid){ mainArea.innerHTML=detailHtml(uid); setFiltersVisible(false); try{window.scrollTo(0,0);}catch(e){} }
+  function renderList(){ mainArea.innerHTML=resultsHtml(); setFiltersVisible(true); paintFilters(); restoreInputs(); setCrumb(null); highlightTree(null); }
+  function renderDetail(uid){ mainArea.innerHTML=detailHtml(uid); setFiltersVisible(false); setCrumb(uid); highlightTree(uid); try{window.scrollTo(0,0);}catch(e){} }
+
+  // --- Scroll-thema-integraties: breadcrumb (kaart-UID) + paginaboom (kaarten) ---
+  function setCrumb(uid){
+    var ol=document.querySelector('.breadcrumbs ol, theme-breadcrumbs ol'); if(!ol)return;
+    var mine=ol.querySelector('[data-twiin-crumb]');
+    var hidden=ol.querySelector('[data-twiin-hidden]');
+    if(uid){
+      if(!mine){
+        // Verberg de huidige paginacrumb (laatste origineel) en toon de kaart-UID.
+        var origs=[].slice.call(ol.children).filter(function(li){return !li.hasAttribute('data-twiin-crumb');});
+        var last=origs[origs.length-1];
+        if(last){ last.setAttribute('data-twiin-hidden','1'); last.style.display='none'; }
+        mine=document.createElement('li'); mine.setAttribute('data-twiin-crumb','1'); ol.appendChild(mine);
+      }
+      mine.textContent=uid;
+    } else {
+      if(mine)mine.remove();
+      if(hidden){ hidden.style.display=''; hidden.removeAttribute('data-twiin-hidden'); }
+    }
+  }
+  function treeIndexLink(){
+    var t=document.querySelector('#articleTree'); if(!t)return null;
+    var links=t.querySelectorAll('a[href]'), path=location.pathname.replace(/\/+$/,'');
+    for(var i=0;i<links.length;i++){ var h=(links[i].getAttribute('href')||'').split('#')[0].split('?')[0].replace(/\/+$/,''); if(h&&(h===path||h.indexOf(PAGEKEY)>-1)) return links[i]; }
+    return null;
+  }
+  function highlightTree(uid){
+    var t=document.querySelector('#articleTree'); if(!t)return;
+    var links=t.querySelectorAll('.twiin-tree-link');
+    for(var i=0;i<links.length;i++){ if(uid&&links[i].getAttribute('data-uid')===uid)links[i].setAttribute('aria-current','true'); else links[i].removeAttribute('aria-current'); }
+  }
+  function buildTree(){
+    var a=treeIndexLink(); if(!a)return false;
+    var li=a.closest('.tree-item'); if(!li)return true;
+    if(li.querySelector('[data-twiin-tree]')){ highlightTree(hashUid()); return true; }
+    var ul=document.createElement('ul'); ul.setAttribute('data-twiin-tree','1');
+    DATA.slice().sort(function(x,y){return x.uid.localeCompare(y.uid);}).forEach(function(c){
+      var cli=document.createElement('li'); cli.className='tree-item';
+      cli.innerHTML='<div class="tree-item-header"><a class="twiin-tree-link" data-uid="'+esc(c.uid)+'" href="#'+HASHKEY+'='+esc(c.uid)+'">'+esc(c.naam)+'</a></div>';
+      ul.appendChild(cli);
+    });
+    li.appendChild(ul);
+    var btn=li.querySelector('.tree-action'); if(btn){ btn.setAttribute('aria-expanded','true'); btn.removeAttribute('aria-disabled'); btn.removeAttribute('aria-busy'); }
+    highlightTree(hashUid());
+    return true;
+  }
   function hashUid(){var m=new RegExp('[#&]'+HASHKEY+'=([^&]+)').exec(location.hash||'');return m?decodeURIComponent(m[1]):null;}
   function render(){var u=hashUid(); if(u&&byUid[u])renderDetail(u); else renderList();}
   function toList(){ if(location.hash&&hashUid())history.pushState('','',location.pathname+location.search); }
@@ -284,6 +331,8 @@ JS = r"""
     if(host){ clearInterval(iv); boot(host); }
     else if(n>66){ clearInterval(iv); }
   },150);
+  // Paginaboom wordt async door het thema opgebouwd: pollen tot we kaarten kunnen toevoegen.
+  var tn=0, tiv=setInterval(function(){ tn++; if(buildTree()||tn>75) clearInterval(tiv); },200);
 })();
 """
 
