@@ -297,7 +297,8 @@ JS = r"""
     if(!btn){ btn=document.createElement('button'); btn.type='button'; btn.className='tree-action'; hdr.insertBefore(btn, hdr.firstChild); }
     btn.setAttribute('data-twiin-toggle','1'); btn.removeAttribute('aria-disabled'); btn.removeAttribute('aria-busy');
     if(!btn.__twlasWired){ btn.__twlasWired=true; btn.addEventListener('click',function(ev){ ev.preventDefault(); ev.stopImmediatePropagation(); setTreeExpanded(li, btn.getAttribute('aria-expanded')!=='true'); }); }
-    setTreeExpanded(li, true);
+    // Standaard ingeklapt: toont de > (uitklapbaar), net als de andere boom-items.
+    setTreeExpanded(li, false);
     highlightTree(hashUid());
     return true;
   }
