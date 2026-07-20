@@ -160,6 +160,7 @@
     var btn=hdr.querySelector('.tree-action');
     if(!btn){ btn=document.createElement('button'); btn.type='button'; btn.className='tree-action'; hdr.insertBefore(btn, hdr.firstChild); }
     btn.setAttribute('data-twiin-toggle','1'); btn.removeAttribute('aria-disabled'); btn.removeAttribute('aria-busy');
+    if(!btn.__twlasWired){ btn.__twlasWired=true; btn.addEventListener('click',function(ev){ ev.preventDefault(); ev.stopImmediatePropagation(); setTreeExpanded(li, btn.getAttribute('aria-expanded')!=='true'); }); }
     setTreeExpanded(li, true);
     highlightTree(hashUid());
     return true;
@@ -170,9 +171,6 @@
 
   function wire(){
     document.addEventListener('click',function(e){
-      // Uitklap-knop van ons boom-knooppunt (buiten .twiin-las).
-      var tg=e.target.closest&&e.target.closest('[data-twiin-toggle]');
-      if(tg){ e.preventDefault(); e.stopPropagation(); var pli=tg.closest('.tree-item'); if(pli)setTreeExpanded(pli, tg.getAttribute('aria-expanded')!=='true'); return; }
       // Boom-links staan buiten .twiin-las (in #navigator-nav): apart afhandelen.
       var tl=e.target.closest&&e.target.closest('.twiin-tree-link');
       if(tl){ e.preventDefault(); location.hash=HASHKEY+'='+tl.getAttribute('data-uid'); return; }
