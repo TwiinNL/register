@@ -129,8 +129,8 @@ CSS = r"""
 .twiin-las .permalink-box__row{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;}
 .twiin-las .permalink-box__url{font-family:var(--mono);font-size:.82rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.5rem .7rem;flex:1;word-break:break-all;}
 .twiin-las .permalink-box__formats{font-size:.82rem;margin:.7rem 0 0;color:var(--muted);}
-ul[data-twiin-tree]{display:block!important;max-height:none!important;height:auto!important;overflow:visible!important;list-style:none;margin:.2rem 0;padding-left:1.1rem;}
-ul[data-twiin-tree] li.tree-item{display:list-item!important;max-height:none!important;height:auto!important;overflow:visible!important;}
+ul[data-twiin-tree]{list-style:none;margin:.2rem 0;padding-left:1.1rem;max-height:none;overflow:visible;}
+ul[data-twiin-tree] li.tree-item{list-style:none;max-height:none;overflow:visible;}
 ul[data-twiin-tree] .twiin-tree-link{display:block;padding:.25rem .4rem;font-size:.86rem;color:inherit;text-decoration:none;border-radius:6px;}
 ul[data-twiin-tree] .twiin-tree-link:hover{background:rgba(0,0,0,.05);}
 ul[data-twiin-tree] .twiin-tree-link[aria-current=true]{font-weight:700;color:#e6396a;}
@@ -277,6 +277,11 @@ JS = r"""
     var links=t.querySelectorAll('.twiin-tree-link');
     for(var i=0;i<links.length;i++){ if(uid&&links[i].getAttribute('data-uid')===uid)links[i].setAttribute('aria-current','true'); else links[i].removeAttribute('aria-current'); }
   }
+  function setTreeExpanded(li,exp){
+    var btn=li.querySelector('[data-twiin-toggle]'), ul=li.querySelector('[data-twiin-tree]');
+    if(btn)btn.setAttribute('aria-expanded', exp?'true':'false');
+    if(ul)ul.style.display = exp?'block':'none';
+  }
   function buildTree(){
     var a=treeIndexLink(); if(!a)return false;
     var li=a.closest('.tree-item'); if(!li)return true;
@@ -288,7 +293,12 @@ JS = r"""
       ul.appendChild(cli);
     });
     li.appendChild(ul);
-    var btn=li.querySelector('.tree-action'); if(btn){ btn.setAttribute('aria-expanded','true'); btn.removeAttribute('aria-disabled'); btn.removeAttribute('aria-busy'); }
+    // Maak het knooppunt uitklapbaar zoals native tree-items (chevron-knop).
+    var hdr=li.querySelector('.tree-item-header')||li;
+    var btn=hdr.querySelector('.tree-action');
+    if(!btn){ btn=document.createElement('button'); btn.type='button'; btn.className='tree-action'; hdr.insertBefore(btn, hdr.firstChild); }
+    btn.setAttribute('data-twiin-toggle','1'); btn.removeAttribute('aria-disabled'); btn.removeAttribute('aria-busy');
+    setTreeExpanded(li, true);
     highlightTree(hashUid());
     return true;
   }
@@ -298,7 +308,10 @@ JS = r"""
 
   function wire(){
     document.addEventListener('click',function(e){
-      // Boom-links staan buiten .twiin-las (in #articleTree): apart afhandelen.
+      // Uitklap-knop van ons boom-knooppunt (buiten .twiin-las).
+      var tg=e.target.closest&&e.target.closest('[data-twiin-toggle]');
+      if(tg){ e.preventDefault(); e.stopPropagation(); var pli=tg.closest('.tree-item'); if(pli)setTreeExpanded(pli, tg.getAttribute('aria-expanded')!=='true'); return; }
+      // Boom-links staan buiten .twiin-las (in #navigator-nav): apart afhandelen.
       var tl=e.target.closest&&e.target.closest('.twiin-tree-link');
       if(tl){ e.preventDefault(); location.hash=HASHKEY+'='+tl.getAttribute('data-uid'); return; }
       if(!e.target.closest||!e.target.closest('.twiin-las'))return;
