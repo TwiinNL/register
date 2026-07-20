@@ -81,8 +81,9 @@ CSS = r"""
 @media (max-width:860px){.twiin-las-split{flex-direction:column;}.twiin-las-col-side{width:100%;position:static;max-height:none;overflow:visible;}}
 .twiin-las .register__filters{background:transparent;border:0;padding:0;}
 .twiin-las-col-side .register__filters h3:first-child{margin-top:.4rem;}
-.twiin-las-toc{overflow:auto;}
+.twiin-las-toc{overflow:auto;border:1px solid var(--_border-color,var(--border));border-radius:var(--K15t-radius-small,10px);background:var(--_background-color,var(--surface));}
 .twiin-las-toc .register__filters{padding:12px 16px;}
+.twiin-las.twiin-las-toc .register__filters h3{font:var(--K15t-font-body-small-strong, 600 .82rem/1.4 Roboto,sans-serif);color:var(--_foreground-color,var(--navy));text-transform:none;letter-spacing:normal;margin:.9rem 0 .4rem;}
 .twiin-las .filter-reset{display:flex;justify-content:flex-end;margin-bottom:.6rem;}
 .twiin-las .register__filters h3{margin:.2rem 0 .6rem;font-size:.78rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);}
 .twiin-las .facet{margin-bottom:1.1rem;}
