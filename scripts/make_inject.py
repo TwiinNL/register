@@ -143,6 +143,8 @@ JS = r"""
   var PAGEKEY='index-landelijke-afspraken';  // herkent de index-pagina in boom/URL
   var SITE='https://las.codeberg.page/playground/';  // permalink-basis (codeberg)
   var INDEXNAME='';  // naam van de indexpagina (uit h1), voor de breadcrumb
+  var INDEXURL='';   // absolute URL van de indexpagina (uit de boomlink), voor kaartlinks
+  var ON_INDEX = location.pathname.replace(/\/+$/,'').indexOf(PAGEKEY)>-1;  // staan we op de indexpagina?
   var FACETS=[['soort','Soort'],['status','Status'],['domein','Domein'],['uitwisseling','Uitwisseling'],['patroon','Communicatiepatroon'],['functie','Generieke functie'],['toepassingen','Toepassing']];
   var byUid={}; DATA.forEach(function(c){byUid[c.uid]=c;});
   var slugToUid={}; DATA.forEach(function(c){slugToUid[c.uid.toLowerCase()]=c.uid;});
@@ -294,12 +296,13 @@ JS = r"""
   }
   function buildTree(){
     var a=treeIndexLink(); if(!a)return false;
+    try{ var u=new URL(a.getAttribute('href')||'', location.href); INDEXURL=u.origin+u.pathname; }catch(e){}
     var li=a.closest('.tree-item'); if(!li)return true;
     if(li.querySelector('[data-twiin-tree]')){ highlightTree(hashUid()); return true; }
     var ul=document.createElement('ul'); ul.setAttribute('data-twiin-tree','1');
     DATA.slice().sort(function(x,y){return x.uid.localeCompare(y.uid);}).forEach(function(c){
       var cli=document.createElement('li'); cli.className='tree-item';
-      cli.innerHTML='<div class="tree-item-header"><a class="tree-link twiin-tree-link" data-uid="'+esc(c.uid)+'" href="#'+HASHKEY+'='+esc(c.uid)+'">'+esc(c.naam)+'</a></div>';
+      cli.innerHTML='<div class="tree-item-header"><a class="tree-link twiin-tree-link" data-uid="'+esc(c.uid)+'" href="'+esc(INDEXURL)+'#'+HASHKEY+'='+esc(c.uid)+'">'+esc(c.naam)+'</a></div>';
       ul.appendChild(cli);
     });
     li.appendChild(ul);
@@ -323,9 +326,6 @@ JS = r"""
       // Breadcrumb-crumb 'Index...' -> terug naar de lijst (in-page, geen reload).
       var ix=e.target.closest&&e.target.closest('[data-twiin-index]');
       if(ix){ e.preventDefault(); toList(); render(); return; }
-      // Boom-links staan buiten .twiin-las (in #navigator-nav): apart afhandelen.
-      var tl=e.target.closest&&e.target.closest('.twiin-tree-link');
-      if(tl){ e.preventDefault(); location.hash=HASHKEY+'='+tl.getAttribute('data-uid'); return; }
       if(!e.target.closest||!e.target.closest('.twiin-las'))return;
       if(e.target.closest('[data-back]')){toList();render();return;}
       var cp=e.target.closest('[data-copy]');
@@ -371,13 +371,24 @@ JS = r"""
     wire(); render(); return true;
   }
   function findHost(){for(var i=0;i<MAIN_SELECTORS.length;i++){var el=qs(MAIN_SELECTORS[i]);if(el)return el;}return null;}
-  var n=0, iv=setInterval(function(){
-    n++;
-    var host=findHost();
-    if(host){ clearInterval(iv); boot(host); }
-    else if(n>66){ clearInterval(iv); }
-  },150);
-  // Paginaboom wordt async door het thema opgebouwd: pollen tot we kaarten kunnen toevoegen.
+
+  // Altijd: basis-CSS + klik op boomlinks (werkt op ELKE pagina).
+  css();
+  document.addEventListener('click',function(e){
+    var tl=e.target.closest&&e.target.closest('.twiin-tree-link'); if(!tl)return;
+    e.preventDefault();
+    var uid=tl.getAttribute('data-uid');
+    if(ON_INDEX){ location.hash=HASHKEY+'='+uid; }                              // in-page (behoudt token)
+    else { location.href=(INDEXURL||(tl.getAttribute('href')||'').split('#')[0])+'#'+HASHKEY+'='+uid; }  // naar de indexpagina
+  });
+
+  // Register (filters + resultaten + detail) alleen op de indexpagina mounten.
+  if(ON_INDEX){
+    var n=0, iv=setInterval(function(){ n++; var host=findHost();
+      if(host){ clearInterval(iv); boot(host); } else if(n>66){ clearInterval(iv); } },150);
+  }
+
+  // Paginaboom ALTIJD verrijken (elke pagina toont 'Index Landelijke afspraken' met > + kaarten).
   function watchTree(){ var t=treeRoot(); if(!t||t.__twlasWatch)return; t.__twlasWatch=true;
     new MutationObserver(function(){ if(!t.querySelector('[data-twiin-tree]')) buildTree(); }).observe(t,{childList:true,subtree:true}); }
   var tn=0, tiv=setInterval(function(){ tn++; buildTree();
