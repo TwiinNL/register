@@ -287,6 +287,11 @@ JS = r"""
     if(btn)btn.setAttribute('aria-expanded', exp?'true':'false');
     if(ul)ul.style.display = exp?'block':'none';
   }
+  // Klap de boom uit als er een kaart open is, in als we op de lijst zijn.
+  function syncTreeExpanded(){
+    var a=treeIndexLink(); if(!a)return; var li=a.closest('.tree-item');
+    if(li&&li.querySelector('[data-twiin-tree]')) setTreeExpanded(li, !!hashUid());
+  }
   function buildTree(){
     var a=treeIndexLink(); if(!a)return false;
     var li=a.closest('.tree-item'); if(!li)return true;
@@ -304,13 +309,13 @@ JS = r"""
     if(!btn){ btn=document.createElement('button'); btn.type='button'; btn.className='tree-action'; hdr.insertBefore(btn, hdr.firstChild); }
     btn.setAttribute('data-twiin-toggle','1'); btn.removeAttribute('aria-disabled'); btn.removeAttribute('aria-busy');
     if(!btn.__twlasWired){ btn.__twlasWired=true; btn.addEventListener('click',function(ev){ ev.preventDefault(); ev.stopImmediatePropagation(); setTreeExpanded(li, btn.getAttribute('aria-expanded')!=='true'); }); }
-    // Standaard ingeklapt: toont de > (uitklapbaar), net als de andere boom-items.
-    setTreeExpanded(li, false);
+    // Beginstaat volgt de weergave: uitgeklapt bij open kaart, anders ingeklapt (>).
+    setTreeExpanded(li, !!hashUid());
     highlightTree(hashUid());
     return true;
   }
   function hashUid(){var m=new RegExp('[#&]'+HASHKEY+'=([^&]+)').exec(location.hash||'');return m?decodeURIComponent(m[1]):null;}
-  function render(){var u=hashUid(); if(u&&byUid[u])renderDetail(u); else renderList();}
+  function render(){var u=hashUid(); if(u&&byUid[u])renderDetail(u); else renderList(); syncTreeExpanded();}
   function toList(){ if(location.hash&&hashUid())history.pushState('','',location.pathname+location.search); }
 
   function wire(){
