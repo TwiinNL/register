@@ -83,6 +83,7 @@ CSS = r"""
 .twiin-las-col-side .register__filters h3:first-child{margin-top:.4rem;}
 .twiin-las-toc{overflow:auto;}
 .twiin-las-toc .register__filters{padding:12px 16px;}
+.twiin-las .filter-reset{display:flex;justify-content:flex-end;margin-bottom:.6rem;}
 .twiin-las .register__filters h3{margin:.2rem 0 .6rem;font-size:.78rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);}
 .twiin-las .facet{margin-bottom:1.1rem;}
 .twiin-las .facet__option{display:flex;align-items:center;gap:.45rem;font-size:.85rem;padding:.12rem 0;cursor:pointer;}
@@ -153,7 +154,7 @@ JS = r"""
   }
   function facetsHtml(){
     var base=DATA.filter(matches);
-    var parts=['<aside class="register__filters"><button type="button" class="btn" data-reset>Filters wissen</button>'];
+    var parts=['<aside class="register__filters"><div class="filter-reset"><button type="button" class="btn" data-reset>Filters wissen</button></div>'];
     FACETS.forEach(function(fp){var f=fp[0];var counts={};base.forEach(function(c){asList(c[f]).forEach(function(v){counts[v]=(counts[v]||0)+1;});});
       var all={};DATA.forEach(function(c){asList(c[f]).forEach(function(v){all[v]=true;});});
       var active=state.filters[f]||[];
@@ -219,7 +220,9 @@ JS = r"""
     h.push('</article>'); return h.join('');
   }
 
-  function setFiltersVisible(v){ if(!sideArea)return; if(tocMode){ sideArea.classList.toggle('toc', v); sideArea.style.display=v?'flex':'none'; } else { sideArea.style.display=v?'':'none'; } }
+  // Verberg filters zonder de kolom te laten inklappen (voorkomt dat de content
+  // hercentreert/verspringt); de TOC-kolom blijft gereserveerd, net als in Scroll.
+  function setFiltersVisible(v){ if(sideArea)sideArea.style.visibility=v?'visible':'hidden'; }
   function paintFilters(){ if(sideArea)sideArea.innerHTML=facetsHtml(); }
   function restoreInputs(){
     var si=mainArea.querySelector('[data-search]'); if(si){si.value=state.q; if(state.q){si.focus();si.setSelectionRange(si.value.length,si.value.length);}}
