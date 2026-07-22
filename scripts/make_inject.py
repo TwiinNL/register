@@ -129,9 +129,6 @@ CSS = r"""
 .twiin-las .permalink-box__row{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;}
 .twiin-las .permalink-box__url{font-family:var(--mono);font-size:.82rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.5rem .7rem;flex:1;word-break:break-all;}
 .twiin-las .permalink-box__formats{font-size:.82rem;margin:.7rem 0 0;color:var(--muted);}
-ul[data-twiin-tree]{list-style:none;margin:.2rem 0;padding-left:1.1rem;max-height:none;overflow:visible;}
-ul[data-twiin-tree] li.tree-item{list-style:none;max-height:none;overflow:visible;}
-ul[data-twiin-tree] .twiin-tree-link[aria-current=true]{font-weight:700;color:#e6396a;}
 """
 
 JS = r"""
@@ -143,7 +140,6 @@ JS = r"""
   var PAGEKEY='index-landelijke-afspraken';  // herkent de index-pagina in boom/URL
   var SITE='https://las.codeberg.page/playground/';  // permalink-basis (codeberg)
   var INDEXNAME='';  // naam van de indexpagina (uit h1), voor de breadcrumb
-  var INDEXURL='';   // absolute URL van de indexpagina (uit de boomlink), voor kaartlinks
   var ON_INDEX = location.pathname.replace(/\/+$/,'').indexOf(PAGEKEY)>-1;  // staan we op de indexpagina?
   var FACETS=[['soort','Soort'],['status','Status'],['domein','Domein'],['uitwisseling','Uitwisseling'],['patroon','Communicatiepatroon'],['functie','Generieke functie'],['toepassingen','Toepassing']];
   var byUid={}; DATA.forEach(function(c){byUid[c.uid]=c;});
@@ -249,8 +245,8 @@ JS = r"""
     var si=mainArea.querySelector('[data-search]'); if(si){si.value=state.q; if(state.q){si.focus();si.setSelectionRange(si.value.length,si.value.length);}}
     var so=mainArea.querySelector('[data-sort]'); if(so)so.value=state.sort;
   }
-  function renderList(){ mainArea.innerHTML=resultsHtml(); setFiltersVisible(true); paintFilters(); restoreInputs(); setCrumb(null); highlightTree(null); }
-  function renderDetail(uid){ mainArea.innerHTML=detailHtml(uid); setFiltersVisible(false); setCrumb(uid); highlightTree(uid); try{window.scrollTo(0,0);}catch(e){} }
+  function renderList(){ mainArea.innerHTML=resultsHtml(); setFiltersVisible(true); paintFilters(); restoreInputs(); setCrumb(null); }
+  function renderDetail(uid){ mainArea.innerHTML=detailHtml(uid); setFiltersVisible(false); setCrumb(uid); try{window.scrollTo(0,0);}catch(e){} }
 
   // --- Scroll-thema-integraties: breadcrumb (kaart-UID) + paginaboom (kaarten) ---
   function setCrumb(uid){
@@ -264,61 +260,8 @@ JS = r"""
       li.appendChild(a); ol.appendChild(li);
     }
   }
-  // Er bestaan twee #articleTree (een verborgen kopie + de zichtbare boom in
-  // #navigator-nav). Kies de zichtbare.
-  function treeRoot(){
-    var nav=document.querySelector('#navigator-nav'); if(nav)return nav;
-    var all=document.querySelectorAll('#articleTree');
-    for(var i=0;i<all.length;i++){ if(all[i].getClientRects().length)return all[i]; }
-    return document.querySelector('#articleTree');
-  }
-  function treeIndexLink(){
-    var t=treeRoot(); if(!t)return null;
-    var links=t.querySelectorAll('a[href]'), path=location.pathname.replace(/\/+$/,''), cand=null;
-    for(var i=0;i<links.length;i++){ var a=links[i], h=(a.getAttribute('href')||'').split('#')[0].split('?')[0].replace(/\/+$/,'');
-      if(h&&(h===path||h.indexOf(PAGEKEY)>-1)){ if(a.offsetHeight>0)return a; cand=cand||a; } }
-    return cand;
-  }
-  function highlightTree(uid){
-    var t=treeRoot(); if(!t)return;
-    var links=t.querySelectorAll('.twiin-tree-link');
-    for(var i=0;i<links.length;i++){ if(uid&&links[i].getAttribute('data-uid')===uid)links[i].setAttribute('aria-current','true'); else links[i].removeAttribute('aria-current'); }
-  }
-  function setTreeExpanded(li,exp){
-    var btn=li.querySelector('[data-twiin-toggle]'), ul=li.querySelector('[data-twiin-tree]');
-    if(btn)btn.setAttribute('aria-expanded', exp?'true':'false');
-    if(ul)ul.style.display = exp?'block':'none';
-  }
-  // Klap de boom uit als er een kaart open is, in als we op de lijst zijn.
-  function syncTreeExpanded(){
-    var a=treeIndexLink(); if(!a)return; var li=a.closest('.tree-item');
-    if(li&&li.querySelector('[data-twiin-tree]')) setTreeExpanded(li, !!hashUid());
-  }
-  function buildTree(){
-    var a=treeIndexLink(); if(!a)return false;
-    try{ var u=new URL(a.getAttribute('href')||'', location.href); INDEXURL=u.origin+u.pathname; }catch(e){}
-    var li=a.closest('.tree-item'); if(!li)return true;
-    if(li.querySelector('[data-twiin-tree]')){ highlightTree(hashUid()); return true; }
-    var ul=document.createElement('ul'); ul.setAttribute('data-twiin-tree','1');
-    DATA.slice().sort(function(x,y){return x.uid.localeCompare(y.uid);}).forEach(function(c){
-      var cli=document.createElement('li'); cli.className='tree-item';
-      cli.innerHTML='<div class="tree-item-header"><a class="tree-link twiin-tree-link" data-uid="'+esc(c.uid)+'" href="'+esc(INDEXURL)+'#'+HASHKEY+'='+esc(c.uid)+'">'+esc(c.naam)+'</a></div>';
-      ul.appendChild(cli);
-    });
-    li.appendChild(ul);
-    // Maak het knooppunt uitklapbaar zoals native tree-items (chevron-knop).
-    var hdr=li.querySelector('.tree-item-header')||li;
-    var btn=hdr.querySelector('.tree-action');
-    if(!btn){ btn=document.createElement('button'); btn.type='button'; btn.className='tree-action'; hdr.insertBefore(btn, hdr.firstChild); }
-    btn.setAttribute('data-twiin-toggle','1'); btn.removeAttribute('aria-disabled'); btn.removeAttribute('aria-busy');
-    if(!btn.__twlasWired){ btn.__twlasWired=true; btn.addEventListener('click',function(ev){ ev.preventDefault(); ev.stopImmediatePropagation(); setTreeExpanded(li, btn.getAttribute('aria-expanded')!=='true'); }); }
-    // Beginstaat volgt de weergave: uitgeklapt bij open kaart, anders ingeklapt (>).
-    setTreeExpanded(li, !!hashUid());
-    highlightTree(hashUid());
-    return true;
-  }
   function hashUid(){var m=new RegExp('[#&]'+HASHKEY+'=([^&]+)').exec(location.hash||'');return m?decodeURIComponent(m[1]):null;}
-  function render(){var u=hashUid(); if(u&&byUid[u])renderDetail(u); else renderList(); syncTreeExpanded();}
+  function render(){var u=hashUid(); if(u&&byUid[u])renderDetail(u); else renderList();}
   function toList(){ if(location.hash&&hashUid())history.pushState('','',location.pathname+location.search); }
 
   function wire(){
@@ -372,29 +315,12 @@ JS = r"""
   }
   function findHost(){for(var i=0;i<MAIN_SELECTORS.length;i++){var el=qs(MAIN_SELECTORS[i]);if(el)return el;}return null;}
 
-  // Altijd: basis-CSS + klik op boomlinks (werkt op ELKE pagina).
-  css();
-  document.addEventListener('click',function(e){
-    var tl=e.target.closest&&e.target.closest('.twiin-tree-link'); if(!tl)return;
-    e.preventDefault();
-    var uid=tl.getAttribute('data-uid');
-    if(ON_INDEX){ location.hash=HASHKEY+'='+uid; }                              // in-page (behoudt token)
-    else { location.href=(INDEXURL||(tl.getAttribute('href')||'').split('#')[0])+'#'+HASHKEY+'='+uid; }  // naar de indexpagina
-  });
-
-  // Register (filters + resultaten + detail) alleen op de indexpagina mounten.
+  // Register (filters + resultaten + detail) mounten op de indexpagina.
+  // Op andere pagina's doet het script niets (index blijft binnen de pagina).
   if(ON_INDEX){
     var n=0, iv=setInterval(function(){ n++; var host=findHost();
       if(host){ clearInterval(iv); boot(host); } else if(n>66){ clearInterval(iv); } },150);
   }
-
-  // Paginaboom ALTIJD verrijken (elke pagina toont 'Index Landelijke afspraken' met > + kaarten).
-  function watchTree(){ var t=treeRoot(); if(!t||t.__twlasWatch)return; t.__twlasWatch=true;
-    new MutationObserver(function(){ if(!t.querySelector('[data-twiin-tree]')) buildTree(); }).observe(t,{childList:true,subtree:true}); }
-  var tn=0, tiv=setInterval(function(){ tn++; buildTree();
-    var r=treeRoot();
-    if(r&&r.querySelector('[data-twiin-tree]')){ clearInterval(tiv); watchTree(); }
-    else if(tn>75){ clearInterval(tiv); } },200);
 })();
 """
 
