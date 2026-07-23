@@ -4,10 +4,10 @@
   zowel op de index-pagina als op de standalone /embed/-pagina werkt.
   Vereist dat register.js en css/pagefind-overrides.css geladen worden.
 */ -}}
-{{- $kaarten := sort (where site.RegularPages "Type" "index") "Params.ingangsdatum" "desc" -}}
+{{- $kaarten := sort (where site.RegularPages "Type" "register") "Params.ingangsdatum" "desc" -}}
 <div class="register">
   <aside class="register__filters" id="pf-filters" aria-label="Filters">
-    <noscript><p class="muted">Filteren vereist JavaScript. Hieronder staat de volledige index.</p></noscript>
+    <noscript><p class="muted">Filteren vereist JavaScript. Hieronder staat het volledige register.</p></noscript>
   </aside>
 
   <div class="register__main">

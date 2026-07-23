@@ -6,7 +6,7 @@
 
   <nav class="breadcrumb" aria-label="Kruimelpad">
     <a href="{{ site.Home.RelPermalink }}">Home</a> ›
-    <a href="{{ "index/" | relURL }}">Index</a> ›
+    <a href="{{ "register/" | relURL }}">Register</a> ›
     <span>{{ .Params.uid }}</span>
   </nav>
 
@@ -121,7 +121,7 @@
         {{ $target := index (where site.RegularPages "Params.uid" $code) 0 }}
         <li>
           {{ if $target }}<a href="{{ $target.RelPermalink }}">{{ $code }} — {{ $target.Title }}</a>
-          {{ else }}<code>{{ $code }}</code> <span class="muted">(nog niet in de index)</span>{{ end }}
+          {{ else }}<code>{{ $code }}</code> <span class="muted">(nog niet in het register)</span>{{ end }}
         </li>
       {{ end }}
     </ul>

@@ -11,7 +11,7 @@
 baseURL = "https://las.codeberg.page/playground/"
 
 defaultContentLanguage = "nl"
-title = "Twiin Landelijk afsprakenstelsel | Index"
+title = "Twiin Landelijk afsprakenstelsel | Register"
 
 [languages.nl]
   locale = "nl-NL"
@@ -23,10 +23,10 @@ enableGitInfo = true
 enableRobotsTXT = true
 
 # -----------------------------------------------------------------------------
-# Permalinks: kaarten leven onder /index/<uid-lowercase>/
+# Permalinks: kaarten leven onder /register/<uid-lowercase>/
 # -----------------------------------------------------------------------------
 [permalinks]
-  index = "/index/:slug/"
+  register = "/register/:slug/"
 
 # -----------------------------------------------------------------------------
 # Media type + output format voor JSON-LD (RDF) per kaart

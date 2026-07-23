@@ -1,3 +1,3 @@
 ---
-title: "Twiin Landelijk afsprakenstelsel | Index"
+title: "Twiin Landelijk afsprakenstelsel | Register"
 ---

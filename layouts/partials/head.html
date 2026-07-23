@@ -24,7 +24,7 @@
 <link rel="stylesheet" href="{{ "css/main.css" | relURL }}">
 
 {{- /* RDF / JSON-LD: voor kaarten een volledige beschrijving in de <head> */ -}}
-{{ if eq .Type "index" }}{{ if not .IsNode }}
+{{ if eq .Type "register" }}{{ if not .IsNode }}
 {{ partialCached "jsonld.html" . .RelPermalink }}
 {{ end }}{{ end }}
 {{- /* RSS autodiscovery */ -}}

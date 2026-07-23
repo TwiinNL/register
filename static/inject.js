@@ -72,7 +72,7 @@
     h.push('<div class="kaart__badges">'+badge('soort',c.soort)+badge('status',c.status)+'</div>');
     h.push('<p class="kaart__uid">'+esc(c.uid)+'</p><h1 class="kaart__title">'+esc(c.naam)+'</h1>');
     if(c.samenvatting)h.push('<p class="kaart__lead">'+esc(c.samenvatting)+'</p>');
-    var pl=SITE+'index/'+c.uid.toLowerCase()+'/', jl=pl+'index.jsonld';
+    var pl=SITE+'register/'+c.uid.toLowerCase()+'/', jl=pl+'index.jsonld';
     h.push('<section class="permalink-box"><h2>Permalink</h2>'
       +'<p class="permalink-box__hint">Verwijs naar deze metadata via onderstaande permalink. Deze blijft stabiel zodra een eigen domein is gekoppeld.</p>'
       +'<div class="permalink-box__row"><code class="permalink-box__url" id="twlas-permalink">'+esc(pl)+'</code>'
@@ -123,7 +123,7 @@
       // Bij een geopende kaart wijst de laatste crumb naar de INDEXpagina (niet de kaart).
       var li=document.createElement('li'); li.setAttribute('data-twiin-crumb','1');
       var a=document.createElement('a'); a.href=location.pathname; a.setAttribute('data-twiin-index','1');
-      a.textContent=INDEXNAME || 'Index Landelijke afspraken';
+      a.textContent=INDEXNAME || 'Register Landelijke afspraken';
       li.appendChild(a); ol.appendChild(li);
     }
   }

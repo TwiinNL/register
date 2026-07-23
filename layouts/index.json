@@ -1,4 +1,4 @@
-{{- $index:= where site.RegularPages "Type" "index" -}}
+{{- $index:= where site.RegularPages "Type" "register" -}}
 {{- $items := slice -}}
 {{- range (sort $index "Params.uid") -}}
   {{- $permalink := .Permalink -}}{{ with .Params.permalink }}{{ $permalink = . }}{{ end -}}

@@ -1,8 +1,8 @@
 ---
-title: "Over deze index"
+title: "Over het register"
 ---
 
-Deze index is de **centrale vindplaats** voor de metadata van
+Dit register is de **centrale vindplaats** voor de metadata van
 afspraken, specificaties, richtlijnen en standaarden binnen het **Twiin Landelijk
 Afsprakenstelsel voor gezondheidsgegevens**. Iedere kaart beschrijft één afspraak, of een combinatie van
 afspraken vormt het permalink-anker voor verwijzing.
@@ -35,6 +35,6 @@ voor domeinspecifieke eigenschappen.
 
 ## Zoeken en filteren
 
-De [index](../index/) is full-text doorzoekbaar en te filteren op
+Het [register](../register/) is full-text doorzoekbaar en te filteren op
 attributen: soort, status, domein, uitwisseling, communicatiepatroon, generieke functie,
 toepassing en auteur.
