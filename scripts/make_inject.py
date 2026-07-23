@@ -137,7 +137,7 @@ JS = r"""
   var DATA=__DATA__, VOCAB=__VOCAB__;
   var MAIN_SELECTORS=['.article-body.fb-layout-body','.fb-layout-container'];
   var HASHKEY='las';
-  var PAGEKEY='index-landelijke-afspraken';  // herkent de index-pagina in boom/URL
+  var PAGEKEY='landelijke-afspraken';  // herkent de register-pagina aan de URL (index-/register-landelijke-afspraken)
   var SITE='https://las.codeberg.page/playground/';  // permalink-basis (codeberg)
   var INDEXNAME='';  // naam van de indexpagina (uit h1), voor de breadcrumb
   var ON_INDEX = location.pathname.replace(/\/+$/,'').indexOf(PAGEKEY)>-1;  // staan we op de indexpagina?
