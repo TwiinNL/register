@@ -23,7 +23,7 @@ autorisator:
 beheerder: ["Twiin"]
 betreft_twiin:
   - titel: "Specificatie: Netwerkbeveiliging mTLS 1.3"
-    link: "/index/tw-las-sp-001/"
+    link: "/register/tw-las-sp-001/"
     beheerder: "Twiin"
 betreft_extern:
   - titel: "HL7 FHIR R4"
@@ -49,7 +49,7 @@ draft: false
 Deze technische afspraak beschrijft het **Notified Pull**-patroon: de bronhouder verstuurt
 een notificatie naar de geadresseerde, die vervolgens op een zelfgekozen moment de
 betreffende gegevens gericht opvraagt. De uitwisseling verloopt over een wederzijds
-geauthenticeerde TLS-verbinding (zie [TW-LAS-SP-001](/index/tw-las-sp-001/)) en maakt
+geauthenticeerde TLS-verbinding (zie [TW-LAS-SP-001](/register/tw-las-sp-001/)) en maakt
 gebruik van HL7 FHIR R4-resources en -interacties.
 
 De afspraak legt de minimale set FHIR-profielen, de notificatie-payload en de

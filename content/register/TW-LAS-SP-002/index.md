@@ -21,7 +21,7 @@ autorisator: []
 beheerder: ["Twiin"]
 betreft_twiin:
   - titel: "Specificatie: Netwerkbeveiliging mTLS 1.3"
-    link: "/index/tw-las-sp-001/"
+    link: "/register/tw-las-sp-001/"
     beheerder: "Twiin"
 betreft_extern:
   - titel: "UZI-register (CIBG)"
@@ -40,5 +40,5 @@ draft: false
 
 Deze specificatie beschrijft hoe zorgaanbieders en hun systemen worden geïdentificeerd en
 geauthenticeerd, als basis voor autorisatiebeslissingen. Zij bouwt voort op de
-transportbeveiliging uit [TW-LAS-SP-001](/index/tw-las-sp-001/) en is op dit moment een
+transportbeveiliging uit [TW-LAS-SP-001](/register/tw-las-sp-001/) en is op dit moment een
 **kandidaat**-versie voor Stelselversie 1.6.

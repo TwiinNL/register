@@ -155,7 +155,7 @@ JS = r"""
   function kl(f,code){var m=VOCAB[f]&&VOCAB[f][code];return m?m.kleur:'grijs';}
   function badge(f,code){return '<span class="badge badge--'+kl(f,code)+'">'+esc(lbl(f,code))+'</span>';}
   function badges(f,arr){arr=asList(arr);return arr.length?arr.map(function(c){return badge(f,c);}).join(''):'<span class="muted">--</span>';}
-  function linkFor(url){var m=/(?:^|\/)index\/([a-z0-9-]+)\/?$/i.exec(url||'');if(m&&slugToUid[m[1].toLowerCase()])return '#'+HASHKEY+'='+slugToUid[m[1].toLowerCase()];return url;}
+  function linkFor(url){var m=/(?:^|\/)(?:register|index)\/([a-z0-9-]+)\/?$/i.exec(url||'');if(m&&slugToUid[m[1].toLowerCase()])return '#'+HASHKEY+'='+slugToUid[m[1].toLowerCase()];return url;}
   function isInternal(url){return String(url||'').indexOf('#'+HASHKEY+'=')===0;}
 
   function matches(c){

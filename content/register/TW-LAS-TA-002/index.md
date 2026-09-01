@@ -23,10 +23,10 @@ autorisator:
 beheerder: ["Twiin"]
 betreft_twiin:
   - titel: "Technische afspraak: Notified Pull via FHIR"
-    link: "/index/tw-las-ta-001/"
+    link: "/register/tw-las-ta-001/"
     beheerder: "Twiin"
   - titel: "Specificatie: Netwerkbeveiliging mTLS 1.3"
-    link: "/index/tw-las-sp-001/"
+    link: "/register/tw-las-sp-001/"
     beheerder: "Twiin"
 betreft_extern:
   - titel: "IHE XCPD — Cross-Community Patient Discovery"

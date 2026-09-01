@@ -23,7 +23,7 @@ autorisator:
 beheerder: ["Twiin"]
 betreft_twiin:
   - titel: "Procesafspraak: Toetreding en aansluiting"
-    link: "/index/tw-las-pa-001/"
+    link: "/register/tw-las-pa-001/"
     beheerder: "Twiin"
 betreft_extern: []
 relaties: ["TW-LAS-PA-001", "TW-LAS-SP-001"]
