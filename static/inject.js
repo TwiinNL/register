@@ -5,7 +5,7 @@
   var MAIN_SELECTORS=['.article-body.fb-layout-body','.fb-layout-container'];
   var HASHKEY='la';
   var PAGEKEY='landelijke-afspraken';  // herkent de register-pagina aan de URL (index-/register-landelijke-afspraken)
-  var SITE='https://twiin.codeberg.page/la/';  // permalink-basis (codeberg)
+  var SITE='https://twiin.codeberg.page/register/la/';  // permalink-basis (codeberg): /register/la/<slug>/
   var INFOBOX="<div data-component=\"panel\" role=\"note\" data-appearance=\"info\"><div class=\"panel-content\"><p><strong>Doel:</strong> Dit register heeft als doel om objecten binnen Twiin bruikbaar en vindbaar te maken voor andere afsprakenstelsels.</p><p><strong>Status:</strong> draft, voor gebruik in PoC</p><p><strong>Planning voor opname in Twiin:</strong> Naar verwachting onderdeel van de 2027 voorjaarsrelease.</p><p><strong>(Verwachte) impact:</strong> Gemiddeld. </p><p><strong>Benodigde acties voor opname Twiin Afsprakenstelsel:</strong> Vaststelling van verwijsrichtlijnen door de werkgroep 'Verwijzen naar Landelijk afsprakenstelsel'.</p></div></div>";  // infobox bovenaan het register (Scroll panel-opmaak)
   var INDEXNAME='';  // naam van de indexpagina (uit h1), voor de breadcrumb
   var ON_INDEX = location.pathname.replace(/\/+$/,'').indexOf(PAGEKEY)>-1;  // staan we op de indexpagina?

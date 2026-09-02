@@ -17,7 +17,7 @@ Laden via Scroll 'Custom JavaScript' (IIFE; inject.js zelf mount alleen op de
 register-pagina via de ON_INDEX-guard, dus geen paginaguard in de loader nodig):
   (function(){
     var s=document.createElement('script');
-    s.src='https://twiin.codeberg.page/la/inject.js';
+    s.src='https://twiin.codeberg.page/register/inject.js';
     s.charset='utf-8';
     document.head.appendChild(s);
   })();
@@ -156,7 +156,7 @@ JS = r"""
   var MAIN_SELECTORS=['.article-body.fb-layout-body','.fb-layout-container'];
   var HASHKEY='la';
   var PAGEKEY='landelijke-afspraken';  // herkent de register-pagina aan de URL (index-/register-landelijke-afspraken)
-  var SITE='https://twiin.codeberg.page/la/';  // permalink-basis (codeberg)
+  var SITE='https://twiin.codeberg.page/register/la/';  // permalink-basis (codeberg): /register/la/<slug>/
   var INFOBOX=__INFOBOX__;  // infobox bovenaan het register (Scroll panel-opmaak)
   var INDEXNAME='';  // naam van de indexpagina (uit h1), voor de breadcrumb
   var ON_INDEX = location.pathname.replace(/\/+$/,'').indexOf(PAGEKEY)>-1;  // staan we op de indexpagina?

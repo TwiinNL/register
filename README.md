@@ -40,7 +40,7 @@ hugo new --kind kaart content/register/TW-LA-SP-003/index.md
 
 Dit maakt een kaart op basis van [`archetypes/kaart.md`](archetypes/kaart.md). Vul de
 front-matter in (zie veldenoverzicht hieronder) en zet `draft: false`. De URL volgt uit
-`slug` (= UID in kleine letters), bijvoorbeeld `/tw-la-sp-003/`.
+`slug` (= UID in kleine letters), bijvoorbeeld `/la/tw-la-sp-003/`.
 
 ### Velden (front-matter)
 
@@ -115,23 +115,25 @@ uitwisseling, communicatiepatroon, generieke functie, toepassing, auteur.
 
 De workflow [`.forgejo/workflows/pages.yml`](.forgejo/workflows/pages.yml) bouwt bij elke
 push naar `main` de site + zoekindex en publiceert naar de branch **`pages`** van deze
-repo. Resultaat: **https://twiin.codeberg.page/la/**
+repo. Resultaat: **https://twiin.codeberg.page/register/**
 
 ### Eigen domein (`register.twiin.nl/la/`)
 
-Op `*.codeberg.page` staat de repo onder de mount `/la/`; een eigen domein serveert de repo
-juist op de root. Om de kaarten ook op het eigen domein onder `/la/` te houden, zet je bij de
-cutover:
+De repo heet `register` en staat op `*.codeberg.page` onder de mount `/register/`; kaarten
+staan onder `/la/<slug>/` (zie `[permalinks]`). Zo is de tijdelijke URL
+`twiin.codeberg.page/register/la/<slug>/`. Een eigen domein serveert de repo op de root, dus
+daar wordt dat `register.twiin.nl/la/<slug>/` en de root `register.twiin.nl/` is het register
+zelf.
 
-* `baseURL` in `hugo.toml` → `https://register.twiin.nl/`
-* permalinks → `register = "/la/:slug/"` (het `/la/`-segment verhuist van de mount naar het pad)
+Cutover = **één regel**: `baseURL` in `hugo.toml` → `https://register.twiin.nl/`
+(permalinks blijven `register = "/la/:slug/"`).
 
 DNS (nieuwe git-pages server, geen `.domains`-bestand meer nodig):
 
 * `register.twiin.nl` → **CNAME** → `codeberg.page.`
-* `_git-pages-repository.register.twiin.nl` → **TXT** → `https://codeberg.org/Twiin/la.git`
+* `_git-pages-repository.register.twiin.nl` → **TXT** → `https://codeberg.org/Twiin/register.git`
 
-Permalinks en RDF-identifiers volgen daarna automatisch (`…/la/<slug>/`).
+Permalinks en RDF-identifiers volgen daarna automatisch (`register.twiin.nl/la/<slug>/`).
 
 ---
 

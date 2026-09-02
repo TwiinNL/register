@@ -4,11 +4,11 @@
 # =============================================================================
 #
 # baseURL: bepaalt waar de permalinks naar verwijzen.
-#   - Codeberg Pages (per-repo):  https://twiin.codeberg.page/la/
-#   - Eigen domein (later):       https://register.twiin.nl/la/
-# Pas deze één regel aan zodra het eigen domein gekoppeld is; alle permalinks
-# en RDF-identifiers volgen automatisch.
-baseURL = "https://twiin.codeberg.page/la/"
+#   - Codeberg Pages (repo 'register', mount /register/):  https://twiin.codeberg.page/register/
+#   - Eigen domein (later, repo op de root):               https://register.twiin.nl/
+# Kaarten staan onder /la/ (zie [permalinks]); bij cutover alleen deze regel omzetten
+# naar https://register.twiin.nl/ — permalinks worden dan register.twiin.nl/la/<slug>/.
+baseURL = "https://twiin.codeberg.page/register/"
 
 defaultContentLanguage = "nl"
 title = "Twiin Landelijk afsprakenstelsel | Register"
@@ -26,8 +26,9 @@ enableRobotsTXT = true
 # Permalinks: kaarten leven onder /register/<uid-lowercase>/
 # -----------------------------------------------------------------------------
 [permalinks]
-  # Kaarten staan direct onder de repo-mount (/la/) i.p.v. een extra /register/-segment.
-  register = "/:slug/"
+  # Kaarten leven onder /la/<slug>/ (het pad-segment 'la', niet de repo-mount).
+  # Temp: twiin.codeberg.page/register/la/<slug>/  |  Eigen domein: register.twiin.nl/la/<slug>/
+  register = "/la/:slug/"
 
 # -----------------------------------------------------------------------------
 # Media type + output format voor JSON-LD (RDF) per kaart
@@ -69,7 +70,7 @@ enableRobotsTXT = true
   licentieURL = "https://creativecommons.org/licenses/by-sa/4.0/deed.nl"
   # RDF/JSON-LD: basis-namespace voor de eigen LAS-vocabulaire.
   # Eindigt op #; termen worden hieraan gehangen (bv. las:Afspraak).
-  rdfNamespace = "https://twiin.codeberg.page/la/ns#"
+  rdfNamespace = "https://twiin.codeberg.page/register/la/ns#"
   # Hoeveel uitgelichte kaarten op de landingspagina
   uitgelichtAantal = 4
 
