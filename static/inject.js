@@ -6,6 +6,7 @@
   var HASHKEY='la';
   var PAGEKEY='landelijke-afspraken';  // herkent de register-pagina aan de URL (index-/register-landelijke-afspraken)
   var SITE='https://twiin.codeberg.page/la/';  // permalink-basis (codeberg)
+  var INFOBOX="<div data-component=\"panel\" role=\"note\" data-appearance=\"info\"><div class=\"panel-content\"><p><strong>Doel:</strong> Dit register heeft als doel om objecten binnen Twiin bruikbaar en vindbaar te maken voor andere afsprakenstelsels</p><p><strong>Status:</strong> draft, voor gebruik in PoC</p><p><strong>Planning voor opname in Twiin:</strong> Na vaststelling van verwijsrichtlijnen en aanwijzing van (een selectie aan) definitieve landelijke afspraken. Naar verwachting onderdeel voor de voorjaarsrelease van 2027.</p><p><strong>(Verwachte) impact:</strong> Gemiddeld. </p><p><strong>Benodigde acties voor opname Twiin Afsprakenstelsel:</strong> Zie 'Planning voor opname in Twiin.</p></div></div>";  // infobox bovenaan het register (Scroll panel-opmaak)
   var INDEXNAME='';  // naam van de indexpagina (uit h1), voor de breadcrumb
   var ON_INDEX = location.pathname.replace(/\/+$/,'').indexOf(PAGEKEY)>-1;  // staan we op de indexpagina?
   var FACETS=[['soort','Soort'],['status','Status'],['domein','Domein'],['uitwisseling','Uitwisseling'],['patroon','Communicatiepatroon'],['functie','Generieke functie'],['toepassingen','Toepassing']];
@@ -52,7 +53,7 @@
         +'<h3 class="card__title">'+esc(c.naam)+'</h3>'+(c.samenvatting?'<p class="card__summary">'+esc(c.samenvatting)+'</p>':'')
         +'<div class="card__foot">'+badge('status',c.status)+asList(c.domein).map(function(d){return badge('domein',d);}).join('')+'</div></article>';
     }).join(''):'<p class="muted">Geen resultaten. Pas je zoekterm of filters aan.</p>';
-    return '<div class="register__main"><form class="search" onsubmit="return false">'
+    return '<div class="register__main">'+INFOBOX+'<form class="search" onsubmit="return false">'
       +'<input type="search" data-search placeholder="Zoek op vrije tekst, UID, naam" value="'+esc(state.q)+'">'
       +'<label class="search__sort">Sorteer: <select data-sort><option value="relevance">Relevantie</option><option value="ingang_desc">Ingangsdatum (nieuw-oud)</option><option value="ingang_asc">Ingangsdatum (oud-nieuw)</option></select></label></form>'
       +'<p class="register__stats">'+r.length+(r.length===1?' resultaat':' resultaten')+(state.q?(' voor "'+esc(state.q)+'"'):'')+'</p>'
