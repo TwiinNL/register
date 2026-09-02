@@ -40,7 +40,7 @@ hugo new --kind kaart content/register/TW-LA-SP-003/index.md
 
 Dit maakt een kaart op basis van [`archetypes/kaart.md`](archetypes/kaart.md). Vul de
 front-matter in (zie veldenoverzicht hieronder) en zet `draft: false`. De URL volgt uit
-`slug` (= UID in kleine letters), bijvoorbeeld `/register/tw-la-sp-003/`.
+`slug` (= UID in kleine letters), bijvoorbeeld `/tw-la-sp-003/`.
 
 ### Velden (front-matter)
 
@@ -115,14 +115,23 @@ uitwisseling, communicatiepatroon, generieke functie, toepassing, auteur.
 
 De workflow [`.forgejo/workflows/pages.yml`](.forgejo/workflows/pages.yml) bouwt bij elke
 push naar `main` de site + zoekindex en publiceert naar de branch **`pages`** van deze
-repo. Resultaat: **https://twiin.codeberg.page/register/**
+repo. Resultaat: **https://twiin.codeberg.page/la/**
 
-### Eigen domein (`register.twiin.nl`)
+### Eigen domein (`register.twiin.nl/la/`)
 
-* Wijzig `baseURL` in `hugo.toml` naar `https://register.twiin.nl/` en voeg een
-  `.domains`-bestand (met `register.twiin.nl`) toe in de `pages`-branch. Zet daarnaast een
-  DNS-CNAME `register.twiin.nl → twiin.codeberg.page.` (zie Codeberg-documentatie).
-  Permalinks en RDF-identifiers volgen automatisch.
+Op `*.codeberg.page` staat de repo onder de mount `/la/`; een eigen domein serveert de repo
+juist op de root. Om de kaarten ook op het eigen domein onder `/la/` te houden, zet je bij de
+cutover:
+
+* `baseURL` in `hugo.toml` → `https://register.twiin.nl/`
+* permalinks → `register = "/la/:slug/"` (het `/la/`-segment verhuist van de mount naar het pad)
+
+DNS (nieuwe git-pages server, geen `.domains`-bestand meer nodig):
+
+* `register.twiin.nl` → **CNAME** → `codeberg.page.`
+* `_git-pages-repository.register.twiin.nl` → **TXT** → `https://codeberg.org/Twiin/la.git`
+
+Permalinks en RDF-identifiers volgen daarna automatisch (`…/la/<slug>/`).
 
 ---
 

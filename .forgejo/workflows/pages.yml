@@ -4,7 +4,7 @@
 # Draait op de Codeberg gedeelde runner (label `codeberg-medium`). Hugo en
 # Pagefind worden als statische binaries opgehaald (geen container/Node nodig).
 # Het resultaat wordt naar branch `pages` van deze repo geduwd en is dan
-# bereikbaar op https://twiin.codeberg.page/register/ .
+# bereikbaar op https://twiin.codeberg.page/la/ .
 # =============================================================================
 name: Deploy site
 
@@ -58,4 +58,4 @@ jobs:
           git add -A
           git commit -q -m "Deploy ${GITHUB_SHA:-handmatig} [skip ci]"
           git push -f "https://x-access-token:${{ forge.token }}@codeberg.org/${{ forge.repository }}.git" pages
-          echo "Gepubliceerd → https://twiin.codeberg.page/register/"
+          echo "Gepubliceerd → https://twiin.codeberg.page/la/"

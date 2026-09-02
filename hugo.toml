@@ -4,11 +4,11 @@
 # =============================================================================
 #
 # baseURL: bepaalt waar de permalinks naar verwijzen.
-#   - Codeberg Pages (per-repo):  https://twiin.codeberg.page/register/
-#   - Eigen domein (later):       https://register.twiin.nl/
+#   - Codeberg Pages (per-repo):  https://twiin.codeberg.page/la/
+#   - Eigen domein (later):       https://register.twiin.nl/la/
 # Pas deze één regel aan zodra het eigen domein gekoppeld is; alle permalinks
 # en RDF-identifiers volgen automatisch.
-baseURL = "https://twiin.codeberg.page/register/"
+baseURL = "https://twiin.codeberg.page/la/"
 
 defaultContentLanguage = "nl"
 title = "Twiin Landelijk afsprakenstelsel | Register"
@@ -26,7 +26,8 @@ enableRobotsTXT = true
 # Permalinks: kaarten leven onder /register/<uid-lowercase>/
 # -----------------------------------------------------------------------------
 [permalinks]
-  register = "/register/:slug/"
+  # Kaarten staan direct onder de repo-mount (/la/) i.p.v. een extra /register/-segment.
+  register = "/:slug/"
 
 # -----------------------------------------------------------------------------
 # Media type + output format voor JSON-LD (RDF) per kaart
@@ -68,7 +69,7 @@ enableRobotsTXT = true
   licentieURL = "https://creativecommons.org/licenses/by-sa/4.0/deed.nl"
   # RDF/JSON-LD: basis-namespace voor de eigen LAS-vocabulaire.
   # Eindigt op #; termen worden hieraan gehangen (bv. las:Afspraak).
-  rdfNamespace = "https://twiin.codeberg.page/register/ns#"
+  rdfNamespace = "https://twiin.codeberg.page/la/ns#"
   # Hoeveel uitgelichte kaarten op de landingspagina
   uitgelichtAantal = 4
 

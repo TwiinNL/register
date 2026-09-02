@@ -16,7 +16,7 @@ Pure ASCII uitvoer.
 Laden via Scroll 'Custom JavaScript' (met paginaguard):
   <script>if(location.pathname.indexOf('register-landelijke-afspraken')>-1){
     var s=document.createElement('script');
-    s.src='https://twiin.codeberg.page/register/inject.js';s.charset='utf-8';
+    s.src='https://twiin.codeberg.page/la/inject.js';s.charset='utf-8';
     document.head.appendChild(s);}</script>
 
 Invoer : content/register/*/index.md + data/vocab.yaml
@@ -138,7 +138,7 @@ JS = r"""
   var MAIN_SELECTORS=['.article-body.fb-layout-body','.fb-layout-container'];
   var HASHKEY='la';
   var PAGEKEY='landelijke-afspraken';  // herkent de register-pagina aan de URL (index-/register-landelijke-afspraken)
-  var SITE='https://twiin.codeberg.page/register/';  // permalink-basis (codeberg)
+  var SITE='https://twiin.codeberg.page/la/';  // permalink-basis (codeberg)
   var INDEXNAME='';  // naam van de indexpagina (uit h1), voor de breadcrumb
   var ON_INDEX = location.pathname.replace(/\/+$/,'').indexOf(PAGEKEY)>-1;  // staan we op de indexpagina?
   var FACETS=[['soort','Soort'],['status','Status'],['domein','Domein'],['uitwisseling','Uitwisseling'],['patroon','Communicatiepatroon'],['functie','Generieke functie'],['toepassingen','Toepassing']];
@@ -155,7 +155,7 @@ JS = r"""
   function kl(f,code){var m=VOCAB[f]&&VOCAB[f][code];return m?m.kleur:'grijs';}
   function badge(f,code){return '<span class="badge badge--'+kl(f,code)+'">'+esc(lbl(f,code))+'</span>';}
   function badges(f,arr){arr=asList(arr);return arr.length?arr.map(function(c){return badge(f,c);}).join(''):'<span class="muted">--</span>';}
-  function linkFor(url){var m=/(?:^|\/)(?:register|index)\/([a-z0-9-]+)\/?$/i.exec(url||'');if(m&&slugToUid[m[1].toLowerCase()])return '#'+HASHKEY+'='+slugToUid[m[1].toLowerCase()];return url;}
+  function linkFor(url){var m=/(?:^|\/)(?:la|register|index)\/([a-z0-9-]+)\/?$/i.exec(url||'');if(m&&slugToUid[m[1].toLowerCase()])return '#'+HASHKEY+'='+slugToUid[m[1].toLowerCase()];return url;}
   function isInternal(url){return String(url||'').indexOf('#'+HASHKEY+'=')===0;}
 
   function matches(c){
@@ -205,7 +205,7 @@ JS = r"""
     h.push('<div class="kaart__badges">'+badge('soort',c.soort)+badge('status',c.status)+'</div>');
     h.push('<p class="kaart__uid">'+esc(c.uid)+'</p><h1 class="kaart__title">'+esc(c.naam)+'</h1>');
     if(c.samenvatting)h.push('<p class="kaart__lead">'+esc(c.samenvatting)+'</p>');
-    var pl=SITE+'register/'+c.uid.toLowerCase()+'/', jl=pl+'index.jsonld';
+    var pl=SITE+c.uid.toLowerCase()+'/', jl=pl+'index.jsonld';
     h.push('<section class="permalink-box"><h2>Permalink</h2>'
       +'<p class="permalink-box__hint">Verwijs naar deze metadata via onderstaande permalink. Deze blijft stabiel zodra een eigen domein is gekoppeld.</p>'
       +'<div class="permalink-box__row"><code class="permalink-box__url" id="twlas-permalink">'+esc(pl)+'</code>'
