@@ -30,7 +30,7 @@ gekoppeld is, verwijst de permalink daarnaartoe.
 
 Iedere kaart publiceert een machineleesbare beschrijving als RDF. Deze is opgenomen in de pagina en los op te halen via `index.jsonld` bij
 elke kaart. De beschrijving gebruikt Dublin Core Terms (`dct`),
-ADMS (`adms`), SKOS (`skos`) en schema.org, aangevuld met een eigen LAS-vocabulaire (`las:`)
+ADMS (`adms`), SKOS (`skos`) en schema.org, aangevuld met een eigen LA-vocabulaire (`la:`)
 voor domeinspecifieke eigenschappen.
 
 ## Zoeken en filteren

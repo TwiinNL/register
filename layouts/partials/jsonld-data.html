@@ -4,7 +4,7 @@
   zodat er één bron is voor de RDF-representatie.
 
   Vocabulaires: Dublin Core Terms (dct), ADMS (assets/standaarden),
-  SKOS (gecontroleerde waarden) en schema.org. Eigen termen onder 'las:'.
+  SKOS (gecontroleerde waarden) en schema.org. Eigen termen onder 'la:'.
 */ -}}
 {{- $p := . -}}
 {{- $ns := site.Params.rdfNamespace -}}
@@ -18,11 +18,11 @@
   "schema" "https://schema.org/"
   "owl" "http://www.w3.org/2002/07/owl#"
   "rdfs" "http://www.w3.org/2000/01/rdf-schema#"
-  "las" $ns -}}
+  "la" $ns -}}
 
 {{- $node := dict
   "@id" $id
-  "@type" (slice "adms:Asset" "las:Afspraak")
+  "@type" (slice "adms:Asset" "la:Afspraak")
   "dct:identifier" $p.Params.uid
   "dct:title" $p.Title
   "schema:name" $p.Title
@@ -42,13 +42,13 @@
 
 {{- with $p.Params.samenvatting }}{{ $node = merge $node (dict "dct:description" .) }}{{ end -}}
 
-{{- /* Context-lijsten als skos:Concept-arrays onder las:* */ -}}
+{{- /* Context-lijsten als skos:Concept-arrays onder la:* */ -}}
 {{- $contextMap := slice
-  (dict "field" "domein" "vocab" "domein" "prop" "las:domein")
-  (dict "field" "uitwisseling" "vocab" "uitwisseling" "prop" "las:uitwisseling")
-  (dict "field" "patroon" "vocab" "patroon" "prop" "las:communicatiepatroon")
-  (dict "field" "functie" "vocab" "functie" "prop" "las:generiekeFunctie")
-  (dict "field" "toepassingen" "vocab" "stelsel" "prop" "las:toepassing") -}}
+  (dict "field" "domein" "vocab" "domein" "prop" "la:domein")
+  (dict "field" "uitwisseling" "vocab" "uitwisseling" "prop" "la:uitwisseling")
+  (dict "field" "patroon" "vocab" "patroon" "prop" "la:communicatiepatroon")
+  (dict "field" "functie" "vocab" "functie" "prop" "la:generiekeFunctie")
+  (dict "field" "toepassingen" "vocab" "stelsel" "prop" "la:toepassing") -}}
 {{- range $contextMap -}}
   {{- $vals := index $p.Params .field -}}
   {{- if $vals -}}
@@ -63,20 +63,20 @@
 {{- end -}}
 
 {{- with $p.Params.auteur }}{{ $node = merge $node (dict "dct:creator" .) }}{{ end -}}
-{{- with $p.Params.beheerder }}{{ $node = merge $node (dict "las:beheerder" .) }}{{ end -}}
+{{- with $p.Params.beheerder }}{{ $node = merge $node (dict "la:beheerder" .) }}{{ end -}}
 
 {{- /* Autorisator(en) + datum */ -}}
 {{- with $p.Params.autorisator -}}
   {{- $arr := slice -}}
   {{- range . -}}
-    {{- $arr = $arr | append (dict "las:organisatie" .naam "dct:date" (string .datum)) -}}
+    {{- $arr = $arr | append (dict "la:organisatie" .naam "dct:date" (string .datum)) -}}
   {{- end -}}
-  {{- $node = merge $node (dict "las:autorisator" $arr) -}}
+  {{- $node = merge $node (dict "la:autorisator" $arr) -}}
 {{- end -}}
 
 {{- with $p.Params.ingangsdatum }}{{ $node = merge $node (dict "dct:issued" (string .) "schema:datePublished" (string .)) }}{{ end -}}
-{{- with $p.Params.vervaldatum }}{{ $node = merge $node (dict "las:vervaldatum" (string .)) }}{{ end -}}
-{{- with $p.Params.ingang_stelselversie }}{{ $node = merge $node (dict "las:ingangStelselversie" (string .)) }}{{ end -}}
+{{- with $p.Params.vervaldatum }}{{ $node = merge $node (dict "la:vervaldatum" (string .)) }}{{ end -}}
+{{- with $p.Params.ingang_stelselversie }}{{ $node = merge $node (dict "la:ingangStelselversie" (string .)) }}{{ end -}}
 
 {{- /* Relaties naar andere UIDs → interne permalinks */ -}}
 {{- with $p.Params.relaties -}}
@@ -94,8 +94,8 @@
 
 {{- /* Verwijzingen binnen + buiten Twiin → dct:references */ -}}
 {{- $refs := slice -}}
-{{- range $p.Params.betreft_twiin }}{{ $refs = $refs | append (dict "@id" .link "dct:title" .titel "las:beheerder" (.beheerder | default "Twiin") "las:scope" "twiin") }}{{ end -}}
-{{- range $p.Params.betreft_extern }}{{ $refs = $refs | append (dict "@id" .link "dct:title" .titel "las:beheerder" (.beheerder | default "") "las:scope" "extern") }}{{ end -}}
+{{- range $p.Params.betreft_twiin }}{{ $refs = $refs | append (dict "@id" .link "dct:title" .titel "la:beheerder" (.beheerder | default "Twiin") "la:scope" "twiin") }}{{ end -}}
+{{- range $p.Params.betreft_extern }}{{ $refs = $refs | append (dict "@id" .link "dct:title" .titel "la:beheerder" (.beheerder | default "") "la:scope" "extern") }}{{ end -}}
 {{- with $refs }}{{ $node = merge $node (dict "dct:references" .) }}{{ end -}}
 
 {{- /* Wijzigingslog → adms:versionNotes-achtige lijst */ -}}
@@ -104,7 +104,7 @@
   {{- range . -}}
     {{- $arr = $arr | append (dict "dct:date" (string .datum) "owl:versionInfo" (string .versie) "rdfs:comment" .wijziging) -}}
   {{- end -}}
-  {{- $node = merge $node (dict "las:wijzigingslog" $arr) -}}
+  {{- $node = merge $node (dict "la:wijzigingslog" $arr) -}}
 {{- end -}}
 
 {{- $graph := merge (dict "@context" $ctx) $node -}}

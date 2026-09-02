@@ -1,4 +1,4 @@
-# Twiin LAS — Register van afspraken & specificaties
+# Twiin Landelijk afsprakenstelsel | Register
 
 De centrale vindplaats voor de metadata van afspraken,
 specificaties, richtlijnen en standaarden binnen het **Twiin Landelijk Afsprakenstelsel
@@ -100,7 +100,7 @@ static/css, static/js     # styling en gedrag (thema, filter-UI)
 
 Elke kaart bevat een `<script type="application/ld+json">` in de pagina én een los
 `index.jsonld`-bestand. De beschrijving gebruikt Dublin Core Terms (`dct`), ADMS (`adms`),
-SKOS (`skos`) en schema.org, aangevuld met een eigen LAS-vocabulaire (`las:`). De
+SKOS (`skos`) en schema.org, aangevuld met een eigen LA-vocabulaire (`la:`). De
 namespace staat in `hugo.toml` (`params.rdfNamespace`).
 
 ### Zoeken & filteren

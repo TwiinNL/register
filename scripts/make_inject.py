@@ -10,7 +10,7 @@ Zo houdt de content volle breedte en staan de filters in de sticky TOC rechts.
 Valt terug op één mount (filters+resultaten samen) als er geen .toc.sticky is.
 
 Alle data/CSS/JS inline (geen runtime fetch -> geen CORS). Kaartklik -> detail
-in dezelfde container via hash (#las=<uid>); gebruiker blijft op de pagina.
+in dezelfde container via hash (#la=<uid>); gebruiker blijft op de pagina.
 Pure ASCII uitvoer.
 
 Laden via Scroll 'Custom JavaScript' (met paginaguard):
@@ -136,7 +136,7 @@ JS = r"""
   if(window.__twiinLasInit){return;} window.__twiinLasInit=true;   // voorkom dubbele injectie
   var DATA=__DATA__, VOCAB=__VOCAB__;
   var MAIN_SELECTORS=['.article-body.fb-layout-body','.fb-layout-container'];
-  var HASHKEY='las';
+  var HASHKEY='la';
   var PAGEKEY='landelijke-afspraken';  // herkent de register-pagina aan de URL (index-/register-landelijke-afspraken)
   var SITE='https://twiin.codeberg.page/register/';  // permalink-basis (codeberg)
   var INDEXNAME='';  // naam van de indexpagina (uit h1), voor de breadcrumb
