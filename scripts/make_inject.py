@@ -72,21 +72,6 @@ for c in cards:
 DATA = json.dumps(cards, ensure_ascii=True)
 VOCAB = json.dumps(vocab_out, ensure_ascii=True)
 
-# Infobox bovenaan het register op de Scroll/ontwikkelsupplement-pagina. Gebruikt het
-# native Scroll 'panel'-component (data-component/data-appearance) zodat het dezelfde
-# opmaak krijgt als de infoboxen op andere ontwikkelsupplement-pagina's.
-INFOBOX = (
-  '<div data-component="panel" role="note" data-appearance="info">'
-  '<div class="panel-content">'
-  '<p><strong>Doel:</strong> Dit register heeft als doel om objecten binnen Twiin bruikbaar en vindbaar te maken voor andere afsprakenstelsels.</p>'
-  '<p><strong>Status:</strong> draft, voor gebruik in PoC</p>'
-  '<p><strong>Planning voor opname in Twiin:</strong> Naar verwachting onderdeel van de 2027 voorjaarsrelease.</p>'
-  '<p><strong>(Verwachte) impact:</strong> Gemiddeld. </p>'
-  "<p><strong>Benodigde acties voor opname Twiin Afsprakenstelsel:</strong> Vaststelling van verwijsrichtlijnen door de werkgroep 'Verwijzen naar Landelijk afsprakenstelsel'.</p>"
-  '</div>'
-  '</div>'
-)
-
 CSS = r"""
 .twiin-las{--accent:#e6396a;--bg:#fff;--bg-alt:#f6f4f7;--surface:#fff;--border:#e6e2e9;--text:#283340;--muted:#6a6675;--navy:#243140;--radius:12px;--radius-sm:8px;--shadow:0 1px 2px rgba(36,49,64,.06),0 4px 16px rgba(36,49,64,.07);--mono:ui-monospace,Menlo,Consolas,monospace;font-family:"Roboto",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;color:var(--text);line-height:1.55;}
 .twiin-las *{box-sizing:border-box;}
@@ -147,6 +132,10 @@ CSS = r"""
 .twiin-las .permalink-box__row{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;}
 .twiin-las .permalink-box__url{font-family:var(--mono);font-size:.82rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.5rem .7rem;flex:1;word-break:break-all;}
 .twiin-las .permalink-box__formats{font-size:.82rem;margin:.7rem 0 0;color:var(--muted);}
+/* Donkere modus: volgt data-color-scheme van het ontwikkelsupplement/Scroll-thema.
+   Alleen de kleur-tokens worden omgezet; de infobox is het native Scroll-'panel'
+   en volgt het thema al vanzelf. */
+html[data-color-scheme="dark"] .twiin-las{--bg:#0f1113;--bg-alt:#1a1d21;--surface:#16191d;--border:#2b3038;--text:#e3e5e8;--muted:#9aa0a8;--navy:#e8eaed;--accent:#f2578a;--shadow:0 1px 2px rgba(0,0,0,.5),0 4px 16px rgba(0,0,0,.55);--c-groen-bg:#123524;--c-groen-fg:#5fce97;--c-blauw-bg:#15233f;--c-blauw-fg:#84b1ff;--c-paars-bg:#241a3a;--c-paars-fg:#b79bf0;--c-cyaan-bg:#0e2c33;--c-cyaan-fg:#57cfe0;--c-oranje-bg:#3a2410;--c-oranje-fg:#f0a95c;--c-geel-bg:#332a10;--c-geel-fg:#e0c46a;--c-rood-bg:#3a1414;--c-rood-fg:#f08a8a;--c-grijs-bg:#22262d;--c-grijs-fg:#aeb6c2;}
 """
 
 JS = r"""
@@ -157,7 +146,9 @@ JS = r"""
   var HASHKEY='la';
   var PAGEKEY='landelijke-afspraken';  // herkent de register-pagina aan de URL (index-/register-landelijke-afspraken)
   var SITE='https://twiin.codeberg.page/register/la/';  // permalink-basis (codeberg): /register/la/<slug>/
-  var INFOBOX=__INFOBOX__;  // infobox bovenaan het register (Scroll panel-opmaak)
+  // Infobox wordt NIET meer meegebakken: we nemen het 'panel' over dat in de
+  // Confluence/Scroll-pagina zelf staat (zo blijft de tekst in Confluence beheerbaar).
+  var PAGE_INFOBOX='';
   var INDEXNAME='';  // naam van de indexpagina (uit h1), voor de breadcrumb
   var ON_INDEX = location.pathname.replace(/\/+$/,'').indexOf(PAGEKEY)>-1;  // staan we op de indexpagina?
   var FACETS=[['soort','Soort'],['status','Status'],['domein','Domein'],['uitwisseling','Uitwisseling'],['patroon','Communicatiepatroon'],['functie','Generieke functie'],['toepassingen','Toepassing']];
@@ -204,7 +195,7 @@ JS = r"""
         +'<h3 class="card__title">'+esc(c.naam)+'</h3>'+(c.samenvatting?'<p class="card__summary">'+esc(c.samenvatting)+'</p>':'')
         +'<div class="card__foot">'+badge('status',c.status)+asList(c.domein).map(function(d){return badge('domein',d);}).join('')+'</div></article>';
     }).join(''):'<p class="muted">Geen resultaten. Pas je zoekterm of filters aan.</p>';
-    return '<div class="register__main">'+INFOBOX+'<form class="search" onsubmit="return false">'
+    return '<div class="register__main">'+PAGE_INFOBOX+'<form class="search" onsubmit="return false">'
       +'<input type="search" data-search placeholder="Zoek op vrije tekst, UID, naam" value="'+esc(state.q)+'">'
       +'<label class="search__sort">Sorteer: <select data-sort><option value="relevance">Relevantie</option><option value="ingang_desc">Ingangsdatum (nieuw-oud)</option><option value="ingang_asc">Ingangsdatum (oud-nieuw)</option></select></label></form>'
       +'<p class="register__stats">'+r.length+(r.length===1?' resultaat':' resultaten')+(state.q?(' voor "'+esc(state.q)+'"'):'')+'</p>'
@@ -322,6 +313,10 @@ JS = r"""
   function boot(host){
     css();
     var h1=host.querySelector('h1'); if(h1&&h1.textContent.trim())INDEXNAME=h1.textContent.trim();
+    // Neem het infobox-'panel' over dat in de pagina (Confluence) staat, voordat we de
+    // host leegmaken. Zo blijft de meta-informatie in Confluence beheerbaar.
+    var _ibs=host.querySelectorAll('[data-component="panel"]'); var _ib='';
+    for(var _i=0;_i<_ibs.length;_i++){_ib+=_ibs[_i].outerHTML;} PAGE_INFOBOX=_ib;
     var mw=document.createElement('div'); mw.className='twiin-las twiin-las-content';
     host.replaceChildren(mw);
     var toc=makeTocHost();
@@ -344,7 +339,6 @@ JS = r"""
 """
 
 js = (JS.replace("__DATA__", DATA).replace("__VOCAB__", VOCAB)
-        .replace("__INFOBOX__", json.dumps(INFOBOX, ensure_ascii=True))
         .replace("__CSS__", json.dumps(CSS.strip(), ensure_ascii=True)))
 
 dest = os.path.join(ROOT, "static", "inject.js")
