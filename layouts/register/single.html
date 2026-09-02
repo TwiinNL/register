@@ -56,20 +56,20 @@
       <dt>Soort</dt><dd>{{ partial "badge.html" (dict "vocab" "soort" "code" .Params.soort) }} <span class="muted">{{ partial "label.html" (dict "vocab" "soort" "code" .Params.soort) }}</span></dd>
       <dt>Status</dt><dd>{{ partial "badge.html" (dict "vocab" "status" "code" .Params.status) }}</dd>
       <dt>Ingangsdatum</dt><dd>{{ with .Params.ingangsdatum }}<time datetime="{{ . }}">{{ . }}</time>{{ end }}{{ with .Params.ingang_stelselversie }} <span class="muted">(vanaf Stelselversie {{ . }})</span>{{ end }}</dd>
-      <dt>Vervaldatum</dt><dd>{{ with .Params.vervaldatum }}<time datetime="{{ . }}">{{ . }}</time>{{ with $.Params.vervaldatum_stelselversie }} <span class="muted">(t/m Stelselversie {{ . }})</span>{{ end }}{{ else }}<span class="muted">—</span>{{ end }}</dd>
-      <dt>Auteur / Opsteller</dt><dd>{{ delimit .Params.auteur ", " | default "—" }}</dd>
-      <dt>Autorisator</dt><dd>{{ with .Params.autorisator }}{{ range . }}{{ .naam }}{{ with .datum }} <span class="muted">({{ . }})</span>{{ end }}{{ end }}{{ else }}<span class="muted">—</span>{{ end }}</dd>
-      <dt>Beheerder</dt><dd>{{ delimit .Params.beheerder ", " | default "—" }}</dd>
+      <dt>Vervaldatum</dt><dd>{{ with .Params.vervaldatum }}<time datetime="{{ . }}">{{ . }}</time>{{ with $.Params.vervaldatum_stelselversie }} <span class="muted">(t/m Stelselversie {{ . }})</span>{{ end }}{{ else }}<span class="muted">-</span>{{ end }}</dd>
+      <dt>Auteur / Opsteller</dt><dd>{{ delimit .Params.auteur ", " | default "-" }}</dd>
+      <dt>Autorisator</dt><dd>{{ with .Params.autorisator }}{{ range . }}{{ .naam }}{{ with .datum }} <span class="muted">({{ . }})</span>{{ end }}{{ end }}{{ else }}<span class="muted">-</span>{{ end }}</dd>
+      <dt>Beheerder</dt><dd>{{ delimit .Params.beheerder ", " | default "-" }}</dd>
     </dl>
   </section>
 
   <section class="kaart__context">
     <h2>Context</h2>
     <dl class="attr-grid">
-      <dt>Domein</dt><dd class="badges">{{ range .Params.domein }}{{ partial "badge.html" (dict "vocab" "domein" "code" .) }}{{ else }}<span class="muted">—</span>{{ end }}</dd>
-      <dt>Uitwisseling</dt><dd class="badges">{{ range .Params.uitwisseling }}{{ partial "badge.html" (dict "vocab" "uitwisseling" "code" .) }}{{ else }}<span class="muted">—</span>{{ end }}</dd>
-      <dt>Communicatiepatroon <span class="tag-prefix">[P]</span></dt><dd class="badges">{{ range .Params.patroon }}{{ partial "badge.html" (dict "vocab" "patroon" "code" .) }}{{ else }}<span class="muted">—</span>{{ end }}</dd>
-      <dt>Generieke functies <span class="tag-prefix">[F]</span></dt><dd class="badges">{{ range .Params.functie }}{{ partial "badge.html" (dict "vocab" "functie" "code" .) }}{{ else }}<span class="muted">—</span>{{ end }}</dd>
+      <dt>Domein</dt><dd class="badges">{{ range .Params.domein }}{{ partial "badge.html" (dict "vocab" "domein" "code" .) }}{{ else }}<span class="muted">-</span>{{ end }}</dd>
+      <dt>Uitwisseling</dt><dd class="badges">{{ range .Params.uitwisseling }}{{ partial "badge.html" (dict "vocab" "uitwisseling" "code" .) }}{{ else }}<span class="muted">-</span>{{ end }}</dd>
+      <dt>Communicatiepatroon <span class="tag-prefix">[P]</span></dt><dd class="badges">{{ range .Params.patroon }}{{ partial "badge.html" (dict "vocab" "patroon" "code" .) }}{{ else }}<span class="muted">-</span>{{ end }}</dd>
+      <dt>Generieke functies <span class="tag-prefix">[F]</span></dt><dd class="badges">{{ range .Params.functie }}{{ partial "badge.html" (dict "vocab" "functie" "code" .) }}{{ else }}<span class="muted">-</span>{{ end }}</dd>
     </dl>
   </section>
 
@@ -98,7 +98,7 @@
   <section class="kaart__block">
     <h2>Bijbehorende specificaties in Twiin</h2>
     <ul class="ref-list">
-      {{ range . }}<li><a href="{{ .link }}"{{ if not (hasPrefix .link "/") }} rel="external"{{ end }}>{{ .titel }}</a> <span class="muted">— beheerder: {{ .beheerder | default "Twiin" }}</span></li>{{ end }}
+      {{ range . }}<li><a href="{{ .link }}"{{ if not (hasPrefix .link "/") }} rel="external"{{ end }}>{{ .titel }}</a></li>{{ end }}
     </ul>
   </section>
   {{ end }}
@@ -107,7 +107,7 @@
   <section class="kaart__block">
     <h2>Bijbehorende standaarden &amp; normen buiten Twiin</h2>
     <ul class="ref-list">
-      {{ range . }}<li><a href="{{ .link }}" rel="external">{{ .titel }}</a>{{ with .beheerder }} <span class="muted">— {{ . }}</span>{{ end }}</li>{{ end }}
+      {{ range . }}<li><a href="{{ .link }}" rel="external">{{ .titel }}</a>{{ with .beheerder }} <span class="muted">- {{ . }}</span>{{ end }}</li>{{ end }}
     </ul>
   </section>
   {{ end }}
@@ -120,7 +120,7 @@
         {{ $code := . }}
         {{ $target := index (where site.RegularPages "Params.uid" $code) 0 }}
         <li>
-          {{ if $target }}<a href="{{ $target.RelPermalink }}">{{ $code }} — {{ $target.Title }}</a>
+          {{ if $target }}<a href="{{ $target.RelPermalink }}">{{ $code }} - {{ $target.Title }}</a>
           {{ else }}<code>{{ $code }}</code> <span class="muted">(nog niet in het register)</span>{{ end }}
         </li>
       {{ end }}

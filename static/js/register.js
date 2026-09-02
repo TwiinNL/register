@@ -57,7 +57,7 @@ async function initPagefind() {
     await pagefind.init();
     return true;
   } catch (err) {
-    console.warn('[register] Pagefind niet beschikbaar — server-gerenderde lijst blijft staan.', err);
+    console.warn('[register] Pagefind niet beschikbaar - server-gerenderde lijst blijft staan.', err);
     if (els.stats) els.stats.textContent = '';
     return false;
   }

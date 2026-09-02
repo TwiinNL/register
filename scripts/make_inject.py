@@ -217,10 +217,10 @@ JS = r"""
     h.push('<dt>Status</dt><dd>'+badge('status',c.status)+'</dd>');
     h.push('<dt>Ingangsdatum</dt><dd>'+(c.ingangsdatum?esc(c.ingangsdatum):'<span class="muted">--</span>')+(c.ingang_stelselversie?' <span class="muted">(vanaf Stelselversie '+esc(c.ingang_stelselversie)+')</span>':'')+'</dd>');
     h.push('<dt>Vervaldatum</dt><dd>'+(c.vervaldatum?esc(c.vervaldatum):'<span class="muted">--</span>')+'</dd>');
-    h.push('<dt>Auteur / Opsteller</dt><dd>'+(asList(c.auteur).join(', ')||'--')+'</dd>');
+    h.push('<dt>Auteur / Opsteller</dt><dd>'+(asList(c.auteur).join(', ')||'-')+'</dd>');
     var aut=asList(c.autorisator).map(function(a){return esc(a.naam||'')+(a.datum?' <span class="muted">('+esc(String(a.datum))+')</span>':'');}).join(', ');
     h.push('<dt>Autorisator</dt><dd>'+(aut||'<span class="muted">--</span>')+'</dd>');
-    h.push('<dt>Beheerder</dt><dd>'+(asList(c.beheerder).join(', ')||'--')+'</dd></dl></section>');
+    h.push('<dt>Beheerder</dt><dd>'+(asList(c.beheerder).join(', ')||'-')+'</dd></dl></section>');
     h.push('<section><h2>Context</h2><dl class="attr-grid">'
       +'<dt>Domein</dt><dd class="badges">'+badges('domein',c.domein)+'</dd>'
       +'<dt>Uitwisseling</dt><dd class="badges">'+badges('uitwisseling',c.uitwisseling)+'</dd>'
@@ -229,9 +229,9 @@ JS = r"""
     if(c.voorwaarden)h.push('<section><h2>Voorwaarden / Uitzonderingen</h2><p>'+esc(c.voorwaarden)+'</p></section>');
     if(c.conformiteitscriteria)h.push('<section><h2>Conformiteitscriteria</h2><p>'+esc(c.conformiteitscriteria)+'</p></section>');
     if(c.body)h.push('<section><h2>Omschrijving</h2>'+para(c.body)+'</section>');
-    if(asList(c.betreft_twiin).length)h.push('<section><h2>Bijbehorende specificaties in Twiin</h2><ul class="ref-list">'+c.betreft_twiin.map(function(r){var hf=linkFor(r.link);return '<li><a href="'+esc(hf)+'"'+(isInternal(hf)?'':' target="_top" rel="noopener"')+'>'+esc(r.titel)+'</a> <span class="muted">-- beheerder: '+esc(r.beheerder||'Twiin')+'</span></li>';}).join('')+'</ul></section>');
-    if(asList(c.betreft_extern).length)h.push('<section><h2>Bijbehorende standaarden &amp; normen buiten Twiin</h2><ul class="ref-list">'+c.betreft_extern.map(function(r){return '<li><a href="'+esc(r.link)+'" target="_top" rel="noopener">'+esc(r.titel)+'</a>'+(r.beheerder?' <span class="muted">-- '+esc(r.beheerder)+'</span>':'')+'</li>';}).join('')+'</ul></section>');
-    if(asList(c.relaties).length)h.push('<section><h2>Relaties en afhankelijkheden</h2><ul class="ref-list">'+c.relaties.map(function(u){var t=byUid[u];return t?('<li><a href="#'+HASHKEY+'='+esc(u)+'">'+esc(u)+' -- '+esc(t.naam)+'</a></li>'):('<li>'+esc(u)+' <span class="muted">(niet in index)</span></li>');}).join('')+'</ul></section>');
+    if(asList(c.betreft_twiin).length)h.push('<section><h2>Bijbehorende specificaties in Twiin</h2><ul class="ref-list">'+c.betreft_twiin.map(function(r){var hf=linkFor(r.link);return '<li><a href="'+esc(hf)+'"'+(isInternal(hf)?'':' target="_top" rel="noopener"')+'>'+esc(r.titel)+'</a></li>';}).join('')+'</ul></section>');
+    if(asList(c.betreft_extern).length)h.push('<section><h2>Bijbehorende standaarden &amp; normen buiten Twiin</h2><ul class="ref-list">'+c.betreft_extern.map(function(r){return '<li><a href="'+esc(r.link)+'" target="_top" rel="noopener">'+esc(r.titel)+'</a>'+(r.beheerder?' <span class="muted">- '+esc(r.beheerder)+'</span>':'')+'</li>';}).join('')+'</ul></section>');
+    if(asList(c.relaties).length)h.push('<section><h2>Relaties en afhankelijkheden</h2><ul class="ref-list">'+c.relaties.map(function(u){var t=byUid[u];return t?('<li><a href="#'+HASHKEY+'='+esc(u)+'">'+esc(u)+' - '+esc(t.naam)+'</a></li>'):('<li>'+esc(u)+' <span class="muted">(niet in index)</span></li>');}).join('')+'</ul></section>');
     if(asList(c.toepassingen).length)h.push('<section><h2>Toepassingen in</h2><p class="badges">'+badges('toepassingen',c.toepassingen)+'</p></section>');
     if(asList(c.wijzigingslog).length)h.push('<section><h2>Wijzigingslog</h2><table class="log"><thead><tr><th>Datum</th><th>Versie</th><th>Wijziging</th></tr></thead><tbody>'+c.wijzigingslog.map(function(w){return '<tr><td>'+esc(String(w.datum||''))+'</td><td>'+esc(String(w.versie||''))+'</td><td>'+esc(w.wijziging||'')+'</td></tr>';}).join('')+'</tbody></table></section>');
     h.push('</article>'); return h.join('');

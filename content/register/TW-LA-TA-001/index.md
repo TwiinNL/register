@@ -22,19 +22,13 @@ autorisator:
     datum: "2026-04-09"
 beheerder: ["Twiin"]
 betreft_twiin:
-  - titel: "TA150 — Network-level security: mTLS 1.3 (normatief)"
+  - titel: "10.4.7 | Network level security: mTLS 1.3"
     link: "https://afsprakenstelsel.twiin.nl/normatief/ta150/10-2-10-netwerk-level-security-mtls-1-3#Network-level-security:-mTLS-1.3"
     beheerder: "Twiin"
-  - titel: "TA150 — Programma van Eisen netwerkbeveiliging (mTLS)"
+  - titel: "PvE | Netwerkbeveiliging: mTLS"
     link: "https://afsprakenstelsel.twiin.nl/normatief/ta150/pve-netwerkbeveiliging#mTLS"
     beheerder: "Twiin"
-betreft_extern:
-  - titel: "RFC 8446 — TLS 1.3"
-    link: "https://www.rfc-editor.org/rfc/rfc8446"
-    beheerder: "IETF"
-  - titel: "PKIoverheid Programma van Eisen"
-    link: "https://www.logius.nl/domeinen/toegang/pkioverheid"
-    beheerder: "Logius"
+betreft_extern: []
 relaties: []
 toepassingen: ["MedMij", "AORTA", "NUTS"]
 wijzigingslog:
@@ -55,5 +49,5 @@ controleren, MOETEN dit volgens de meest recent gepubliceerde Certificaten Revoc
 (CRL) of via het Online Certificate Status Protocol (OCSP), minimaal ieder uur, doen.
 
 De normatieve tekst en de bijbehorende eisen staan in het Twiin Afsprakenstelsel onder
-**TA150 — Netwerkbeveiliging**; zie de verwijzingen hieronder onder *Bijbehorende
+**Netwerkbeveiliging**; zie de verwijzingen hieronder onder *Bijbehorende
 specificaties in Twiin*.
