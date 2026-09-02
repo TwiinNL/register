@@ -13,11 +13,14 @@ Alle data/CSS/JS inline (geen runtime fetch -> geen CORS). Kaartklik -> detail
 in dezelfde container via hash (#la=<uid>); gebruiker blijft op de pagina.
 Pure ASCII uitvoer.
 
-Laden via Scroll 'Custom JavaScript' (met paginaguard):
-  <script>if(location.pathname.indexOf('register-landelijke-afspraken')>-1){
+Laden via Scroll 'Custom JavaScript' (IIFE; inject.js zelf mount alleen op de
+register-pagina via de ON_INDEX-guard, dus geen paginaguard in de loader nodig):
+  (function(){
     var s=document.createElement('script');
-    s.src='https://twiin.codeberg.page/la/inject.js';s.charset='utf-8';
-    document.head.appendChild(s);}</script>
+    s.src='https://twiin.codeberg.page/la/inject.js';
+    s.charset='utf-8';
+    document.head.appendChild(s);
+  })();
 
 Invoer : content/register/*/index.md + data/vocab.yaml
 Uitvoer: static/inject.js  (-> /register/inject.js)
