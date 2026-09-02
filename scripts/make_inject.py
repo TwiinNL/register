@@ -146,9 +146,8 @@ JS = r"""
   var HASHKEY='la';
   var PAGEKEY='landelijke-afspraken';  // herkent de register-pagina aan de URL (index-/register-landelijke-afspraken)
   var SITE='https://twiin.codeberg.page/register/la/';  // permalink-basis (codeberg): /register/la/<slug>/
-  // Infobox wordt NIET meer meegebakken: we nemen het 'panel' over dat in de
-  // Confluence/Scroll-pagina zelf staat (zo blijft de tekst in Confluence beheerbaar).
-  var PAGE_INFOBOX='';
+  // De infobox is het native Scroll-'panel' uit de Confluence-pagina; het blijft op zijn
+  // plek staan (niet meegebakken, niet verplaatst) zodat het niet reflowt/resizet.
   var INDEXNAME='';  // naam van de indexpagina (uit h1), voor de breadcrumb
   var ON_INDEX = location.pathname.replace(/\/+$/,'').indexOf(PAGEKEY)>-1;  // staan we op de indexpagina?
   var FACETS=[['soort','Soort'],['status','Status'],['domein','Domein'],['uitwisseling','Uitwisseling'],['patroon','Communicatiepatroon'],['functie','Generieke functie'],['toepassingen','Toepassing']];
@@ -195,7 +194,7 @@ JS = r"""
         +'<h3 class="card__title">'+esc(c.naam)+'</h3>'+(c.samenvatting?'<p class="card__summary">'+esc(c.samenvatting)+'</p>':'')
         +'<div class="card__foot">'+badge('status',c.status)+asList(c.domein).map(function(d){return badge('domein',d);}).join('')+'</div></article>';
     }).join(''):'<p class="muted">Geen resultaten. Pas je zoekterm of filters aan.</p>';
-    return '<div class="register__main">'+PAGE_INFOBOX+'<form class="search" onsubmit="return false">'
+    return '<div class="register__main"><form class="search" onsubmit="return false">'
       +'<input type="search" data-search placeholder="Zoek op vrije tekst, UID, naam" value="'+esc(state.q)+'">'
       +'<label class="search__sort">Sorteer: <select data-sort><option value="relevance">Relevantie</option><option value="ingang_desc">Ingangsdatum (nieuw-oud)</option><option value="ingang_asc">Ingangsdatum (oud-nieuw)</option></select></label></form>'
       +'<p class="register__stats">'+r.length+(r.length===1?' resultaat':' resultaten')+(state.q?(' voor "'+esc(state.q)+'"'):'')+'</p>'
@@ -313,12 +312,13 @@ JS = r"""
   function boot(host){
     css();
     var h1=host.querySelector('h1'); if(h1&&h1.textContent.trim())INDEXNAME=h1.textContent.trim();
-    // Neem het infobox-'panel' over dat in de pagina (Confluence) staat, voordat we de
-    // host leegmaken. Zo blijft de meta-informatie in Confluence beheerbaar.
-    var _ibs=host.querySelectorAll('[data-component="panel"]'); var _ib='';
-    for(var _i=0;_i<_ibs.length;_i++){_ib+=_ibs[_i].outerHTML;} PAGE_INFOBOX=_ib;
+    // Laat het native infobox-'panel' (uit Confluence) exact staan waar Scroll het rendert,
+    // zodat het zijn eigen opmaak/hoogte houdt (geen reflow/resize bij het mounten). We
+    // verwijderen alleen overige native inhoud en hangen het register eronder.
+    var _kids=[].slice.call(host.children);
+    for(var _i=0;_i<_kids.length;_i++){ var _k=_kids[_i]; if(!(_k.matches&&_k.matches('[data-component="panel"]'))) _k.remove(); }
     var mw=document.createElement('div'); mw.className='twiin-las twiin-las-content';
-    host.replaceChildren(mw);
+    host.appendChild(mw);
     var toc=makeTocHost();
     if(toc){ mainArea=mw; sideArea=toc; tocMode=true; }
     else {
