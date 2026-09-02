@@ -115,15 +115,14 @@ uitwisseling, communicatiepatroon, generieke functie, toepassing, auteur.
 
 De workflow [`.forgejo/workflows/pages.yml`](.forgejo/workflows/pages.yml) bouwt bij elke
 push naar `main` de site + zoekindex en publiceert naar de branch **`pages`** van deze
-repo. Resultaat: **https://las.codeberg.page/playground/**
+repo. Resultaat: **https://twiin.codeberg.page/register/**
 
-### Eigen domein / root-publicatie
+### Eigen domein (`register.twiin.nl`)
 
-* **Eigen domein:** wijzig `baseURL` in `hugo.toml` en voeg een `.domains`-bestand toe in
-  de `pages`-branch (zie Codeberg-documentatie). Permalinks volgen automatisch.
-* **Publiceren op de root** `https://las.codeberg.page/` (i.p.v. `…/playground/`): maak een
-  aparte repo `LAS/pages`, zet daar een access-token als repo-secret en laat de deploy-stap
-  naar die repo pushen. Zet dan ook `baseURL = "https://las.codeberg.page/"`.
+* Wijzig `baseURL` in `hugo.toml` naar `https://register.twiin.nl/` en voeg een
+  `.domains`-bestand (met `register.twiin.nl`) toe in de `pages`-branch. Zet daarnaast een
+  DNS-CNAME `register.twiin.nl → twiin.codeberg.page.` (zie Codeberg-documentatie).
+  Permalinks en RDF-identifiers volgen automatisch.
 
 ---
 

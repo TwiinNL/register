@@ -14,13 +14,13 @@ in dezelfde container via hash (#las=<uid>); gebruiker blijft op de pagina.
 Pure ASCII uitvoer.
 
 Laden via Scroll 'Custom JavaScript' (met paginaguard):
-  <script>if(location.pathname.indexOf('index-landelijke-afspraken')>-1){
+  <script>if(location.pathname.indexOf('register-landelijke-afspraken')>-1){
     var s=document.createElement('script');
-    s.src='https://las.codeberg.page/playground/inject.js';s.charset='utf-8';
+    s.src='https://twiin.codeberg.page/register/inject.js';s.charset='utf-8';
     document.head.appendChild(s);}</script>
 
 Invoer : content/register/*/index.md + data/vocab.yaml
-Uitvoer: static/inject.js  (-> /playground/inject.js)
+Uitvoer: static/inject.js  (-> /register/inject.js)
 """
 import json, os, glob, re, yaml
 
@@ -138,7 +138,7 @@ JS = r"""
   var MAIN_SELECTORS=['.article-body.fb-layout-body','.fb-layout-container'];
   var HASHKEY='las';
   var PAGEKEY='landelijke-afspraken';  // herkent de register-pagina aan de URL (index-/register-landelijke-afspraken)
-  var SITE='https://las.codeberg.page/playground/';  // permalink-basis (codeberg)
+  var SITE='https://twiin.codeberg.page/register/';  // permalink-basis (codeberg)
   var INDEXNAME='';  // naam van de indexpagina (uit h1), voor de breadcrumb
   var ON_INDEX = location.pathname.replace(/\/+$/,'').indexOf(PAGEKEY)>-1;  // staan we op de indexpagina?
   var FACETS=[['soort','Soort'],['status','Status'],['domein','Domein'],['uitwisseling','Uitwisseling'],['patroon','Communicatiepatroon'],['functie','Generieke functie'],['toepassingen','Toepassing']];

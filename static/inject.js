@@ -5,7 +5,7 @@
   var MAIN_SELECTORS=['.article-body.fb-layout-body','.fb-layout-container'];
   var HASHKEY='las';
   var PAGEKEY='landelijke-afspraken';  // herkent de register-pagina aan de URL (index-/register-landelijke-afspraken)
-  var SITE='https://las.codeberg.page/playground/';  // permalink-basis (codeberg)
+  var SITE='https://twiin.codeberg.page/register/';  // permalink-basis (codeberg)
   var INDEXNAME='';  // naam van de indexpagina (uit h1), voor de breadcrumb
   var ON_INDEX = location.pathname.replace(/\/+$/,'').indexOf(PAGEKEY)>-1;  // staan we op de indexpagina?
   var FACETS=[['soort','Soort'],['status','Status'],['domein','Domein'],['uitwisseling','Uitwisseling'],['patroon','Communicatiepatroon'],['functie','Generieke functie'],['toepassingen','Toepassing']];

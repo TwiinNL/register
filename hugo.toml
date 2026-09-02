@@ -4,11 +4,11 @@
 # =============================================================================
 #
 # baseURL: bepaalt waar de permalinks naar verwijzen.
-#   - Codeberg Pages (per-repo):  https://las.codeberg.page/playground/
-#   - Eigen domein (later):       https://afsprakenstelsel.twiin.nl/
-# Pas deze één regel aan zodra een eigen domein gekoppeld is; alle permalinks
+#   - Codeberg Pages (per-repo):  https://twiin.codeberg.page/register/
+#   - Eigen domein (later):       https://register.twiin.nl/
+# Pas deze één regel aan zodra het eigen domein gekoppeld is; alle permalinks
 # en RDF-identifiers volgen automatisch.
-baseURL = "https://las.codeberg.page/playground/"
+baseURL = "https://twiin.codeberg.page/register/"
 
 defaultContentLanguage = "nl"
 title = "Twiin Landelijk afsprakenstelsel | Register"
@@ -68,7 +68,7 @@ enableRobotsTXT = true
   licentieURL = "https://creativecommons.org/licenses/by-sa/4.0/deed.nl"
   # RDF/JSON-LD: basis-namespace voor de eigen LAS-vocabulaire.
   # Eindigt op #; termen worden hieraan gehangen (bv. las:Afspraak).
-  rdfNamespace = "https://las.codeberg.page/playground/ns#"
+  rdfNamespace = "https://twiin.codeberg.page/register/ns#"
   # Hoeveel uitgelichte kaarten op de landingspagina
   uitgelichtAantal = 4
 
