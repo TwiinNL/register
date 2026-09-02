@@ -35,19 +35,19 @@ de server-gerenderde kaartenlijst blijft als fallback zichtbaar).
 ## Een nieuwe kaart toevoegen
 
 ```bash
-hugo new --kind kaart content/register/TW-LAS-SP-003/index.md
+hugo new --kind kaart content/register/TW-LA-SP-003/index.md
 ```
 
 Dit maakt een kaart op basis van [`archetypes/kaart.md`](archetypes/kaart.md). Vul de
 front-matter in (zie veldenoverzicht hieronder) en zet `draft: false`. De URL volgt uit
-`slug` (= UID in kleine letters), bijvoorbeeld `/register/tw-las-sp-003/`.
+`slug` (= UID in kleine letters), bijvoorbeeld `/register/tw-la-sp-003/`.
 
 ### Velden (front-matter)
 
 | Veld | Betekenis |
 |------|-----------|
 | `title` | Naam van de afspraak |
-| `uid` | `TW-LAS-[SOORT]-[NUMMER]` |
+| `uid` | `TW-LA-[SOORT]-[NUMMER]` |
 | `soort` | `VA`, `PA`, `TA`, `SP`, `RI` |
 | `slug` | UID in kleine letters (bepaalt de URL) |
 | `samenvatting` | Korte tekst voor overzichten/zoekresultaten |
@@ -84,7 +84,7 @@ content/
   over.md                 # uitleg register/permalinks/RDF
   register/
     _index.md             # register (zoeken + filteren)
-    TW-LAS-*/index.md      # de metadatakaarten
+    TW-LA-*/index.md       # de metadatakaarten
 layouts/
   index.html              # landingspagina (uitgelicht + categorieën)
   index.json              # machineleesbare index van alle kaarten

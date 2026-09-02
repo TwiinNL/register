@@ -9,7 +9,7 @@ afspraken vormt het permalink-anker voor verwijzing.
 
 ## Metadatakaarten
 
-Elke kaart heeft een unieke identificatie volgens de logica **`TW-LAS-[SOORT]-[NUMMER]`**,
+Elke kaart heeft een unieke identificatie volgens de logica **`TW-LA-[SOORT]-[NUMMER]`**,
 waarbij `SOORT` een van de volgende waarden is:
 
 | Code | Soort |

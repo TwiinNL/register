@@ -1,9 +1,9 @@
 ---
 # === Identiteit ===========================================================
 title: "{{ replace .Name `-` ` ` | title }}"
-uid: "TW-LAS-XX-000"          # logica: TW-LAS-[SOORT]-[NUMMER]
+uid: "TW-LA-XX-000"           # logica: TW-LA-[SOORT]-[NUMMER]
 soort: "SP"                    # VA | PA | TA | SP | RI
-slug: "tw-las-xx-000"          # = uid in kleine letters (bepaalt de URL)
+slug: "tw-la-xx-000"           # = uid in kleine letters (bepaalt de URL)
 samenvatting: "Korte omschrijving die in overzichten en zoekresultaten verschijnt."
 
 # Permalink: laat leeg om automatisch de pagina-URL te gebruiken (huidige
