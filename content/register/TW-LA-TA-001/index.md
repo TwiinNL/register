@@ -28,7 +28,13 @@ betreft_twiin:
   - titel: "PvE | Netwerkbeveiliging: mTLS"
     link: "https://afsprakenstelsel.twiin.nl/normatief/ta150/pve-netwerkbeveiliging#mTLS"
     beheerder: "Twiin"
-betreft_extern: []
+betreft_extern:
+  - titel: "RFC 8705: OAuth 2.0 Mutual-TLS Client Authentication and Certificate-Bound Access Tokens"
+    link: "https://datatracker.ietf.org/doc/html/rfc8705"
+  - titel: "Transport Layer Security (TLS)"
+    link: "https://www.ncsc.nl/documenten/publicaties/2025/juni/01/ict-beveiligingsrichtlijnen-voor-transport-layer-security-2025-05"
+  - titel: "PKIoverheid certificates"
+    link: "https://cert.pkioverheid.nl/"
 relaties: []
 toepassingen: ["MedMij", "AORTA", "NUTS"]
 wijzigingslog:
