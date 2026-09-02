@@ -78,11 +78,11 @@ VOCAB = json.dumps(vocab_out, ensure_ascii=True)
 INFOBOX = (
   '<div data-component="panel" role="note" data-appearance="info">'
   '<div class="panel-content">'
-  '<p><strong>Doel:</strong> Dit register heeft als doel om objecten binnen Twiin bruikbaar en vindbaar te maken voor andere afsprakenstelsels</p>'
+  '<p><strong>Doel:</strong> Dit register heeft als doel om objecten binnen Twiin bruikbaar en vindbaar te maken voor andere afsprakenstelsels.</p>'
   '<p><strong>Status:</strong> draft, voor gebruik in PoC</p>'
-  '<p><strong>Planning voor opname in Twiin:</strong> Na vaststelling van verwijsrichtlijnen en aanwijzing van (een selectie aan) definitieve landelijke afspraken. Naar verwachting onderdeel voor de voorjaarsrelease van 2027.</p>'
+  '<p><strong>Planning voor opname in Twiin:</strong> Naar verwachting onderdeel van de 2027 voorjaarsrelease.</p>'
   '<p><strong>(Verwachte) impact:</strong> Gemiddeld. </p>'
-  "<p><strong>Benodigde acties voor opname Twiin Afsprakenstelsel:</strong> Zie 'Planning voor opname in Twiin.</p>"
+  "<p><strong>Benodigde acties voor opname Twiin Afsprakenstelsel:</strong> Vaststelling van verwijsrichtlijnen door de werkgroep 'Verwijzen naar Landelijk afsprakenstelsel'.</p>"
   '</div>'
   '</div>'
 )
