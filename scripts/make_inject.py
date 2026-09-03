@@ -132,6 +132,15 @@ CSS = r"""
 .twiin-las .permalink-box__row{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;}
 .twiin-las .permalink-box__url{font-family:var(--mono);font-size:.82rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.5rem .7rem;flex:1;word-break:break-all;}
 .twiin-las .permalink-box__formats{font-size:.82rem;margin:.7rem 0 0;color:var(--muted);}
+/* Mobiel: geef het hoofdcontent volle breedte. De geinjecteerde filterkolom
+   (.twiin-las-toc) heeft de klasse .toc, waardoor de Scroll-grid via :has(.toc) een
+   ~200px zijkolom blijft reserveren en de content halve breedte krijgt. Onder 768px
+   klappen we die grid uit tot een kolom; de filters komen dan onder de resultaten
+   (net als dat Scroll de sticky TOC op mobiel niet in een zijkolom houdt). */
+@media (max-width:767px){
+  .main-content:has(.twiin-las-toc){display:block !important;}
+  .twiin-las-toc{position:static !important;width:auto !important;max-height:none !important;overflow:visible !important;margin:1.2rem 0 0 !important;}
+}
 /* Donkere modus: volgt data-color-scheme van het ontwikkelsupplement/Scroll-thema.
    Alleen de kleur-tokens worden omgezet; de infobox is het native Scroll-'panel'
    en volgt het thema al vanzelf. */
