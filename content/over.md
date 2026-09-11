@@ -22,7 +22,7 @@ waarbij `SOORT` een van de volgende waarden is:
 
 ## Permalinks
 
-De permalink is de stabiele verwijzing naar een kaart. Zolang de site via Codeberg Pages
+De permalink is de stabiele verwijzing naar een kaart. Zolang de site via GitHub Pages
 gepubliceerd wordt, is de permalink de URL binnen deze publicatie. Zodra een eigen domein
 gekoppeld is, verwijst de permalink daarnaartoe.
 

@@ -8,7 +8,7 @@ machineleesbare **RDF/JSON-LD**-representatie.
 
 Gebouwd met **[Hugo](https://gohugo.io/)** (statische site) en
 **[Pagefind](https://pagefind.app/)** (zoeken + facet-filteren), gepubliceerd via
-**Codeberg Pages** met **Forgejo Actions**.
+**GitHub Pages** met **GitHub Actions**.
 
 ---
 
@@ -93,7 +93,7 @@ layouts/
   _default/single.jsonld  # RDF/JSON-LD per kaart (index.jsonld)
   partials/jsonld-data.html  # opbouw van de RDF-graf
 static/css, static/js     # styling en gedrag (thema, filter-UI)
-.forgejo/workflows/pages.yml  # CI: build + publish
+.github/workflows/deploy.yml  # CI: build + publish
 ```
 
 ### RDF / JSON-LD
@@ -111,27 +111,30 @@ uitwisseling, communicatiepatroon, generieke functie, toepassing, auteur.
 
 ---
 
-## Publicatie (Codeberg Pages)
+## Publicatie (GitHub Pages)
 
-De workflow [`.forgejo/workflows/pages.yml`](.forgejo/workflows/pages.yml) bouwt bij elke
-push naar `main` de site + zoekindex en publiceert naar de branch **`pages`** van deze
-repo. Resultaat: **https://twiin.codeberg.page/register/**
+De workflow [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) bouwt bij elke
+push naar `main` de site + zoekindex en publiceert via de officiele GitHub Pages
+artifact-flow. Resultaat: **https://twiinnl.github.io/register/**
+
+> Eenmalig instellen: **Settings → Pages → Build and deployment → Source = "GitHub Actions"**.
 
 ### Eigen domein (`register.twiin.nl/la/`)
 
-De repo heet `register` en staat op `*.codeberg.page` onder de mount `/register/`; kaarten
+De repo heet `register` en staat op `twiinnl.github.io` onder de mount `/register/`; kaarten
 staan onder `/la/<slug>/` (zie `[permalinks]`). Zo is de tijdelijke URL
-`twiin.codeberg.page/register/la/<slug>/`. Een eigen domein serveert de repo op de root, dus
+`twiinnl.github.io/register/la/<slug>/`. Een eigen domein serveert de repo op de root, dus
 daar wordt dat `register.twiin.nl/la/<slug>/` en de root `register.twiin.nl/` is het register
 zelf.
 
 Cutover = **één regel**: `baseURL` in `hugo.toml` → `https://register.twiin.nl/`
 (permalinks blijven `register = "/la/:slug/"`).
 
-DNS (nieuwe git-pages server, geen `.domains`-bestand meer nodig):
+DNS + GitHub:
 
-* `register.twiin.nl` → **CNAME** → `codeberg.page.`
-* `_git-pages-repository.register.twiin.nl` → **TXT** → `https://codeberg.org/Twiin/register.git`
+* `register.twiin.nl` → **CNAME** → `twiinnl.github.io`
+* Zet het custom domain in **Settings → Pages** (GitHub schrijft dan een `CNAME`-bestand
+  in de publicatie en regelt automatisch een TLS-certificaat).
 
 Permalinks en RDF-identifiers volgen daarna automatisch (`register.twiin.nl/la/<slug>/`).
 
