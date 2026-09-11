@@ -15,7 +15,7 @@ uitwisseling: ["Verwijzing", "Overdracht"]
 patroon: ["Notified Pull", "Pull", "Indexed Pull", "Push"]
 functie: ["Netwerkbeveiliging", "Authenticatie", "Identificatie"]
 voorwaarden: "Geldt voor alle systeem-tot-systeem-verbindingen binnen het stelsel, ongeacht het communicatiepatroon."
-conformiteitscriteria: "Verbindingen gebruiken uitsluitend TLS 1.3 met wederzijdse authenticatie (mTLS). Systemen die de geldigheid van het PKIoverheid-servercertificaat van andere systemen controleren, MOETEN dit volgens de meest recent gepubliceerde Certificaten Revocatie Lijst (CRL) of via het Online Certificate Status Protocol (OCSP) minimaal ieder uur doen."
+conformiteitscriteria: "Verbindingen gebruiken uitsluitend TLS 1.3 met wederzijdse authenticatie (mTLS). Systemen die de geldigheid van het PKIoverheid-servercertificaat van andere systemen controleren, MOETEN dit volgens de meest recent gepubliceerde Certificate Revocation List (CRL) of via het Online Certificate Status Protocol (OCSP) minimaal ieder uur doen."
 auteur: ["Working Group TA"]
 autorisator:
   - naam: "VWS programma LDN"
@@ -51,9 +51,9 @@ Alle systeem-tot-systeem-verbindingen binnen het stelsel verlopen via wederzijds
 geauthenticeerde TLS 1.3 (mTLS) met servercertificaten uit het PKIoverheid-stelsel.
 
 Systemen die de geldigheid van het PKIoverheid-servercertificaat van andere systemen
-controleren, MOETEN dit volgens de meest recent gepubliceerde Certificaten Revocatie Lijst
+controleren, MOETEN dit volgens de meest recent gepubliceerde Certificate Revocation List
 (CRL) of via het Online Certificate Status Protocol (OCSP), minimaal ieder uur, doen.
 
 De normatieve tekst en de bijbehorende eisen staan in het Twiin Afsprakenstelsel onder
-**Netwerkbeveiliging**; zie de verwijzingen hieronder onder *Bijbehorende
+Netwerkbeveiliging; zie de verwijzingen hieronder onder *Bijbehorende
 specificaties in Twiin*.
