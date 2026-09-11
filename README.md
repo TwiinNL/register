@@ -115,28 +115,22 @@ uitwisseling, communicatiepatroon, generieke functie, toepassing, auteur.
 
 De workflow [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) bouwt bij elke
 push naar `main` de site + zoekindex en publiceert via de officiele GitHub Pages
-artifact-flow. Resultaat: **https://twiinnl.github.io/register/**
+artifact-flow. Live URL: **https://fhir.twiin.nl/register/**
+
+Het org-Pages-domein van `TwiinNL` is `fhir.twiin.nl`; het `register`-project staat daar onder
+`/register/`. `twiinnl.github.io/register/` redirect naar `fhir.twiin.nl/register/`.
 
 > Eenmalig instellen: **Settings → Pages → Build and deployment → Source = "GitHub Actions"**.
 
-### Eigen domein (`register.twiin.nl/la/`)
+### Eigen domein (`register.twiin.nl/la/`) — later
 
-De repo heet `register` en staat op `twiinnl.github.io` onder de mount `/register/`; kaarten
-staan onder `/la/<slug>/` (zie `[permalinks]`). Zo is de tijdelijke URL
-`twiinnl.github.io/register/la/<slug>/`. Een eigen domein serveert de repo op de root, dus
-daar wordt dat `register.twiin.nl/la/<slug>/` en de root `register.twiin.nl/` is het register
-zelf.
+Kaarten staan onder `/la/<slug>/` (zie `[permalinks]`), dus nu op
+`fhir.twiin.nl/register/la/<slug>/`. Voor een eigen domein op de root:
 
-Cutover = **één regel**: `baseURL` in `hugo.toml` → `https://register.twiin.nl/`
-(permalinks blijven `register = "/la/:slug/"`).
-
-DNS + GitHub:
-
-* `register.twiin.nl` → **CNAME** → `twiinnl.github.io`
-* Zet het custom domain in **Settings → Pages** (GitHub schrijft dan een `CNAME`-bestand
-  in de publicatie en regelt automatisch een TLS-certificaat).
-
-Permalinks en RDF-identifiers volgen daarna automatisch (`register.twiin.nl/la/<slug>/`).
+* Cutover = **één regel**: `baseURL` in `hugo.toml` → `https://register.twiin.nl/`
+  (permalinks blijven `register = "/la/:slug/"` → `register.twiin.nl/la/<slug>/`).
+* DNS `register.twiin.nl` → **CNAME** → `twiinnl.github.io`, en zet het custom domain in
+  **Settings → Pages** (GitHub regelt dan automatisch een TLS-certificaat).
 
 ---
 

@@ -3,8 +3,8 @@
 #
 # Draait op een GitHub-hosted runner (ubuntu-latest). Hugo en Pagefind worden
 # als statische binaries opgehaald (geen container/Node nodig). Het resultaat
-# wordt via de officiele Pages-artifact-flow gedeployed en is bereikbaar op
-# https://twiinnl.github.io/register/ .
+# wordt via de officiele Pages-artifact-flow gedeployed. Live op het org-Pages-domein:
+# https://fhir.twiin.nl/register/  (twiinnl.github.io/register/ redirect hierheen).
 #
 # Vereist eenmalig: Settings > Pages > Build and deployment > Source = "GitHub Actions".
 # De vooraf gegenereerde static/inject.js wordt meegepubliceerd (geen Python nodig).

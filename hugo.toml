@@ -4,11 +4,11 @@
 # =============================================================================
 #
 # baseURL: bepaalt waar de permalinks naar verwijzen.
-#   - GitHub Pages (repo 'register', mount /register/):  https://twiinnl.github.io/register/
-#   - Eigen domein (later, repo op de root):             https://register.twiin.nl/
-# Kaarten staan onder /la/ (zie [permalinks]); bij cutover alleen deze regel omzetten
-# naar https://register.twiin.nl/ — permalinks worden dan register.twiin.nl/la/<slug>/.
-baseURL = "https://twiinnl.github.io/register/"
+#   - GitHub Pages via org-domein (nu):  https://fhir.twiin.nl/register/
+#     (twiinnl.github.io/register/ redirect hierheen; org-Pages-domein = fhir.twiin.nl)
+#   - Eigen domein (later):              https://register.twiin.nl/
+# Kaarten staan onder /la/ (zie [permalinks]); bij cutover alleen deze regel omzetten.
+baseURL = "https://fhir.twiin.nl/register/"
 
 defaultContentLanguage = "nl"
 title = "Twiin Landelijk afsprakenstelsel | Register"
@@ -27,7 +27,7 @@ enableRobotsTXT = true
 # -----------------------------------------------------------------------------
 [permalinks]
   # Kaarten leven onder /la/<slug>/ (het pad-segment 'la', niet de repo-mount).
-  # Temp: twiinnl.github.io/register/la/<slug>/  |  Eigen domein: register.twiin.nl/la/<slug>/
+  # Temp: fhir.twiin.nl/register/la/<slug>/  |  Eigen domein: register.twiin.nl/la/<slug>/
   register = "/la/:slug/"
 
 # -----------------------------------------------------------------------------
@@ -70,7 +70,7 @@ enableRobotsTXT = true
   licentieURL = "https://creativecommons.org/licenses/by-sa/4.0/deed.nl"
   # RDF/JSON-LD: basis-namespace voor de eigen LAS-vocabulaire.
   # Eindigt op #; termen worden hieraan gehangen (bv. las:Afspraak).
-  rdfNamespace = "https://twiinnl.github.io/register/la/ns#"
+  rdfNamespace = "https://fhir.twiin.nl/register/la/ns#"
   # Hoeveel uitgelichte kaarten op de landingspagina
   uitgelichtAantal = 4
 
