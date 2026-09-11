@@ -3,7 +3,7 @@ title: "Netwerkbeveiliging (mTLS 1.3)"
 uid: "TW-LA-TA-001"
 soort: "TA"
 slug: "tw-la-ta-001"
-samenvatting: "Technische afspraak voor netwerk-niveau beveiliging met wederzijds geauthenticeerde TLS 1.3 (mTLS) op basis van PKIoverheid-certificaten, inclusief revocatiecontrole via CRL/OCSP."
+samenvatting: "Technische afspraak over beveiliging op netwerkniveau met TLS 1.3 en wederzijdse authenticatie (mTLS), op basis van PKIoverheid-certificaten, inclusief controle op ingetrokken certificaten via CRL/OCSP."
 permalink: ""
 status: "Normatief"
 ingangsdatum: "2026-04-09"
@@ -47,8 +47,8 @@ draft: false
 ---
 
 Deze technische afspraak legt de beveiliging van het transportkanaal tussen systemen vast.
-Alle systeem-tot-systeem-verbindingen binnen het stelsel verlopen via **wederzijds
-geauthenticeerde TLS 1.3** (mTLS) met servercertificaten uit het PKIoverheid-stelsel.
+Alle systeem-tot-systeem-verbindingen binnen het stelsel verlopen via wederzijds
+geauthenticeerde TLS 1.3 (mTLS) met servercertificaten uit het PKIoverheid-stelsel.
 
 Systemen die de geldigheid van het PKIoverheid-servercertificaat van andere systemen
 controleren, MOETEN dit volgens de meest recent gepubliceerde Certificaten Revocatie Lijst
