@@ -115,22 +115,22 @@ uitwisseling, communicatiepatroon, generieke functie, toepassing, auteur.
 
 De workflow [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) bouwt bij elke
 push naar `main` de site + zoekindex en publiceert via de officiele GitHub Pages
-artifact-flow. Live URL: **https://fhir.twiin.nl/register/**
-
-Het org-Pages-domein van `TwiinNL` is `fhir.twiin.nl`; het `register`-project staat daar onder
-`/register/`. `twiinnl.github.io/register/` redirect naar `fhir.twiin.nl/register/`.
+artifact-flow. Live URL: **https://twiinnl.github.io/register/**
 
 > Eenmalig instellen: **Settings → Pages → Build and deployment → Source = "GitHub Actions"**.
 
 ### Eigen domein (`register.twiin.nl/la/`) — later
 
 Kaarten staan onder `/la/<slug>/` (zie `[permalinks]`), dus nu op
-`fhir.twiin.nl/register/la/<slug>/`. Voor een eigen domein op de root:
+`twiinnl.github.io/register/la/<slug>/`. Voor een eigen domein op de root:
 
-* Cutover = **één regel**: `baseURL` in `hugo.toml` → `https://register.twiin.nl/`
-  (permalinks blijven `register = "/la/:slug/"` → `register.twiin.nl/la/<slug>/`).
-* DNS `register.twiin.nl` → **CNAME** → `twiinnl.github.io`, en zet het custom domain in
-  **Settings → Pages** (GitHub regelt dan automatisch een TLS-certificaat).
+1. **DNS** (bij de twiin.nl-provider): `register.twiin.nl` → **CNAME** → `twiinnl.github.io`
+   (of vier A-records naar GitHub Pages: `185.199.108.153`, `.109.153`, `.110.153`, `.111.153`).
+   Let op: het mag NIET naar een andere server wijzen.
+2. Zet het custom domain in **Settings → Pages** (GitHub regelt dan automatisch TLS en schrijft
+   een `CNAME`-bestand; zet dat ook in `static/CNAME` zodat elke Actions-build het meepubliceert).
+3. Cutover = **één regel**: `baseURL` in `hugo.toml` → `https://register.twiin.nl/`
+   (permalinks blijven `register = "/la/:slug/"` → `register.twiin.nl/la/<slug>/`).
 
 ---
 

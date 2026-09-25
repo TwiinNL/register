@@ -17,7 +17,7 @@ Laden via Scroll 'Custom JavaScript' (IIFE; inject.js zelf mount alleen op de
 register-pagina via de ON_INDEX-guard, dus geen paginaguard in de loader nodig):
   (function(){
     var s=document.createElement('script');
-    s.src='https://fhir.twiin.nl/register/inject.js';
+    s.src='https://twiinnl.github.io/register/inject.js';
     s.charset='utf-8';
     document.head.appendChild(s);
   })();
@@ -154,7 +154,7 @@ JS = r"""
   var MAIN_SELECTORS=['.article-body.fb-layout-body','.fb-layout-container'];
   var HASHKEY='la';
   var PAGEKEY='landelijke-afspraken';  // herkent de register-pagina aan de URL (index-/register-landelijke-afspraken)
-  var SITE='https://fhir.twiin.nl/register/la/';  // permalink-basis (github pages): /register/la/<slug>/
+  var SITE='https://twiinnl.github.io/register/la/';  // permalink-basis (github pages): /register/la/<slug>/
   // De infobox is het native Scroll-'panel' uit de Confluence-pagina; het blijft op zijn
   // plek staan (niet meegebakken, niet verplaatst) zodat het niet reflowt/resizet.
   var INDEXNAME='';  // naam van de indexpagina (uit h1), voor de breadcrumb

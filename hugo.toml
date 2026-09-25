@@ -4,9 +4,8 @@
 # =============================================================================
 #
 # baseURL: bepaalt waar de permalinks naar verwijzen.
-#   - GitHub Pages via org-domein (nu):  https://twiinnl.github.io/register/
-#     (twiinnl.github.io/register/ redirect hierheen; org-Pages-domein = fhir.twiin.nl)
-#   - Eigen domein (later):              https://register.twiin.nl/
+#   - GitHub Pages (nu):     https://twiinnl.github.io/register/
+#   - Eigen domein (later):  https://register.twiin.nl/
 # Kaarten staan onder /la/ (zie [permalinks]); bij cutover alleen deze regel omzetten.
 baseURL = "https://twiinnl.github.io/register/"
 

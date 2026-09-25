@@ -4,7 +4,7 @@
 # Draait op een GitHub-hosted runner (ubuntu-latest). Hugo en Pagefind worden
 # als statische binaries opgehaald (geen container/Node nodig). Het resultaat
 # wordt via de officiele Pages-artifact-flow gedeployed. Live op het org-Pages-domein:
-# https://fhir.twiin.nl/register/  (twiinnl.github.io/register/ redirect hierheen).
+# https://twiinnl.github.io/register/ .
 #
 # Vereist eenmalig: Settings > Pages > Build and deployment > Source = "GitHub Actions".
 # De vooraf gegenereerde static/inject.js wordt meegepubliceerd (geen Python nodig).
@@ -35,13 +35,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0   # nodig voor enableGitInfo (Lastmod)
 
       - name: Setup Pages
         id: pages
-        uses: actions/configure-pages@v5
+        uses: actions/configure-pages@v6
 
       - name: Installeer Hugo + Pagefind (statische binaries)
         run: |
@@ -62,7 +62,7 @@ jobs:
           pagefind --site public
 
       - name: Upload Pages-artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: ./public
 
@@ -75,4 +75,4 @@ jobs:
     steps:
       - name: Publiceer naar GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
