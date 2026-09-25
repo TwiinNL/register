@@ -5,7 +5,7 @@
   var MAIN_SELECTORS=['.article-body.fb-layout-body','.fb-layout-container'];
   var HASHKEY='la';
   var PAGEKEY='landelijke-afspraken';  // herkent de register-pagina aan de URL (index-/register-landelijke-afspraken)
-  var SITE='https://twiinnl.github.io/register/la/';  // permalink-basis (github pages): /register/la/<slug>/
+  var SITE='https://register.twiin.nl/la/';  // permalink-basis (github pages): /register/la/<slug>/
   // De infobox is het native Scroll-'panel' uit de Confluence-pagina; het blijft op zijn
   // plek staan (niet meegebakken, niet verplaatst) zodat het niet reflowt/resizet.
   var INDEXNAME='';  // naam van de indexpagina (uit h1), voor de breadcrumb

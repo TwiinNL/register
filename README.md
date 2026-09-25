@@ -115,22 +115,22 @@ uitwisseling, communicatiepatroon, generieke functie, toepassing, auteur.
 
 De workflow [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) bouwt bij elke
 push naar `main` de site + zoekindex en publiceert via de officiele GitHub Pages
-artifact-flow. Live URL: **https://twiinnl.github.io/register/**
+artifact-flow. Live URL: **https://register.twiin.nl/** (custom domain, serveert op de root).
+`twiinnl.github.io/register/` redirect daarheen.
 
 > Eenmalig instellen: **Settings → Pages → Build and deployment → Source = "GitHub Actions"**.
 
-### Eigen domein (`register.twiin.nl/la/`) — later
+### Custom domain `register.twiin.nl`
 
-Kaarten staan onder `/la/<slug>/` (zie `[permalinks]`), dus nu op
-`twiinnl.github.io/register/la/<slug>/`. Voor een eigen domein op de root:
-
-1. **DNS** (bij de twiin.nl-provider): `register.twiin.nl` → **CNAME** → `twiinnl.github.io`
-   (of vier A-records naar GitHub Pages: `185.199.108.153`, `.109.153`, `.110.153`, `.111.153`).
-   Let op: het mag NIET naar een andere server wijzen.
-2. Zet het custom domain in **Settings → Pages** (GitHub regelt dan automatisch TLS en schrijft
-   een `CNAME`-bestand; zet dat ook in `static/CNAME` zodat elke Actions-build het meepubliceert).
-3. Cutover = **één regel**: `baseURL` in `hugo.toml` → `https://register.twiin.nl/`
-   (permalinks blijven `register = "/la/:slug/"` → `register.twiin.nl/la/<slug>/`).
+* **`static/CNAME`** bevat `register.twiin.nl` — Hugo kopieert dit naar `public/CNAME`, zodat
+  elke Actions-build het custom domain meepubliceert (anders wist elke deploy het domain en
+  krijg je de "Create CNAME / Delete CNAME"-lus).
+* **DNS** (bij de twiin.nl-provider): `register.twiin.nl` → **CNAME** → `twiinnl.github.io`
+  (of vier A-records: `185.199.108.153`, `.109.153`, `.110.153`, `.111.153`). Het mag NIET naar
+  een andere server wijzen. Pas ná deze DNS-wijziging geeft GitHub een TLS-certificaat uit en
+  serveert het domein — domein-*verificatie* (TXT) alleen is niet genoeg.
+* `baseURL` = `https://register.twiin.nl/`, permalinks `register = "/la/:slug/"` →
+  `register.twiin.nl/la/<slug>/`.
 
 ---
 
