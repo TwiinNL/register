@@ -128,7 +128,7 @@ JS = r"""
   function absU(u){if(!u)return u;if(u.indexOf('http')===0)return u;return SITE.replace(/\/+$/,'')+(u.charAt(0)==='/'?u:'/'+u);}
   function css(){if(qs('#twlas-css'))return;var st=document.createElement('style');st.id='twlas-css';st.textContent=__CSS__;document.head.appendChild(st);}
 
-  var box=null, tocEl=null, mainEl=null, filtersEl=null, resultsEl=null, cards=[], state={q:'',filters:{},sort:'relevance'};
+  var box=null, tocEl=null, mainEl=null, filtersEl=null, resultsEl=null, cards=[], tocWant=true, state={q:'',filters:{},sort:'relevance'};
 
   function vals(card,field){var v=card.getAttribute('data-'+field)||'';return v?v.split('|'):[];}
 
@@ -172,9 +172,12 @@ JS = r"""
   // native "On this page"-TOC). Scroll's stylesheet zet onze nav default op display:none,
   // dus we forceren zelf block/none.
   function tocGridOk(){ var mc=qs('.main-content'); return !!(mc&&/toc/.test(getComputedStyle(mc).gridTemplateAreas||'')); }
-  function applyTocDisplay(){ if(!tocEl)return; tocEl.style.setProperty('display', tocGridOk()?'block':'none','important'); }
+  // tocWant=false in kaartweergave: dan NOOIT tonen (ook niet als resize/ResizeObserver
+  // applyTocDisplay opnieuw aanroept) - anders zou de lege nav als rand/box verschijnen.
+  function applyTocDisplay(){ if(!tocEl)return; tocEl.style.setProperty('display', (tocWant&&tocGridOk())?'block':'none','important'); }
   function showTocFilters(){
     if(!filtersEl)return;
+    tocWant=true;
     var mc=qs('.main-content');
     if(!mc){ if(box)box.appendChild(filtersEl); return; }
     if(!tocEl||!tocEl.parentNode) tocEl=makeTocHost();
@@ -185,9 +188,10 @@ JS = r"""
   // zonder zichtbare toc (daar is .toc.sticky ook aanwezig maar display:none). Verwijderen
   // zou de grid laten inklappen en de content naar rechts laten springen.
   function hideTocFilters(){
+    tocWant=false;
     var mc=qs('.main-content'); if(!mc)return;
     if(!tocEl||!tocEl.parentNode) tocEl=makeTocHost();
-    if(tocEl) tocEl.style.setProperty('display','none','important');
+    if(tocEl) applyTocDisplay();
   }
   function showList(){ if(box&&mainEl)box.replaceChildren(mainEl); showTocFilters(); }
 
