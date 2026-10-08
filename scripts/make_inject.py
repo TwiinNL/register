@@ -220,8 +220,13 @@ JS = r"""
     box.addEventListener('click',function(e){
       var cp=e.target.closest&&e.target.closest('[data-copy]');
       if(cp){e.preventDefault();var sel=cp.getAttribute('data-copy'),el=sel?qs(sel,box):null;
-        if(el&&navigator.clipboard&&navigator.clipboard.writeText){
-          navigator.clipboard.writeText((el.textContent||'').trim()).then(function(){var old=cp.textContent;cp.textContent='Gekopieerd '+String.fromCharCode(10003);setTimeout(function(){cp.textContent=old;},1500);}).catch(function(){});
+        if(el){var txt=(el.textContent||'').trim();
+          var ok=function(){var old=cp.textContent;cp.textContent='Gekopieerd '+String.fromCharCode(10003);setTimeout(function(){cp.textContent=old;},1500);};
+          // Confluence/Scroll blokkeert soms de async Clipboard API (NotAllowedError);
+          // val dan terug op de klassieke execCommand-methode binnen dit klik-gebaar.
+          var legacy=function(){try{var ta=document.createElement('textarea');ta.value=txt;ta.setAttribute('readonly','');ta.style.position='fixed';ta.style.top='0';ta.style.left='-9999px';(box||document.body).appendChild(ta);ta.focus();ta.select();ta.setSelectionRange(0,txt.length);var r=document.execCommand('copy');ta.parentNode.removeChild(ta);return r;}catch(_){return false;}};
+          if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(ok,function(){if(legacy())ok();});}
+          else if(legacy()){ok();}
         }return;}
       var back=e.target.closest&&e.target.closest('[data-back]'); if(back){e.preventDefault();if(location.hash)location.hash='';else route();return;}
       var a=e.target.closest&&e.target.closest('.card__link'); if(a){e.preventDefault();var card=a.closest('.card');var uid=card&&card.getAttribute('data-uid');if(uid){location.hash='la='+uid;}else{openDetail(a.getAttribute('href'));}}
