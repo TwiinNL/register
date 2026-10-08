@@ -51,8 +51,25 @@
     } else if(empty){empty.hidden=true;}
   }
 
-  function setTocVisible(v){ if(tocEl)tocEl.hidden=!v; }
-  function showList(){ if(box&&mainEl)box.replaceChildren(mainEl); setTocVisible(true); }
+  // Scroll reserveert de TOC-kolom (grid-area "toc") alleen als de pagina breed genoeg
+  // is; daarop sturen wij het tonen/verbergen van de filters (zelfde breekpunt als de
+  // native "On this page"-TOC). Scroll's stylesheet zet onze nav default op display:none,
+  // dus we forceren zelf block/none.
+  function tocGridOk(){ var mc=qs('.main-content'); return !!(mc&&/toc/.test(getComputedStyle(mc).gridTemplateAreas||'')); }
+  function applyTocDisplay(){ if(!tocEl)return; tocEl.style.setProperty('display', tocGridOk()?'block':'none','important'); }
+  function showTocFilters(){
+    if(!filtersEl)return;
+    var mc=qs('.main-content');
+    if(!mc){ if(box)box.appendChild(filtersEl); return; }
+    tocEl=makeTocHost();
+    if(tocEl){ tocEl.appendChild(filtersEl); applyTocDisplay(); try{requestAnimationFrame(applyTocDisplay);}catch(e){} }
+  }
+  function hideTocFilters(){
+    var mc=qs('.main-content');
+    if(mc){ var o=mc.querySelectorAll('nav[data-twiin]'); for(var k=0;k<o.length;k++)o[k].remove(); }
+    tocEl=null;
+  }
+  function showList(){ if(box&&mainEl)box.replaceChildren(mainEl); showTocFilters(); }
 
   function openDetail(url){
     var u=absU(url);
@@ -64,7 +81,7 @@
       var det=document.createElement('div'); det.className='twiin-las';
       var back=document.createElement('button'); back.type='button'; back.className='kaart__back'; back.setAttribute('data-back','1'); back.innerHTML='&larr; Terug naar het register';
       det.appendChild(back); det.appendChild(art);
-      if(box)box.replaceChildren(det); setTocVisible(false);
+      if(box)box.replaceChildren(det); hideTocFilters();
       try{window.scrollTo(0,0);}catch(e){}
     }).catch(function(){location.href=u;});
   }
@@ -87,8 +104,8 @@
     window.addEventListener('hashchange',route);
   }
 
-  // Maak (of hergebruik) Scroll's sticky-TOC-slot rechts; GEEN inline display zodat
-  // Scroll's eigen stylesheet de kolom toont/verbergt op het juiste breekpunt.
+  // Maak Scroll's sticky-TOC-slot rechts (verwijdert de native TOC + oude eigen nav).
+  // De zichtbaarheid sturen we zelf via applyTocDisplay(), op basis van Scroll's grid.
   function makeTocHost(){
     var mc=qs('.main-content'); if(!mc)return null;
     var olds=mc.querySelectorAll('nav[data-twiin]'); for(var k=0;k<olds.length;k++)olds[k].remove();
@@ -109,12 +126,12 @@
     mainEl=qs('.register__main',reg); filtersEl=qs('.register__filters',reg);
     resultsEl=qs('#pf-results',mainEl); cards=[].slice.call(mainEl.querySelectorAll('.card'));
     [].forEach.call(mainEl.querySelectorAll('.card__link'),function(a){a.setAttribute('href',absU(a.getAttribute('href')));});
-    // Filters in Scroll's sticky-TOC-slot (rechts, native positie + hide-when-narrow);
-    // valt terug op onder de content als er geen .main-content is.
-    tocEl=makeTocHost();
-    if(tocEl&&filtersEl){ tocEl.appendChild(filtersEl); }
-    else if(filtersEl){ box.appendChild(filtersEl); }
-    buildFacets(); applyFilter(); wire(); route();
+    buildFacets(); applyFilter(); wire();
+    // Volg Scroll's eigen grid: als de TOC-kolom (her)verschijnt/verdwijnt bij resize of
+    // zoom, tonen/verbergen we de filters mee (showTocFilters zet ze in de slot).
+    var rt; window.addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(applyTocDisplay,120);});
+    try{var mc0=qs('.main-content'); if(mc0&&window.ResizeObserver){new ResizeObserver(function(){applyTocDisplay();}).observe(mc0);}}catch(e){}
+    route();
   }
 
   function findHost(){for(var i=0;i<MAIN_SELECTORS.length;i++){var el=qs(MAIN_SELECTORS[i]);if(el)return el;}return null;}
