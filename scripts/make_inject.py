@@ -214,6 +214,11 @@ JS = r"""
       fc.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('[data-reset]')){state.filters={};[].forEach.call(fc.querySelectorAll('input[data-filter]'),function(cb){cb.checked=false;});applyFilter();}});
     }
     box.addEventListener('click',function(e){
+      var cp=e.target.closest&&e.target.closest('[data-copy]');
+      if(cp){e.preventDefault();var sel=cp.getAttribute('data-copy'),el=sel?qs(sel,box):null;
+        if(el&&navigator.clipboard&&navigator.clipboard.writeText){
+          navigator.clipboard.writeText((el.textContent||'').trim()).then(function(){var old=cp.textContent;cp.textContent='Gekopieerd '+String.fromCharCode(10003);setTimeout(function(){cp.textContent=old;},1500);}).catch(function(){});
+        }return;}
       var back=e.target.closest&&e.target.closest('[data-back]'); if(back){e.preventDefault();if(location.hash)location.hash='';else route();return;}
       var a=e.target.closest&&e.target.closest('.card__link'); if(a){e.preventDefault();var card=a.closest('.card');var uid=card&&card.getAttribute('data-uid');if(uid){location.hash='la='+uid;}else{openDetail(a.getAttribute('href'));}}
     });
