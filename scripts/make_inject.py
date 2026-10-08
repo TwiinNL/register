@@ -54,15 +54,14 @@ CSS = r"""
 .twiin-las a:hover{text-decoration:underline;}
 .twiin-las .muted{color:var(--muted);}
 .twiin-las [hidden]{display:none!important;}
-/* De box is de container voor de content-breedte-query (hide-when-narrow). */
-.twiin-las-box{container-type:inline-size;}
-/* Register: hoofdkolom links, filters RECHTS (consistent met de standalone). */
-.twiin-las .register{display:grid;grid-template-columns:1fr 240px;gap:1.5rem;align-items:start;}
-.twiin-las .register__main{grid-column:1;min-width:0;}
-.twiin-las .register__filters{grid-column:2;position:sticky;top:1rem;max-height:calc(100vh - 2rem);overflow:auto;background:transparent;border:0;padding:0;}
-/* Verberg de filterkolom zodra de beschikbare breedte te klein is (content-aware,
-   net als Scroll's sticky-TOC). */
-@container (max-width:700px){.twiin-las .register{grid-template-columns:1fr;}.twiin-las .register__filters{display:none;}}
+/* De filters monteren we in Scroll's eigen sticky-TOC-slot (makeTocHost); die regelt
+   positie RECHTS en het verbergen-bij-smal. De hoofdkolom (zoeken+resultaten) staat
+   vol-breed in de artikelkolom. */
+.twiin-las .register__main{min-width:0;}
+.twiin-las .register__filters{background:transparent;border:0;padding:0;}
+.twiin-las-toc{overflow:auto;border:1px solid var(--_border-color,var(--border));border-radius:var(--K15t-radius-small,10px);background:var(--_background-color,var(--surface));}
+.twiin-las-toc .register__filters{padding:12px 16px;}
+.twiin-las.twiin-las-toc .register__filters h3{font:var(--K15t-font-body-small-strong, 600 .82rem/1.4 Roboto,sans-serif);color:var(--_foreground-color,var(--navy));text-transform:none;letter-spacing:normal;}
 .twiin-las .filter-reset{display:flex;justify-content:flex-end;margin-bottom:.6rem;}
 .twiin-las .register__filters h3{margin:.2rem 0 .6rem;font-size:.78rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);}
 .twiin-las .facet{margin-bottom:1.1rem;}
@@ -99,7 +98,7 @@ CSS = r"""
 .twiin-las .attr-grid dt{font-weight:600;padding:.45rem 0;border-top:1px solid var(--border);}
 .twiin-las .attr-grid dd{margin:0;padding:.45rem 0;border-top:1px solid var(--border);}
 .twiin-las .attr-grid dt:first-of-type,.twiin-las .attr-grid dd:first-of-type{border-top:none;}
-@container (max-width:600px){.twiin-las .attr-grid{grid-template-columns:1fr;}}
+@media (max-width:600px){.twiin-las .attr-grid{grid-template-columns:1fr;}}
 .twiin-las .ref-list{margin:0;padding-left:1.2rem;}.twiin-las .ref-list li{margin:.3rem 0;}
 .twiin-las table.log-table{width:100%;border-collapse:collapse;font-size:.9rem;}
 .twiin-las table.log-table th,.twiin-las table.log-table td{text-align:left;padding:.5rem .6rem;border-bottom:1px solid var(--border);vertical-align:top;}
@@ -129,12 +128,12 @@ JS = r"""
   function absU(u){if(!u)return u;if(u.indexOf('http')===0)return u;return SITE.replace(/\/+$/,'')+(u.charAt(0)==='/'?u:'/'+u);}
   function css(){if(qs('#twlas-css'))return;var st=document.createElement('style');st.id='twlas-css';st.textContent=__CSS__;document.head.appendChild(st);}
 
-  var box=null, registerEl=null, resultsEl=null, cards=[], state={q:'',filters:{},sort:'relevance'};
+  var box=null, tocEl=null, mainEl=null, filtersEl=null, resultsEl=null, cards=[], state={q:'',filters:{},sort:'relevance'};
 
   function vals(card,field){var v=card.getAttribute('data-'+field)||'';return v?v.split('|'):[];}
 
   function buildFacets(){
-    var fc=qs('#pf-filters',registerEl); if(!fc)return;
+    var fc=filtersEl; if(!fc)return;
     var h=['<div class="filter-reset"><button type="button" class="btn" data-reset>Filters wissen</button></div>'];
     for(var i=0;i<FACETS.length;i++){
       var field=FACETS[i][0], title=FACETS[i][1], counts={};
@@ -160,15 +159,16 @@ JS = r"""
       vis.sort(function(a,b){var x=a.getAttribute('data-ingang')||'',y=b.getAttribute('data-ingang')||'';return state.sort==='ingang_desc'?y.localeCompare(x):x.localeCompare(y);});
       vis.forEach(function(c){resultsEl.appendChild(c);});
     }
-    var st=qs('#pf-stats',registerEl); if(st)st.textContent=vis.length+(vis.length===1?' resultaat':' resultaten')+(q?(' voor "'+state.q.trim()+'"'):'');
-    var empty=qs('#twlas-empty',registerEl);
+    var st=qs('#pf-stats',mainEl); if(st)st.textContent=vis.length+(vis.length===1?' resultaat':' resultaten')+(q?(' voor "'+state.q.trim()+'"'):'');
+    var empty=qs('#twlas-empty',mainEl);
     if(!vis.length){
       if(!empty){empty=document.createElement('p');empty.id='twlas-empty';empty.className='muted';empty.textContent='Geen resultaten. Pas je zoekterm of filters aan.';if(resultsEl&&resultsEl.parentNode)resultsEl.parentNode.insertBefore(empty,resultsEl.nextSibling);}
       empty.hidden=false;
     } else if(empty){empty.hidden=true;}
   }
 
-  function showList(){ if(box&&registerEl)box.replaceChildren(registerEl); }
+  function setTocVisible(v){ if(tocEl)tocEl.hidden=!v; }
+  function showList(){ if(box&&mainEl)box.replaceChildren(mainEl); setTocVisible(true); }
 
   function openDetail(url){
     var u=absU(url);
@@ -177,10 +177,10 @@ JS = r"""
       if(!art){location.href=u;return;}
       var bc=art.querySelector('.breadcrumb'); if(bc)bc.remove();
       [].forEach.call(art.querySelectorAll('a[href]'),function(a){a.setAttribute('href',absU(a.getAttribute('href')));a.setAttribute('target','_top');a.setAttribute('rel','noopener');});
-      var det=document.createElement('div'); det.className='twiin-las twiin-las-box';
+      var det=document.createElement('div'); det.className='twiin-las';
       var back=document.createElement('button'); back.type='button'; back.className='kaart__back'; back.setAttribute('data-back','1'); back.innerHTML='&larr; Terug naar het register';
       det.appendChild(back); det.appendChild(art);
-      if(box)box.replaceChildren(det);
+      if(box)box.replaceChildren(det); setTocVisible(false);
       try{window.scrollTo(0,0);}catch(e){}
     }).catch(function(){location.href=u;});
   }
@@ -189,7 +189,7 @@ JS = r"""
   function route(){var u=hashUid(); if(u){openDetail(SITE.replace(/\/+$/,'')+'/la/'+u.toLowerCase()+'/');} else {showList();}}
 
   function wire(){
-    var s=qs('#pf-search',registerEl), so=qs('#pf-sort',registerEl), fc=qs('#pf-filters',registerEl);
+    var s=qs('#pf-search',mainEl), so=qs('#pf-sort',mainEl), fc=filtersEl;
     if(s){var t;s.addEventListener('input',function(){clearTimeout(t);t=setTimeout(function(){state.q=s.value;applyFilter();},180);});}
     if(so){so.addEventListener('change',function(){state.sort=so.value;applyFilter();});}
     if(fc){
@@ -203,14 +203,33 @@ JS = r"""
     window.addEventListener('hashchange',route);
   }
 
+  // Maak (of hergebruik) Scroll's sticky-TOC-slot rechts; GEEN inline display zodat
+  // Scroll's eigen stylesheet de kolom toont/verbergt op het juiste breekpunt.
+  function makeTocHost(){
+    var mc=qs('.main-content'); if(!mc)return null;
+    var olds=mc.querySelectorAll('nav[data-twiin]'); for(var k=0;k<olds.length;k++)olds[k].remove();
+    var ex=mc.querySelector('.toc.sticky:not([data-twiin])'); if(ex)ex.remove();
+    var nav=document.createElement('nav');
+    nav.className='toc sticky twiin-las twiin-las-toc';
+    nav.setAttribute('data-twiin','1');
+    mc.appendChild(nav);
+    return nav;
+  }
+
   function mount(host, reg){
     css();
     var old=host.querySelector('.twiin-las-box'); if(old)old.remove();
     var kids=[].slice.call(host.children);
     for(var i=0;i<kids.length;i++){ if(!(kids[i].matches&&kids[i].matches('[data-component="panel"]'))) kids[i].remove(); }
     box=document.createElement('div'); box.className='twiin-las twiin-las-box'; host.appendChild(box);
-    registerEl=reg; resultsEl=qs('#pf-results',reg); cards=[].slice.call(reg.querySelectorAll('.card'));
-    [].forEach.call(reg.querySelectorAll('.card__link'),function(a){a.setAttribute('href',absU(a.getAttribute('href')));});
+    mainEl=qs('.register__main',reg); filtersEl=qs('.register__filters',reg);
+    resultsEl=qs('#pf-results',mainEl); cards=[].slice.call(mainEl.querySelectorAll('.card'));
+    [].forEach.call(mainEl.querySelectorAll('.card__link'),function(a){a.setAttribute('href',absU(a.getAttribute('href')));});
+    // Filters in Scroll's sticky-TOC-slot (rechts, native positie + hide-when-narrow);
+    // valt terug op onder de content als er geen .main-content is.
+    tocEl=makeTocHost();
+    if(tocEl&&filtersEl){ tocEl.appendChild(filtersEl); }
+    else if(filtersEl){ box.appendChild(filtersEl); }
     buildFacets(); applyFilter(); wire(); route();
   }
 
