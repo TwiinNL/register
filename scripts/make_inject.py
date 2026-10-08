@@ -177,13 +177,17 @@ JS = r"""
     if(!filtersEl)return;
     var mc=qs('.main-content');
     if(!mc){ if(box)box.appendChild(filtersEl); return; }
-    tocEl=makeTocHost();
-    if(tocEl){ tocEl.appendChild(filtersEl); applyTocDisplay(); try{requestAnimationFrame(applyTocDisplay);}catch(e){} }
+    if(!tocEl||!tocEl.parentNode) tocEl=makeTocHost();
+    if(tocEl){ if(filtersEl.parentNode!==tocEl)tocEl.appendChild(filtersEl); applyTocDisplay(); try{requestAnimationFrame(applyTocDisplay);}catch(e){} }
   }
+  // Detail/kaartweergave: houd een (lege, verborgen) toc-nav aan zodat Scroll's grid de
+  // kolom BLIJFT reserveren en de content links blijft staan - net als native pagina's
+  // zonder zichtbare toc (daar is .toc.sticky ook aanwezig maar display:none). Verwijderen
+  // zou de grid laten inklappen en de content naar rechts laten springen.
   function hideTocFilters(){
-    var mc=qs('.main-content');
-    if(mc){ var o=mc.querySelectorAll('nav[data-twiin]'); for(var k=0;k<o.length;k++)o[k].remove(); }
-    tocEl=null;
+    var mc=qs('.main-content'); if(!mc)return;
+    if(!tocEl||!tocEl.parentNode) tocEl=makeTocHost();
+    if(tocEl) tocEl.style.setProperty('display','none','important');
   }
   function showList(){ if(box&&mainEl)box.replaceChildren(mainEl); showTocFilters(); }
 
