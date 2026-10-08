@@ -1,6 +1,16 @@
 {{- /* Compacte metadata-kaart voor overzichten. Verwacht een index-pagina als context. */ -}}
 {{- $p := . -}}
-<article class="card" data-soort="{{ $p.Params.soort }}" data-status="{{ $p.Params.status }}">
+<article class="card"
+  data-soort="{{ $p.Params.soort }}"
+  data-status="{{ $p.Params.status }}"
+  data-domein="{{ delimit $p.Params.domein "|" }}"
+  data-uitwisseling="{{ delimit $p.Params.uitwisseling "|" }}"
+  data-patroon="{{ delimit $p.Params.patroon "|" }}"
+  data-functie="{{ delimit $p.Params.functie "|" }}"
+  data-toepassing="{{ delimit $p.Params.toepassingen "|" }}"
+  data-auteur="{{ delimit $p.Params.auteur "|" }}"
+  data-ingang="{{ $p.Params.ingangsdatum }}"
+  data-uid="{{ $p.Params.uid }}">
   <a class="card__link" href="{{ $p.RelPermalink }}">
     <header class="card__head">
       {{ partial "badge.html" (dict "vocab" "soort" "code" $p.Params.soort) }}
