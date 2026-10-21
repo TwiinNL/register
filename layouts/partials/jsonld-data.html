@@ -42,6 +42,13 @@
 
 {{- with $p.Params.samenvatting }}{{ $node = merge $node (dict "dct:description" .) }}{{ end -}}
 
+{{- /* Omschrijving (body als platte tekst), voorwaarden/uitzonderingen en
+       conformiteitscriteria als eigen la:-termen. */ -}}
+{{- $oms := trim $p.Plain "\n\r\t " -}}
+{{- with $oms }}{{ $node = merge $node (dict "la:omschrijving" .) }}{{ end -}}
+{{- with $p.Params.voorwaarden }}{{ $node = merge $node (dict "la:voorwaarden" .) }}{{ end -}}
+{{- with $p.Params.conformiteitscriteria }}{{ $node = merge $node (dict "la:conformiteitscriteria" .) }}{{ end -}}
+
 {{- /* Context-lijsten als skos:Concept-arrays onder la:* */ -}}
 {{- $contextMap := slice
   (dict "field" "domein" "vocab" "domein" "prop" "la:domein")
